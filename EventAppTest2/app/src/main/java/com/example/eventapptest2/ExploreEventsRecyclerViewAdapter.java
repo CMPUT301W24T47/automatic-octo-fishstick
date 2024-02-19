@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.eventapptest2.placeholder.PlaceholderContent.PlaceholderItem;
-import com.example.eventapptest2.databinding.FragmentSavedEventsBinding;
+import com.example.eventapptest2.databinding.FragmentExploreBinding;
 
 import java.util.List;
 
@@ -16,18 +16,18 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEventsRecyclerViewAdapter.ViewHolder> {
+public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<ExploreEventsRecyclerViewAdapter.ViewHolder> {
 
     private final List<PlaceholderItem> mValues;
 
-    public SavedEventsRecyclerViewAdapter(List<PlaceholderItem> items) {
+    public ExploreEventsRecyclerViewAdapter(List<PlaceholderItem> items) {
         mValues = items;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        return new ViewHolder(FragmentSavedEventsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(FragmentExploreBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
 
     }
 
@@ -48,10 +48,10 @@ public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEv
         public final TextView mContentView;
         public PlaceholderItem mItem;
 
-        public ViewHolder(FragmentSavedEventsBinding binding) {
+        public ViewHolder(FragmentExploreBinding binding) {
             super(binding.getRoot());
-            mIdView = binding.SavedEventTitle;
-            mContentView = binding.SavedEventlocation;
+            mIdView = binding.ExploreEventTitle;
+            mContentView = binding.ExploreEventlocation;
         }
 
 
