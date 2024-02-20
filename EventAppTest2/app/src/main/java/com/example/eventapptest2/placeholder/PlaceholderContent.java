@@ -12,7 +12,7 @@ import java.util.Map;
  * TODO: Replace all uses of this class before publishing your app.
  */
 public class PlaceholderContent {
-
+//COULD LEGIT USE THIS FOR FIREBASE
     /**
      * An array of sample (placeholder) items.
      */

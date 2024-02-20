@@ -66,10 +66,9 @@ public class MainActivity extends AppCompatActivity{
                     fragmentTransaction.commit();
                 }
                 else if(itemId == R.id.AddEventnav){
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.framelayout,new AddEventFragment());
-                    fragmentTransaction.commit();
+                    //FragmentManager fragmentManager = getSupportFragmentManager();
+                    AddEventFragment fragment = new AddEventFragment();
+                    fragment.show(getSupportFragmentManager(), "add_event_fragment");
                 }
                 else if(itemId == R.id.OrginzersEventsnav){
                     FragmentManager fragmentManager = getSupportFragmentManager();
