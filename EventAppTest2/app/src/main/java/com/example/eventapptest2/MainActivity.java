@@ -11,9 +11,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity{
 
-
+    ArrayList<Event> Explore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

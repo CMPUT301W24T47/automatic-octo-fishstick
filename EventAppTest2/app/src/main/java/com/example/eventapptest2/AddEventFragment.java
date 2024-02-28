@@ -27,6 +27,7 @@ public class AddEventFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
     }
 
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
