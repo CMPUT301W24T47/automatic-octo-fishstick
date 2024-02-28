@@ -84,13 +84,13 @@
                 android:id="@+id/DateText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:text="Enter Date"
                 android:textColor="@color/purple"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.627"
+                app:layout_constraintHorizontal_bias="0.546"
                 app:layout_constraintStart_toEndOf="@+id/LimitText"
                 app:layout_constraintTop_toBottomOf="@+id/add_location" />
 
@@ -117,8 +117,9 @@
 
             <EditText
                 android:id="@+id/add_attendee_limit"
-                android:layout_width="182dp"
-                android:layout_height="44dp"
+                android:layout_width="147dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="3dp"
                 android:layout_marginTop="4dp"
                 android:hint="None"
                 app:layout_constraintStart_toStartOf="parent"
@@ -126,13 +127,14 @@
 
             <EditText
                 android:id="@+id/addEventDate"
-                android:layout_width="157dp"
-                android:layout_height="45dp"
+                android:layout_width="176dp"
+                android:layout_height="38dp"
+                android:layout_marginStart="6dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="3dp"
                 android:hint="Day/Month/Year"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.781"
                 app:layout_constraintStart_toEndOf="@+id/add_attendee_limit"
                 app:layout_constraintTop_toBottomOf="@+id/DateText" />
 
