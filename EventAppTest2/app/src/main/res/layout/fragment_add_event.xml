@@ -65,7 +65,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/DescriptionText" />
+                app:layout_constraintTop_toBottomOf="@+id/EventNameEdit" />
 
             <TextView
                 android:id="@+id/LimitText"
@@ -95,7 +95,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/add_location" />
 
             <EditText
-                android:id="@+id/DescriptionText"
+                android:id="@+id/EventNameEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"

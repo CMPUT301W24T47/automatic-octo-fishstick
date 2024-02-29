@@ -1,6 +1,7 @@
 package com.example.eventapptest2;
 
 import android.media.Image;
+import android.widget.ImageView;
 
 public class Event {
 
@@ -8,13 +9,13 @@ public class Event {
     String eventName;
     String eventLocation;
     String eventDate;
-    int eventLimit;
-    Image eventPoster;
+    String eventLimit; //should be int
+    ImageView eventPoster;
     // QR signIn;
     // QR posterQR;
     String details;
 
-    public Event(String eventName, String eventLocation, String eventDate, int eventLimit, Image eventPoster, String details) {
+    public Event(String eventName, String eventLocation, String eventDate, String eventLimit, ImageView eventPoster, String details) {
         this.eventName = eventName;
         this.eventLocation = eventLocation;
         this.eventDate = eventDate;
@@ -23,11 +24,11 @@ public class Event {
         this.details = details;
     }
 
-    public Event(String eventName, String eventLocation, String eventDate, Image eventPoster, String details) {
+    public Event(String eventName, String eventLocation, String eventDate, ImageView eventPoster, String details) {
         this.eventName = eventName;
         this.eventLocation = eventLocation;
         this.eventDate = eventDate;
-        this.eventLimit = -1; // we won't have a negative number of users
+        this.eventLimit = "-1"; // we won't have a negative number of users
         this.eventPoster = eventPoster;
         this.details = details;
     }
@@ -56,20 +57,25 @@ public class Event {
         this.eventDate = eventDate;
     }
 
-    public int getEventLimit() {
+    public String getEventLimit() {
         return eventLimit;
     }
 
-    public void setEventLimit(int eventLimit) {
+    public void setEventLimit(String eventLimit) {
         this.eventLimit = eventLimit;
     }
 
-    public void setEventPoster(Image eventPoster) {
+    public void setEventPoster(ImageView eventPoster) {
         this.eventPoster = eventPoster;
     }
 
-    public Image getEventPoster(Image eventPoster) {
+    public ImageView getEventPoster(ImageView eventPoster) {
         return eventPoster;
     }
+
+    public String getDetails() {return details;}
+
+    public void  setDetails(String details) {this.details = details;}
 }
+
 
