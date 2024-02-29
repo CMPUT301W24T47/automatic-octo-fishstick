@@ -12,21 +12,24 @@ public class Event {
     Image eventPoster;
     // QR signIn;
     // QR posterQR;
+    String details;
 
-    public Event(String eventName, String eventLocation, String eventDate, int eventLimit, Image eventPoster) {
+    public Event(String eventName, String eventLocation, String eventDate, int eventLimit, Image eventPoster, String details) {
         this.eventName = eventName;
         this.eventLocation = eventLocation;
         this.eventDate = eventDate;
         this.eventLimit = eventLimit;
         this.eventPoster = eventPoster;
+        this.details = details;
     }
 
-    public Event(String eventName, String eventLocation, String eventDate, Image eventPoster) {
+    public Event(String eventName, String eventLocation, String eventDate, Image eventPoster, String details) {
         this.eventName = eventName;
         this.eventLocation = eventLocation;
         this.eventDate = eventDate;
         this.eventLimit = -1; // we won't have a negative number of users
         this.eventPoster = eventPoster;
+        this.details = details;
     }
 
     public String getEventName() {
