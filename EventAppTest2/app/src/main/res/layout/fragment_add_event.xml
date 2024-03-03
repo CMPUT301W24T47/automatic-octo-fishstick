@@ -1,27 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="2dp"
-    android:layout_margin="4dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/AddEventImage"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/karansbackground"
-                android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"/>
 
@@ -36,50 +31,54 @@
 
         </FrameLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/EventNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Event Name"
+            android:textColor="@color/purple"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/DescriptionText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"/>
 
-            <TextView
-                android:id="@+id/EventNameText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Event Name"
-                android:textColor="@color/purple"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.003"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/EventlocationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Event Location"
+            android:textColor="@color/purple"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/EventlocationText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="12dp"
-                android:text="Event Location"
-                android:textColor="@color/purple"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/DescriptionText" />
+        <EditText
+            android:id="@+id/add_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:hint="Search Location"/>
 
-            <TextView
-                android:id="@+id/LimitText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="12dp"
-                android:text="Enter Limit"
-                android:textColor="@color/purple"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/add_location" />
+        <TextView
+            android:id="@+id/LimitText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Enter Limit"
+            android:textColor="@color/purple"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
 
+<<<<<<< Updated upstream
             <TextView
                 android:id="@+id/DateText"
                 android:layout_width="wrap_content"
@@ -93,28 +92,33 @@
                 app:layout_constraintHorizontal_bias="0.627"
                 app:layout_constraintStart_toEndOf="@+id/LimitText"
                 app:layout_constraintTop_toBottomOf="@+id/add_location" />
+=======
+        <EditText
+            android:id="@+id/add_attendee_limit"
+            android:layout_width="147dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="4dp"
+            android:hint="None"/>
+>>>>>>> Stashed changes
 
-            <EditText
-                android:id="@+id/DescriptionText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/EventNameText" />
+        <TextView
+            android:id="@+id/DateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Enter Date"
+            android:textColor="@color/purple"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
 
-            <EditText
-                android:id="@+id/add_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:hint="Search Location"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/EventlocationText" />
+        <EditText
+            android:id="@+id/addEventDate"
+            android:layout_width="176dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="4dp"
+            android:hint="Day/Month/Year"/>
 
+<<<<<<< Updated upstream
             <EditText
                 android:id="@+id/add_attendee_limit"
                 android:layout_width="182dp"
@@ -135,19 +139,34 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/add_attendee_limit"
                 app:layout_constraintTop_toBottomOf="@+id/DateText" />
+=======
+        <TextView
+            android:id="@+id/AddEventDescriptionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Description"
+            android:textColor="@color/purple"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
 
-            <EditText
-                android:id="@+id/AddEventDescription"
-                android:layout_width="393dp"
-                android:layout_height="181dp"
-                android:layout_marginTop="16dp"
-                android:hint="Description"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/add_attendee_limit" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <EditText
+            android:id="@+id/AddEventDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="5"
+            android:hint="Description"/>
+>>>>>>> Stashed changes
+
+        <Button
+            android:id="@+id/addeventbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add"
+            android:layout_marginTop="16dp"/>
 
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+</ScrollView>
