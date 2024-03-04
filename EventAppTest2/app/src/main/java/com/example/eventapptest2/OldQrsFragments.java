@@ -3,10 +3,13 @@ package com.example.eventapptest2;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,7 +17,8 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class OldQrsFragments extends Fragment {
-
+    private Button QRBUTTONTEST;
+    private MainActivity mActivityCallback;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 //    private static final String ARG_PARAM1 = "param1";
@@ -58,7 +62,17 @@ public class OldQrsFragments extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mActivityCallback = (MainActivity)getActivity();
+        View rootView = inflater.inflate(R.layout.fragment_old_qrs, container, false);
+        QRBUTTONTEST = (Button) rootView.findViewById(R.id.QRBUTTONTEST);
+        QRBUTTONTEST.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mActivityCallback.switchToScanQRFragment();
+            }
+        });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_old_qrs, container, false);
+        return rootView;
+        //return inflater.inflate(R.layout.fragment_old_qrs, container, false);
     }
 }
