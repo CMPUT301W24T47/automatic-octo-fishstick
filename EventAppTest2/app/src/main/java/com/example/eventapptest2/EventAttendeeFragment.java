@@ -2,5 +2,7 @@ package com.example.eventapptest2;
 
 import android.app.Activity;
 
-public class EventAttendeeFragment extends Activity {
+import androidx.fragment.app.Fragment;
+
+public class EventAttendeeFragment extends Fragment {
 }
