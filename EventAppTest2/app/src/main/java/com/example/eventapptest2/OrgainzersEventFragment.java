@@ -66,6 +66,7 @@ public class OrgainzersEventFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.open_events_list, container, false);
 
+
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
