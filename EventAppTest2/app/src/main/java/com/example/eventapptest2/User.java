@@ -16,7 +16,10 @@ public class User {
 
 
 
-    public User(String userName, String userHomepage, String userEmail, String userPhoneNumber, Image userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList) {
+    String DeviceId; // wont have a setter b/c should only every be init at start of code
+
+    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, Image userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList) {
+        this.DeviceId = deviceId;
         this.userName = userName;
         this.userHomepage = userHomepage;
         this.userEmail = userEmail;
@@ -84,5 +87,8 @@ public class User {
     }
     public ArrayList<Event> getOldQRList() {
         return oldQRList;
+    }
+    public String getDeviceId() {
+        return DeviceId;
     }
 }

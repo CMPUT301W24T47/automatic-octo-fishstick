@@ -19,11 +19,11 @@ public class MainActivity extends AppCompatActivity {
 
     // Initialize the Explore ArrayList
    // Event addEventFragmentstore = new Event();
-    String mId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+    private String DeviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
     ArrayList<Event> savedEvents= new ArrayList<>();
     ArrayList<Event> createdEvents= new ArrayList<>();
     ArrayList<Event> oldQRList= new ArrayList<>();
-    User testuser = new User("Karan","","","",null, savedEvents,  createdEvents,  oldQRList);
+    User testuser = new User(DeviceId,"Karan","","","",null, savedEvents,  createdEvents,  oldQRList);
     ArrayList<Event> Explore = new ArrayList<>();
 
     @Override
@@ -31,7 +31,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Add an event to the Explore ArrayList
+
+
+
+
+
+
+
+
+
+
+        // Add an event to the Explore ArrayList //add a user profile array list for user sign-up/check-in
         Explore.add(new Event("Test", "City", "01/06/2002", null,"karan"));
 
         BottomNavigationView bottomnav = findViewById(R.id.bottomNavView);
