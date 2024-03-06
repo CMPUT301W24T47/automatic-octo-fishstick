@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 
 import com.example.eventapptest2.placeholder.PlaceholderContent;
 
+import java.util.ArrayList;
+
 /**
  * A fragment representing a list of Items.
  */
@@ -23,18 +25,20 @@ public class ExploreFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    private static ArrayList<Event> events;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ExploreFragment() {
+    public ExploreFragment(ArrayList<Event> Explore) {
+        events = Explore;
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static ExploreFragment newInstance(int columnCount) {
-        ExploreFragment fragment = new ExploreFragment();
+        ExploreFragment fragment = new ExploreFragment(events);
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -64,7 +68,10 @@ public class ExploreFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new ExploreEventsRecyclerViewAdapter(PlaceholderContent.ITEMS));
+
+
+            //give the list of explore events to the recyler view
+            recyclerView.setAdapter(new ExploreEventsRecyclerViewAdapter(events));
         }
         return view;
     }

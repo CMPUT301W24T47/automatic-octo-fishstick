@@ -18,10 +18,10 @@ import java.util.List;
  */
 public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<ExploreEventsRecyclerViewAdapter.ViewHolder> {
 
-    private final List<PlaceholderItem> mValues;
+    private final List<Event> events;
 
-    public ExploreEventsRecyclerViewAdapter(List<PlaceholderItem> items) {
-        mValues = items;
+    public ExploreEventsRecyclerViewAdapter(List<Event> items) {
+        events = items;
     }
 
     @Override
@@ -33,31 +33,36 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        //setting events text
+        holder.EventForView = events.get(position);
+        holder.ExploreEventName.setText(events.get(position).getEventName());
+        holder.Eventdate.setText(events.get(position).getEventDate());
+        holder.Eventlocation.setText(events.get(position).getEventLocation());
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return events.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public PlaceholderItem mItem;
+        public final TextView ExploreEventName;
+
+        public final TextView Eventlocation;
+        public final TextView Eventdate;
+        public Event EventForView;
 
         public ViewHolder(FragmentExploreBinding binding) {
             super(binding.getRoot());
-            mIdView = binding.ExploreEventTitle;
-            mContentView = binding.ExploreEventlocation;
+            ExploreEventName = binding.ExploreEventTitle;
+            Eventlocation = binding.ExploreEventlocation;
+            Eventdate = binding.ExploreEventDate;
         }
 
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + Eventdate.getText() + "'";
         }
     }
 }

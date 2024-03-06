@@ -9,26 +9,39 @@ public class Event {
     String eventLocation;
     String eventDate;
     int eventLimit;
+
+
+
+    String EventDesription;
     Image eventPoster;
     // QR signIn;
     // QR posterQR;
 
-    public Event(String eventName, String eventLocation, String eventDate, int eventLimit, Image eventPoster) {
+    public Event(String eventName, String eventLocation, String eventDate, int eventLimit, Image eventPoster,String EventDesription) {
         this.eventName = eventName;
         this.eventLocation = eventLocation;
         this.eventDate = eventDate;
         this.eventLimit = eventLimit;
         this.eventPoster = eventPoster;
+        this.EventDesription = EventDesription;
     }
 
-    public Event(String eventName, String eventLocation, String eventDate, Image eventPoster) {
+    public Event(String eventName, String eventLocation, String eventDate, Image eventPoster,String EventDesription) {
         this.eventName = eventName;
         this.eventLocation = eventLocation;
         this.eventDate = eventDate;
         this.eventLimit = -1; // we won't have a negative number of users
         this.eventPoster = eventPoster;
+        this.EventDesription = EventDesription;
     }
-
+    public Event() {
+        this.eventName = "eventName";
+        this.eventLocation = "eventLocation";
+        this.eventDate = "eventDate";
+        this.eventLimit = -1;
+        this.eventPoster = null;
+        this.EventDesription = "EventDesription";
+    }
     public String getEventName() {
         return eventName;
     }
@@ -67,6 +80,14 @@ public class Event {
 
     public Image getEventPoster(Image eventPoster) {
         return eventPoster;
+    }
+
+    public String getEventDesription() {
+        return EventDesription;
+    }
+
+    public void setEventDesription(String eventDesription) {
+        EventDesription = eventDesription;
     }
 }
 
