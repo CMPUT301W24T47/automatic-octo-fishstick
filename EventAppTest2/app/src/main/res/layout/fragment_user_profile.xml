@@ -126,17 +126,17 @@
             app:layout_constraintVertical_bias="0.834" />
 
 
-        <ImageButton
-            android:id="@+id/editUsernameButton"
-            android:layout_width="33dp"
-            android:layout_height="34dp"
-            android:layout_margin="16dp"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="@color/purple"
-            android:src="@drawable/ic_editbutton_image"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/usernameTextViewProfile"
-            app:layout_constraintTop_toBottomOf="@+id/replaceImageButton" />
+        <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/editUsernameButton"
+        android:layout_width="33dp"
+        android:layout_height="34dp"
+        android:layout_margin="16dp"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/purple"
+        android:drawableStart="@drawable/ic_editbutton_image"
+        android:src="@drawable/ic_editbutton_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/usernameTextViewProfile" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

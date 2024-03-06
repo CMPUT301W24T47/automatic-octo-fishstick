@@ -1,6 +1,7 @@
 package com.example.eventapptest2;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 
@@ -15,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import android.app.AlertDialog;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -41,6 +44,13 @@ public class UserProfileFragment extends Fragment{
     private TextView textOnProfilePic;
 
     private User user;
+
+    private Button editProfileButton;
+    private EditText inputHomePage;
+    private EditText inputEmail;
+    private EditText inputPhoneNum;
+    // Geolocation switch
+    private Switch geolocation;
 
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -99,6 +109,7 @@ public class UserProfileFragment extends Fragment{
 //    }
 
 
+    @SuppressLint("WrongViewCast")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -162,8 +173,31 @@ public class UserProfileFragment extends Fragment{
             alert.show();
         });
 
+        // Edit users profile
+        editProfileButton = v.findViewById(R.id.editUsernameButton);
+
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),EditUserProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Input user information
+        inputHomePage = v.findViewById(R.id.homepageEditText);
+        inputEmail = v.findViewById(R.id.emailEditText);
+        inputPhoneNum = v.findViewById(R.id.phoneEditText);
+
+        // Store user information
+
+
+
+
         return v;
     }
+
+
     public void setImageInitially(Drawable originalPic){
         profilePic.setImageDrawable(originalPic);
 //        Drawable originalPic = profilePic.getDrawable();
