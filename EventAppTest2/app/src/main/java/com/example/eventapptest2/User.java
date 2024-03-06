@@ -2,21 +2,22 @@ package com.example.eventapptest2;
 
 import android.media.Image;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User {
+public class User implements Serializable{
     String userName;
     String userHomepage;
     String userEmail;
     String userPhoneNumber;
-    Image userProfileImage;
+    String userProfileImage;
     ArrayList<Event> savedEvents;
     ArrayList<Event> createdEvents;
     ArrayList<Event> oldQRList;
 
 
 
-    public User(String userName, String userHomepage, String userEmail, String userPhoneNumber, Image userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList) {
+    public User(String userName, String userHomepage, String userEmail, String userPhoneNumber, String userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList) {
         this.userName = userName;
         this.userHomepage = userHomepage;
         this.userEmail = userEmail;
@@ -58,10 +59,10 @@ public class User {
     }
 
 
-    public void setUserProfileImage(Image userProfileImage) {
+    public void setUserProfileImage(String userProfileImage) {
         this.userProfileImage = userProfileImage;
     }
-    public Image getUserProfileImage() {
+    public String getUserProfileImage() {
         return userProfileImage;
     }
 
@@ -86,3 +87,4 @@ public class User {
         return oldQRList;
     }
 }
+
