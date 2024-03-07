@@ -48,10 +48,14 @@ public class AddEventFragment extends DialogFragment {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference useresfb = db.collection("users");
     private final CollectionReference eventfb = db.collection("ExploreEvents");
+    private ArrayList<Event> CreateEvents;
 
-    public AddEventFragment(ArrayList<Event> exploreEvents, User user){//CollectionReference eventref, CollectionReference usersref) {
+    private CollectionReference eventcreated;
+    public AddEventFragment(ArrayList<Event> exploreEvents, User user, String create,ArrayList<Event> createEvents){//CollectionReference eventref, CollectionReference usersref) {
         this.exploreEvents = exploreEvents;
         this.EditUser = user;
+        this.eventcreated = db.collection("CreateEvents" + create);
+        this.CreateEvents = createEvents;
 //        this.useresfb = usersref;
 //        this.eventfb = eventref;
 
@@ -113,26 +117,30 @@ public class AddEventFragment extends DialogFragment {
                                     String imageURL = uri.toString();
 
                                     Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist);
-                                    exploreEvents.add(newevent);
+                                    //lists
+                                   // exploreEvents.add(newevent);
+                                    //CreateEvents.add(newevent);
+
                                     eventfb.add(newevent); /////////firebase
-                                    ArrayList<Event> userevent = EditUser.getCreatedEvents();
-                                    userevent.add(newevent);
-                                    EditUser.setCreatedEvents(userevent);
-                                    useresfb.document(EditUser.getDeviceId()).set(EditUser);
+                                    eventcreated.add(newevent);
+
+
+//                                    ArrayList<Event> userevent = EditUser.getCreatedEvents();
+//                                    userevent.add(newevent);
+//                                    EditUser.setCreatedEvents(userevent);
+//                                    useresfb.document(EditUser.getDeviceId()).set(EditUser);
+
                                     // Store imageURL along with other event details in Firestore
                                     // Example: firestore.collection("events").document(eventId).update("eventPoster", imageURL);
                                 });
                             });
                 }
                 else {
-                    int liming = Integer.parseInt(lim.trim());
                     Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist);
                     exploreEvents.add(newevent);
                     eventfb.add(newevent); /////////firebase
-                    ArrayList<Event> userevent = EditUser.getCreatedEvents();
-                    userevent.add(newevent);
-                    EditUser.setCreatedEvents(userevent);
-                    useresfb.document(EditUser.getDeviceId()).set(EditUser);}
+                    eventcreated.add(newevent);
+                    }
 //
 //
 //
@@ -175,11 +183,6 @@ public class AddEventFragment extends DialogFragment {
                 e.printStackTrace();
             }
         }
-    }
-    private String getMimeType(Uri uri) {
-        ContentResolver contentResolver = requireContext().getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
 

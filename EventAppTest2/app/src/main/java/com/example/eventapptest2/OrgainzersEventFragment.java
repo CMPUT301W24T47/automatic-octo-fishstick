@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 
 import com.example.eventapptest2.placeholder.PlaceholderContent;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link OrgainzersEventFragment#newInstance} factory method to
@@ -31,9 +33,11 @@ public class OrgainzersEventFragment extends Fragment {
     private  int mColumnCount = 1;
 //    private String mParam1;
 //    private String mParam2;
+    private static ArrayList<Event> events;
 
-    public OrgainzersEventFragment() {
+    public OrgainzersEventFragment(ArrayList<Event> createevents) {
         // Required empty public constructor
+        this.events = createevents;
     }
 
     /**
@@ -44,7 +48,7 @@ public class OrgainzersEventFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static OrgainzersEventFragment newInstance(int columnCount) {
-        OrgainzersEventFragment fragment = new OrgainzersEventFragment();
+        OrgainzersEventFragment fragment = new OrgainzersEventFragment(events);
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -75,7 +79,7 @@ public class OrgainzersEventFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new OpenEventsRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            recyclerView.setAdapter(new OpenEventsRecyclerViewAdapter(events));
         }
         return view;
     }
