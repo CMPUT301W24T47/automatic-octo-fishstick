@@ -29,6 +29,9 @@ public class User {
         this.createdEvents = createdEvents;
         this.oldQRList = oldQRList;
     }
+    public User() {
+
+    }
     public void setUserName(String userName) {
         this.userName = userName;
     }

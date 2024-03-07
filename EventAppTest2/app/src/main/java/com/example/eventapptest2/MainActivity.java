@@ -181,17 +181,19 @@ public class MainActivity extends AppCompatActivity {
                 user.setUserEmail((String) doc.getData().get("userEmail"));
                 user.setUserPhoneNumber((String) doc.getData().get("userPhoneNumber"));
                 user.setUserProfileImage((Image) doc.getData().get("UserProfileImage"));
-                getDataSave(deviceId);
 
+
+                getDataSave(deviceId);
+                //maybe redunant but im scared
                 savedEvents = user.getSavedEvents();
 
                 getDataCreate(deviceId);
+                //maybe redunant but im to scared
                 user.setCreatedEvents(createdEvents);
-
-
-
-
                 createdEvents = user.getCreatedEvents();
+
+
+
                 user.setOldQRList((ArrayList<Event>) doc.getData().get("oldQRList"));
                 oldQRList = user.getOldQRList();
 
@@ -227,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
                         String eventDate = (String) doc.getData().get("eventDate");
                         String EventId = (String) doc.getData().get("eventId");
                         String Eventdes = (String) doc.getData().get("eventDescription");
+                        //we can get arround theses arrays the same way we did above for the user event lists the quniue id for this should be the QR
                         ArrayList<User> attendelist = (ArrayList<User>) doc.getData().get("attendeeList");
                         ArrayList<User> checkinlist = (ArrayList<User>) doc.getData().get("Checkin-list");
                         String eventImage = (String) doc.getData().get("eventPoster");

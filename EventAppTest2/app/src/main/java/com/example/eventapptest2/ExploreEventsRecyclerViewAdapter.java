@@ -1,7 +1,9 @@
 package com.example.eventapptest2;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.media.Image;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +16,11 @@ import com.bumptech.glide.Glide;
 import com.example.eventapptest2.placeholder.PlaceholderContent.PlaceholderItem;
 import com.example.eventapptest2.databinding.FragmentExploreBinding;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -65,8 +71,35 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // well need to do something like we did in main to get data for the attende list and check if length is < the length of limit
+                //as well we should do else elif b/c the code will be faster for no limit then just check getlimit == ""
+                //to do the attende chcek in the just add a optinal boolean to the user init clause and only use it for create user as attendee here
+                    final CollectionReference attendeeRef = db.collection("Attendee" + events.get(postini).getEventid());
+                    ArrayList<User> attendees = new ArrayList<>();
+                attendeeRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                            if (error != null) {
+                                return;
+                            }
 
-                saveevent.add(events.get(postini));
+                            attendees.clear(); // Clear the old list
+                            for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+//                    String eventId = doc.getId();
+                                if (doc.exists()) {
+                                    attendees.add(new User());
+                                }// Assuming "karan" is a placeholder for organizer
+                            }
+
+
+                        }
+                    });
+                //so theses ifs did nothing also doesnt check if user has already added it to the list so be careful
+                if (events.get(postini).getEventLimit() == ""){saveevent.add(events.get(postini));
+                                                                        attendeeRef.add(new User());}
+
+                else if (attendees.size() <= Integer.parseInt(events.get(postini).getEventLimit())) {saveevent.add(events.get(postini));
+                    attendeeRef.add(new User());}
             }
         });
 
