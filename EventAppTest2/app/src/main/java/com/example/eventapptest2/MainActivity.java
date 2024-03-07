@@ -108,12 +108,12 @@ public class MainActivity extends AppCompatActivity {
                         } else if (itemId == R.id.ExploreEventNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore));
+                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore,savedEvents,deviceId));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.SavedEventNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new SavedEventsFragment());
+                            fragmentTransaction.replace(R.id.framelayout, new SavedEventsFragment(savedEvents)); // prolly will need not get userid of attendee when they sign in for the attendee list maybe explore event if we wanna care abt it ltr
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.OldQrNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 user.setUserEmail((String) doc.getData().get("userEmail"));
                 user.setUserPhoneNumber((String) doc.getData().get("userPhoneNumber"));
                 user.setUserProfileImage((Image) doc.getData().get("UserProfileImage"));
-                user.setSavedEvents((ArrayList<Event>) doc.getData().get("savedEvents"));
+                getDataSave(deviceId);
 
                 savedEvents = user.getSavedEvents();
 
@@ -207,7 +207,39 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    private void getDataSave(String id){
+        final CollectionReference SavedeventsRef = db.collection("SavedEvents" + id);
 
+        SavedeventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    return;
+                }
+
+                savedEvents.clear(); // Clear the old list
+                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+//                    String eventId = doc.getId();
+                    if (doc.exists()) {
+                        String eventName = (String) doc.getData().get("eventName");
+                        String eventLimit = (String) doc.getData().get("eventLimit");
+                        String eventLocation = (String) doc.getData().get("eventLocation");
+                        String eventDate = (String) doc.getData().get("eventDate");
+                        String EventId = (String) doc.getData().get("eventId");
+                        String Eventdes = (String) doc.getData().get("eventDescription");
+                        ArrayList<User> attendelist = (ArrayList<User>) doc.getData().get("attendeeList");
+                        ArrayList<User> checkinlist = (ArrayList<User>) doc.getData().get("Checkin-list");
+                        String eventImage = (String) doc.getData().get("eventPoster");
+                        //System.out.println("Image URL: " + eventImage);
+                        // ... (add other event properties based on your Event class)
+                        savedEvents.add(new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist));
+                    }// Assuming "karan" is a placeholder for organizer
+                }
+
+
+            }
+        });
+    }
     private void getDataCreate(String id){
          final CollectionReference createeventsRef = db.collection("CreateEvents" + id);
 

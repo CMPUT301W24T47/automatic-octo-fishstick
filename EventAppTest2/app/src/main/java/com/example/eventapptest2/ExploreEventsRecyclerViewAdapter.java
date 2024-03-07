@@ -6,14 +6,18 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventapptest2.placeholder.PlaceholderContent.PlaceholderItem;
 import com.example.eventapptest2.databinding.FragmentExploreBinding;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,9 +27,17 @@ import java.util.List;
 public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<ExploreEventsRecyclerViewAdapter.ViewHolder> {
 
     private final List<Event> events;
+    List<Event> sevents;
+    String did;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private  CollectionReference saveevent;
 
-    public ExploreEventsRecyclerViewAdapter(List<Event> items) {
+    public ExploreEventsRecyclerViewAdapter(List<Event> items,List<Event> saveEvents,String id) {
         events = items;
+        sevents = saveEvents;
+        did = id;
+        saveevent = db.collection("SavedEvents"+id);
+
     }
 
     @Override
@@ -38,6 +50,7 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         //setting events text
+        int postini = position;
         holder.EventForView = events.get(position);
         holder.ExploreEventName.setText(events.get(position).getEventName());
         holder.Eventdate.setText(events.get(position).getEventDate());
@@ -49,6 +62,14 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
         Glide.with(holder.itemView.getContext())
                 .load(imageUrl)
                 .into(holder.Imageing);
+        holder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                saveevent.add(events.get(postini));
+            }
+        });
+
     }
 
     @Override
@@ -63,6 +84,7 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
         public final TextView Eventdate;
         public final ImageView Imageing;
         public Event EventForView;
+        public Button button;
 
 
         public ViewHolder(FragmentExploreBinding binding) {
@@ -71,6 +93,7 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
             Eventlocation = binding.ExploreEventlocation;
             Eventdate = binding.ExploreEventDate;
             Imageing = binding.ExploreuserImage;
+            button = binding.ExploreEventDetialsButton;
 
         }
 

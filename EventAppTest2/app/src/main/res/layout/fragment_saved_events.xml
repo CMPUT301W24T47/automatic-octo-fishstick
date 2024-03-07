@@ -14,7 +14,19 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="242dp">
+            android:layout_height="302dp">
+
+            <TextView
+                android:id="@+id/SavedEventDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="76dp"
+                android:hint="ssssssssssssssss"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/SavedEventlocation" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/SavedEventImage"
@@ -80,6 +92,7 @@
                 android:layout_width="140dp"
                 android:layout_height="41dp"
                 android:layout_margin="16dp"
+                android:layout_marginTop="27dp"
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="@color/purple"
                 android:drawableEnd="@drawable/ic_buttonarrow"
@@ -88,7 +101,7 @@
                 android:text="Detials"
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/SavedEventlocation"
+                app:layout_constraintTop_toBottomOf="@+id/SavedEventDate"
                 tools:layout_editor_absoluteX="0dp" />
 
 

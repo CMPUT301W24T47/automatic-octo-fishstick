@@ -26,19 +26,24 @@ public class ExploreFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private static ArrayList<Event> events;
+    private static ArrayList<Event> sevents;
+    private static String id;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ExploreFragment(ArrayList<Event> Explore) {
+    public ExploreFragment(ArrayList<Event> Explore,ArrayList<Event> saveEvents,String did) {
         events = Explore;
+        sevents = saveEvents;
+        id = did;
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static ExploreFragment newInstance(int columnCount) {
-        ExploreFragment fragment = new ExploreFragment(events);
+        ExploreFragment fragment = new ExploreFragment(events,sevents,id);
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -71,7 +76,7 @@ public class ExploreFragment extends Fragment {
 
 
             //give the list of explore events to the recyler view
-            recyclerView.setAdapter(new ExploreEventsRecyclerViewAdapter(events));
+            recyclerView.setAdapter(new ExploreEventsRecyclerViewAdapter(events,sevents,id));
         }
         return view;
     }

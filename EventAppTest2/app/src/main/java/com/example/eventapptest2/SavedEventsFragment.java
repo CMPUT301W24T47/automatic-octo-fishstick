@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 
 import com.example.eventapptest2.placeholder.PlaceholderContent;
 
+import java.util.ArrayList;
+
 /**
  * A fragment representing a list of Items.
  */
@@ -23,18 +25,20 @@ public class SavedEventsFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    private static ArrayList<Event> sevents;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public SavedEventsFragment() {
+    public SavedEventsFragment(ArrayList<Event> saveEvents) {
+        sevents = saveEvents;
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static SavedEventsFragment newInstance(int columnCount) {
-        SavedEventsFragment fragment = new SavedEventsFragment();
+        SavedEventsFragment fragment = new SavedEventsFragment(sevents);
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -64,7 +68,7 @@ public class SavedEventsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new SavedEventsRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            recyclerView.setAdapter(new SavedEventsRecyclerViewAdapter(sevents));
         }
         return view;
     }
