@@ -73,7 +73,9 @@ public class MainActivity extends AppCompatActivity {
                 // Navigate to UserProfileFragment with retrieved user
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.framelayout, new UserProfileFragment(testuser))
+                        .replace(R.id.framelayout, new UserProfileFragment(testuser))//we should also pass
+                        // CollectionReference usersRef
+                        // we should init a uid from testuser.getdeviceid() to we can do userRef.document(deviceid).set(editeduser) for editing
                         .commit();
 
 
@@ -183,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 user.setUserProfileImage((Image) doc.getData().get("UserProfileImage"));
 
 
-                getDataSave(deviceId);
+                getDataSave(deviceId); // maybe move outside getuser()
                 //maybe redunant but im scared
                 savedEvents = user.getSavedEvents();
 

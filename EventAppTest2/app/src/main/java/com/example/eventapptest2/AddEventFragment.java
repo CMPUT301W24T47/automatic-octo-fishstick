@@ -109,11 +109,13 @@ public class AddEventFragment extends DialogFragment {
                 // Inside AddEventFragment after selecting an image
 
                 if (selectedImageUri != null) {
+
                     StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("event_images/" + UUID.randomUUID().toString());
                     storageRef.putFile(selectedImageUri)
                             .addOnSuccessListener(taskSnapshot -> {
                                 // Image uploaded successfully, get download URL
                                 storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                    // this is adding imageURL to the databse --------------------------
                                     String imageURL = uri.toString();
 
                                     Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist);

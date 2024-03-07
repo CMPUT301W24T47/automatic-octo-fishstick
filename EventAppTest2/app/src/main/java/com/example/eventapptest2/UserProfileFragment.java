@@ -67,8 +67,11 @@ public class UserProfileFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         TextView test = v.findViewById(R.id.usernameTextViewProfile);
-        test.setText(user.getUserName());
 
+        test.setText(user.getUserName());
+        //settext,settext
+        //editing --> new window --> confirm --> usersref.document(id).set(User edituser)
+        // user.setposter(string imageurl)
 
 
 
