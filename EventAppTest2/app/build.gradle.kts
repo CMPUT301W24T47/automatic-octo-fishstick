@@ -48,7 +48,13 @@ secrets {
     ignoreList.add("sdk.*")       // Ignore all keys matching the regexp "sdk.*"
 }
 dependencies {
-    
+    implementation("com.google.zxing:core:3.4.1")
+
+
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    implementation("androidx.multidex:multidex:2.0.1")
+
     implementation("com.google.android.gms:play-services-vision:20.1.3")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")

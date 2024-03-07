@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -39,8 +40,8 @@ public class QRCameraScannerFragment extends Fragment {
     private static final int REQUEST_CAMERA_PERMISSION = 201;
     Button open_camera_button;
     String intentData;
-
-
+    MainActivity mActivityCallback;
+    Button generate_qr_button;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -87,6 +88,15 @@ public class QRCameraScannerFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_q_r_camera_scanner, container, false);
         open_camera_button = (Button) rootView.findViewById(R.id.open_camera_button);
         surfaceView = (SurfaceView) rootView.findViewById(R.id.surfaceView);
+        mActivityCallback = (MainActivity)getActivity();
+        generate_qr_button = (Button) rootView.findViewById(R.id.generate_qr_button);
+        generate_qr_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraSource.release();
+                mActivityCallback.switchToGenerateQRFragment();
+            }
+        });
         initialiseDetectorsandSources();
         // Inflate the layout for this fragment
         return rootView;
@@ -131,7 +141,35 @@ public class QRCameraScannerFragment extends Fragment {
                 cameraSource.stop();
             }
         });
+        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
+            @Override
+            public void release() {
+                Toast.makeText(getActivity().getApplicationContext(), "QR scanner stopped", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void receiveDetections(@NonNull Detector.Detections<Barcode> detections) {
+                final SparseArray<Barcode> barcodes = detections.getDetectedItems();
+                if (barcodes.size() != 0){
+                    open_camera_button.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            open_camera_button.setText("Go to event");
+                            intentData = barcodes.valueAt(0).displayValue;
+                            generate_qr_button.setText(intentData);
+                            open_camera_button.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mActivityCallback.switchToGenerateQRFragment();
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
     }
+
     @Override
     public void onPause(){
         super.onPause();

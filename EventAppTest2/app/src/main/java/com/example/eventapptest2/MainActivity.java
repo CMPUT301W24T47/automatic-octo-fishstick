@@ -106,4 +106,10 @@ public class MainActivity extends AppCompatActivity{
         fragmentTransaction.replace(R.id.framelayout,new QRCameraScannerFragment());
         fragmentTransaction.commit();
     }
+    public void switchToGenerateQRFragment(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.framelayout,new GeneratedQRFragment());
+        fragmentTransaction.commit();
+    }
 }
