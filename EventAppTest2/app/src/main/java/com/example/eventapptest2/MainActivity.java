@@ -206,7 +206,8 @@ public class MainActivity extends AppCompatActivity {
                     String Eventdes = (String) doc.getData().get("eventDescription");
                     ArrayList<User> attendelist = (ArrayList<User>) doc.getData().get("attendeeList");
                     ArrayList<User> checkinlist = (ArrayList<User>) doc.getData().get("Checkin-list");
-                    String eventImage = (String) doc.getData().get("eventImageURL");
+                    String eventImage = (String) doc.getData().get("eventPoster");
+                    //System.out.println("Image URL: " + eventImage);
                     // ... (add other event properties based on your Event class)
                     Explore.add(new Event(EventId,eventName, eventLocation, eventDate,eventLimit, eventImage, Eventdes,attendelist,checkinlist)); // Assuming "karan" is a placeholder for organizer
                 }
