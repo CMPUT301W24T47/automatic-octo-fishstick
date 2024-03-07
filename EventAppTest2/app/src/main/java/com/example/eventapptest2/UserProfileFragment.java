@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+
+import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,9 +25,11 @@ public class UserProfileFragment extends Fragment {
 //    // TODO: Rename and change types of parameters
 //    private String mParam1;
 //    private String mParam2;
+    User user;
 
-    public UserProfileFragment() {
+    public UserProfileFragment(User testuser) {
         // Required empty public constructor
+        this.user = testuser;
     }
 
     /**
@@ -58,6 +63,15 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        TextView test = v.findViewById(R.id.usernameTextViewProfile);
+        test.setText(user.getUserName());
+
+
+
+
+        return v;
     }
 }

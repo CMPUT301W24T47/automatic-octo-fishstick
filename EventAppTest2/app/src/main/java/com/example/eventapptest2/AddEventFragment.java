@@ -2,8 +2,10 @@ package com.example.eventapptest2;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,10 +25,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import static android.app.Activity.RESULT_OK;
 
 import java.util.ArrayList;
+import java.util.UUID;
+
+import io.grpc.Context;
 
 public class AddEventFragment extends DialogFragment {
 
@@ -33,10 +45,16 @@ public class AddEventFragment extends DialogFragment {
     private ArrayList<Event> exploreEvents;
     private Uri selectedImageUri;
     private User EditUser;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference useresfb = db.collection("users");
+    private final CollectionReference eventfb = db.collection("ExploreEvents");
 
-    public AddEventFragment(ArrayList<Event> exploreEvents, User user) {
+    public AddEventFragment(ArrayList<Event> exploreEvents, User user){//CollectionReference eventref, CollectionReference usersref) {
         this.exploreEvents = exploreEvents;
         this.EditUser = user;
+//        this.useresfb = usersref;
+//        this.eventfb = eventref;
+
     }
 
     @Nullable
@@ -54,18 +72,82 @@ public class AddEventFragment extends DialogFragment {
 
 
         Button confirmButton = view.findViewById(R.id.AddEventconfirmButton);
+        EditText eventName = view.findViewById(R.id.DescriptionText);
+        EditText location = view.findViewById(R.id.add_location);
+        EditText limit = view.findViewById(R.id.add_attendee_limit);
+        EditText date = view.findViewById(R.id.addEventDate);
+        EditText desc = view.findViewById(R.id.AddEventDescription);
+        ImageView addEventImage = view.findViewById(R.id.AddEventImage);
+
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // firebase and Eventlist update for user
+                ArrayList<User> addatendeelist = new ArrayList<>();
+                ArrayList<User> checkedinlist = new ArrayList<>();
+                String name = eventName.getText().toString();
+                String eloc = location.getText().toString();
+                String lim = limit.getText().toString();
+                String datee = date.getText().toString();
+                String desce = desc.getText().toString();
+                //Image imagee = addEventImage.get
+                //Image
+//                final String randomkey = UUID.randomUUID().toString();
+//                final StorageReference imageref = FirebaseStorage.getInstance().getReference().child("images/" + randomkey);
+//
+//
+//                imageref.putFile(selectedImageUri)
+//                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                            @Override
+//                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                            }
+//                        });
+                // Inside AddEventFragment after selecting an image
 
+                if (selectedImageUri != null) {
+                    StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("event_images/" + UUID.randomUUID().toString());
+                    storageRef.putFile(selectedImageUri)
+                            .addOnSuccessListener(taskSnapshot -> {
+                                // Image uploaded successfully, get download URL
+                                storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                    String imageURL = uri.toString();
 
-
-                //user.orginzedevents.add(event)
-
-                // sepereatly update explore event it is a global event make a firebase collection explore events
-
-                // add a list in Events called Array<(User,Boolean Chekin Status)> attendelist; -- just a side note not for code
+                                    Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist);
+                                    exploreEvents.add(newevent);
+                                    eventfb.add(newevent); /////////firebase
+                                    ArrayList<Event> userevent = EditUser.getCreatedEvents();
+                                    userevent.add(newevent);
+                                    EditUser.setCreatedEvents(userevent);
+                                    useresfb.document(EditUser.getDeviceId()).set(EditUser);
+                                    // Store imageURL along with other event details in Firestore
+                                    // Example: firestore.collection("events").document(eventId).update("eventPoster", imageURL);
+                                });
+                            });
+                }
+                else {
+                    int liming = Integer.parseInt(lim.trim());
+                    Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist);
+                    exploreEvents.add(newevent);
+                    eventfb.add(newevent); /////////firebase
+                    ArrayList<Event> userevent = EditUser.getCreatedEvents();
+                    userevent.add(newevent);
+                    EditUser.setCreatedEvents(userevent);
+                    useresfb.document(EditUser.getDeviceId()).set(EditUser);}
+//
+//
+//
+//
+//
+//
+//                // firebase and Eventlist update for user
+//
+//
+//
+//                //user.orginzedevents.add(event)
+//
+//                // sepereatly update explore event it is a global event make a firebase collection explore events
+//
+//                // add a list in Events called Array<(User,Boolean Chekin Status)> attendelist; -- just a side note not for code
 
             }
         });
@@ -94,5 +176,11 @@ public class AddEventFragment extends DialogFragment {
             }
         }
     }
+    private String getMimeType(Uri uri) {
+        ContentResolver contentResolver = requireContext().getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
 
 }
