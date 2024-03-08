@@ -27,22 +27,14 @@ public class EditUserProfileActivity extends AppCompatActivity {
     EditText editPhoneNum;
     User user;
 
-//    public EditUserProfileActivity(User userJay){
-//        this.user = userJay;
-//    }
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference usersRef = db.collection("users");
-
-
-
-
+//    FirebaseFirestore db = FirebaseFirestore.getInstance();
+//    CollectionReference usersRef = db.collection("users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_profile);
-        Bundle bundle = getIntent().getExtras();
 
         backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -53,31 +45,43 @@ public class EditUserProfileActivity extends AppCompatActivity {
         });
 
         // Get the User object information from the previous Activity (UserProfileFragment)
-//        user = (User) getIntent().getSerializableExtra("user");
+
 
         editName = findViewById(R.id.userEditNameText);
         editHomePage = findViewById(R.id.userEditHomepageText);
         editEmail = findViewById(R.id.userEditEmailText);
         editPhoneNum = findViewById(R.id.userEditPhoneNumText);
 
+        Bundle bundle = getIntent().getExtras();
+        // Get the User object information from the previous Activity (UserProfileFragment)
+        if (bundle != null) {
+            String userName = bundle.getString("userName");
+            String userHomepage = bundle.getString("homepage");
+            String userEmail = bundle.getString("email");
+            String userPhoneNum = bundle.getString("phoneNum");
+
+            editName.setText(userName);
+            editHomePage.setText(userHomepage);
+            editEmail.setText(userEmail);
+            editPhoneNum.setText(userPhoneNum);
+
+        }
+
         // Get each specific user information from the previous screen
         // - getStringExtra(key)
         //  - Takes the unique key information from the previous page to allow to show on the new screen
-        String userName = getIntent().getStringExtra("userName");
-        editName.setText(userName);
-        String userHomepage = getIntent().getStringExtra("homepage");
-        editHomePage.setText(userHomepage);
+//        String userName = getIntent().getStringExtra("userName");
+//        editName.setText(userName);
+//        String userHomepage = getIntent().getStringExtra("homepage");
+//        editHomePage.setText(userHomepage);
 
 //        String userEmail = getIntent().getStringExtra("email");
 //        editEmail.setText(userEmail);
 //        String userPhoneNum = getIntent().getStringExtra("phoneNum");
 //        editPhoneNum.setText(userPhoneNum);
 
-//        // Karan
-//        User updateUser = getIntent().getParcelableExtra("user");
-//        editName.setText(updateUser.getUserName());
-
-
+//        editName.setText(user.getUserName());
+//        editHomePage.setText(user.getUserHomepage());
 
         // Implement Verify button
         // - Updates the changed user information
@@ -85,31 +89,31 @@ public class EditUserProfileActivity extends AppCompatActivity {
         verifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                updateUser.setUserName(editName.getText().toString());
                 updateUserProfile();
-
-                usersRef.document("abdimare25").set(user);
             }
         });
-
     }
 
+
+    // Update user's profile with the edited information
     private void updateUserProfile() {
         String updatedName = editName.getText().toString();
         String updatedHomePage = editHomePage.getText().toString();
-//        String updatedEmail = editEmail.getText().toString();
-//        String updatedPhoneNum = editPhoneNum.getText().toString();
+        String updatedEmail = editEmail.getText().toString();
+        String updatedPhoneNum = editPhoneNum.getText().toString();
 
-        user.setUserName(updatedName);
-        user.setUserHomepage(updatedHomePage);
+//        user.setUserName(updatedName);
+//        user.setUserHomepage(updatedHomePage);
 //        user.setUserEmail(updatedEmail);
 //        user.getUserPhoneNumber(updatedPhoneNum);
 
-        // Pass updated information back to the UserProfileFragment
-        Intent intent = new Intent();
-        intent.putExtra("updatedUser", user);
-        setResult(Activity.RESULT_OK, intent);
-
+        // Pass back updated user object to UserProfileFragment
+        Intent updateIntent = new Intent();
+        updateIntent.putExtra("updatedUserName", updatedName);
+        updateIntent.putExtra("updatedUserHomepage", updatedHomePage);
+        updateIntent.putExtra("updatedUserEmail", updatedEmail);
+        updateIntent.putExtra("updatedUserPhoneNum", updatedPhoneNum);
+        setResult(Activity.RESULT_OK, updateIntent);
         finish();
     }
 

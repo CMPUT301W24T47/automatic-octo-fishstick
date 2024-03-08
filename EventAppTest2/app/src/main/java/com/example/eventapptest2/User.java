@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * This class represents a User
  */
-public class User implements Parcelable {
+public class User implements Serializable {
     String userName;
     String userHomepage;
     String userEmail;
@@ -43,17 +43,17 @@ public class User implements Parcelable {
         userProfileImage = in.readString();
     }
 
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
+//    public static final Creator<User> CREATOR = new Creator<User>() {
+//        @Override
+//        public User createFromParcel(Parcel in) {
+//            return new User(in);
+//        }
+//
+//        @Override
+//        public User[] newArray(int size) {
+//            return new User[size];
+//        }
+//    };
 
     public void setUserName(String userName) {
         this.userName = userName;
@@ -116,18 +116,18 @@ public class User implements Parcelable {
     }
 
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(userName);
-        dest.writeString(userHomepage);
-        dest.writeString(userEmail);
-        dest.writeString(userPhoneNumber);
-        dest.writeString(userProfileImage);
-    }
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(@NonNull Parcel dest, int flags) {
+//        dest.writeString(userName);
+//        dest.writeString(userHomepage);
+//        dest.writeString(userEmail);
+//        dest.writeString(userPhoneNumber);
+//        dest.writeString(userProfileImage);
+//    }
 }
 
