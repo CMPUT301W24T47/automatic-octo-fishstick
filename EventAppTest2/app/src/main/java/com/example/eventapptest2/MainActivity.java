@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //////////
                 // Navigate to UserProfileFragment with retrieved user
-                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentManager fragmentManager = getSupportFragmentManager(); //passing this into explore events fragment
                 fragmentManager.beginTransaction()
                         .replace(R.id.framelayout, new UserProfileFragment(testuser))//we should also pass
                         // CollectionReference usersRef
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                         } else if (itemId == R.id.ExploreEventNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore,savedEvents,deviceId));
+                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore,savedEvents,deviceId,fragmentManager));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.SavedEventNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();

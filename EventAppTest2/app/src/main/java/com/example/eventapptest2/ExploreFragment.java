@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,22 +29,24 @@ public class ExploreFragment extends Fragment {
     private static ArrayList<Event> events;
     private static ArrayList<Event> sevents;
     private static String id;
+    private static FragmentManager fragmentManager;
 
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ExploreFragment(ArrayList<Event> Explore,ArrayList<Event> saveEvents,String did) {
+    public ExploreFragment(ArrayList<Event> Explore,ArrayList<Event> saveEvents,String did,FragmentManager fragment) {
         events = Explore;
         sevents = saveEvents;
         id = did;
+        fragmentManager = fragment;
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static ExploreFragment newInstance(int columnCount) {
-        ExploreFragment fragment = new ExploreFragment(events,sevents,id);
+        ExploreFragment fragment = new ExploreFragment(events,sevents,id,fragmentManager);
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -76,7 +79,7 @@ public class ExploreFragment extends Fragment {
 
 
             //give the list of explore events to the recyler view
-            recyclerView.setAdapter(new ExploreEventsRecyclerViewAdapter(events,sevents,id));
+            recyclerView.setAdapter(new ExploreEventsRecyclerViewAdapter(events,sevents,id,fragmentManager));
         }
         return view;
     }

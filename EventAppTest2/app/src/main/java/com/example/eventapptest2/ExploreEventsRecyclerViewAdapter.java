@@ -1,6 +1,8 @@
 package com.example.eventapptest2;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.media.Image;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.eventapptest2.placeholder.PlaceholderContent.PlaceholderItem;
 import com.example.eventapptest2.databinding.FragmentExploreBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,12 +40,14 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
     String did;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private  CollectionReference saveevent;
+    private static FragmentManager fragmentManager;
 
-    public ExploreEventsRecyclerViewAdapter(List<Event> items,List<Event> saveEvents,String id) {
+    public ExploreEventsRecyclerViewAdapter(List<Event> items,List<Event> saveEvents,String id,FragmentManager fragment) {
         events = items;
         sevents = saveEvents;
         did = id;
         saveevent = db.collection("SavedEvents"+id);
+        fragmentManager = fragment;
 
     }
 
@@ -79,32 +84,49 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
                 // well need to do something like we did in main to get data for the attende list and check if length is < the length of limit
                 //as well we should do else elif b/c the code will be faster for no limit then just check getlimit == ""
                 //to do the attende chcek in the just add a optinal boolean to the user init clause and only use it for create user as attendee here
-                    final CollectionReference attendeeRef = db.collection("Attendee" + events.get(postini).getEventid());
-                    ArrayList<User> attendees = new ArrayList<>();
-                attendeeRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                            if (error != null) {
-                                return;
-                            }
+//                    final CollectionReference attendeeRef = db.collection("Attendee" + events.get(postini).getEventid());
+//                    ArrayList<User> attendees = new ArrayList<>();
+//                attendeeRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+//                            if (error != null) {
+//                                return;
+//                            }
+//
+//                            attendees.clear(); // Clear the old list
+//                            for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+////                    String eventId = doc.getId();
+//                                if (doc.exists()) {
+//                                    attendees.add(new User());
+//                                }// Assuming "karan" is a placeholder for organizer
+//                            }
+//
+//
+//                        }
+//                    });
+//                //so theses ifs did nothing also doesnt check if user has already added it to the list so be careful
+//                if (events.get(postini).getEventLimit() == ""){saveevent.add(events.get(postini));
+//                                                                        attendeeRef.add(new User());}
+//
+//                else if (attendees.size() <= Integer.parseInt(events.get(postini).getEventLimit())) {saveevent.add(events.get(postini));
+//                    attendeeRef.add(new User());}
 
-                            attendees.clear(); // Clear the old list
-                            for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-//                    String eventId = doc.getId();
-                                if (doc.exists()) {
-                                    attendees.add(new User());
-                                }// Assuming "karan" is a placeholder for organizer
-                            }
 
 
-                        }
-                    });
-                //so theses ifs did nothing also doesnt check if user has already added it to the list so be careful
-                if (events.get(postini).getEventLimit() == ""){saveevent.add(events.get(postini));
-                                                                        attendeeRef.add(new User());}
+                //^^ all the code above is to try to save an event
 
-                else if (attendees.size() <= Integer.parseInt(events.get(postini).getEventLimit())) {saveevent.add(events.get(postini));
-                    attendeeRef.add(new User());}
+                // now we try to hide bottom nav to show a detials page with a back arrow
+                BottomNavigationView bottomnav = v.findViewById(R.id.bottomNavView);
+                //bottomnav.setVisibility(View.INVISIBLE);
+
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                fragmentTransaction.replace(R.id.framelayout, new OldQrsFragments()); //explore is temp
+                fragmentTransaction.commit();
+
+
+
+
             }
         });
 
