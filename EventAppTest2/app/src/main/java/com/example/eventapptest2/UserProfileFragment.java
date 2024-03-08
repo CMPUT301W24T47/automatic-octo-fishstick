@@ -107,10 +107,7 @@ public class UserProfileFragment extends Fragment{
                     userHomePageTextView.setText(updatedUserHomepage);
                     userEmailTextView.setText(updatedUserEmail);
                     userPhoneNumTextView.setText(updatedUserPhoneNum);
-
-
-
-
+                    
                 }
             }
     );
