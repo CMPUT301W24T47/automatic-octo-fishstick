@@ -3,6 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="Go Back"
-        android:id="@+id/GoBacknav"
+        android:id="@+id/GoBacknavDets"
         android:icon="@drawable/ic_go_back"/>
+    <item
+        android:title=""
+        android:id="@+id/invisibleforgoingback"
+        />
 </menu>

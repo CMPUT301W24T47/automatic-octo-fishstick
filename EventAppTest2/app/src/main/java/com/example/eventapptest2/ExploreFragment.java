@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.eventapptest2.placeholder.PlaceholderContent;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -29,24 +30,26 @@ public class ExploreFragment extends Fragment {
     private static ArrayList<Event> events;
     private static ArrayList<Event> sevents;
     private static String id;
-    private static FragmentManager fragmentManager;
+    private static FragmentManager frag;
+    private static BottomNavigationView bottomnav;
 
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ExploreFragment(ArrayList<Event> Explore,ArrayList<Event> saveEvents,String did,FragmentManager fragment) {
+    public ExploreFragment(ArrayList<Event> Explore,ArrayList<Event> saveEvents,String did,FragmentManager freg,BottomNavigationView bottomNavigationview) {
         events = Explore;
         sevents = saveEvents;
         id = did;
-        fragmentManager = fragment;
+        frag = freg;
+        bottomnav = bottomNavigationview;
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static ExploreFragment newInstance(int columnCount) {
-        ExploreFragment fragment = new ExploreFragment(events,sevents,id,fragmentManager);
+        ExploreFragment fragment = new ExploreFragment(events,sevents,id,frag,bottomnav);
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -79,7 +82,7 @@ public class ExploreFragment extends Fragment {
 
 
             //give the list of explore events to the recyler view
-            recyclerView.setAdapter(new ExploreEventsRecyclerViewAdapter(events,sevents,id,fragmentManager));
+            recyclerView.setAdapter(new ExploreEventsRecyclerViewAdapter(events,sevents,id,frag,bottomnav));
         }
         return view;
     }

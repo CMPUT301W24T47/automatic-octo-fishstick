@@ -38,16 +38,19 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
     private final List<Event> events;
     List<Event> sevents;
     String did;
+    //private OnExploreButtonClickListener mListener;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private  CollectionReference saveevent;
-    private static FragmentManager fragmentManager;
+    private static FragmentManager frag;
+    private BottomNavigationView bottomnav;
 
-    public ExploreEventsRecyclerViewAdapter(List<Event> items,List<Event> saveEvents,String id,FragmentManager fragment) {
+    public ExploreEventsRecyclerViewAdapter(List<Event> items,List<Event> saveEvents,String id,FragmentManager freg,BottomNavigationView bottomNavigationview) {
         events = items;
         sevents = saveEvents;
         did = id;
         saveevent = db.collection("SavedEvents"+id);
-        fragmentManager = fragment;
+        frag = freg;
+        bottomnav = bottomNavigationview;
 
     }
 
@@ -115,14 +118,30 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
 
                 //^^ all the code above is to try to save an event
 
-                // now we try to hide bottom nav to show a detials page with a back arrow
-                BottomNavigationView bottomnav = v.findViewById(R.id.bottomNavView);
-                //bottomnav.setVisibility(View.INVISIBLE);
 
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                if (mListener != null) {
+//                    if (postini != RecyclerView.NO_POSITION) {
+//                        mListener.onExploreButtonClick();
+//                    }
+//                }
+
+                // now we try to hide bottom nav to show a detials page with a back arrow
+
+
+
+               // BottomNavigationView bottomnav = v.findViewById(R.id.bottomNavView);
+//                //bottomnav.setVisibility(View.INVISIBLE);
+//
+//
+                FragmentTransaction fragmentTransaction = frag.beginTransaction();
                 //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                fragmentTransaction.replace(R.id.framelayout, new OldQrsFragments()); //explore is temp
+                fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(events.get(position))); //explore is temp
                 fragmentTransaction.commit();
+                if (bottomnav != null) {
+                    bottomnav.getMenu().clear();
+                    bottomnav.inflateMenu(R.menu.go_back_menu);
+                    v.postDelayed(() -> bottomnav.setSelectedItemId(R.id.invisibleforgoingback), 100);
+                }
 
 
 
@@ -131,6 +150,15 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
         });
 
     }
+//    public interface OnExploreButtonClickListener {
+//        void onExploreButtonClick();
+//    }
+//
+//
+//
+//    public void setOnExploreButtonClickListener(OnExploreButtonClickListener listener) {
+//        mListener = listener;
+//    }
 
     @Override
     public int getItemCount() {

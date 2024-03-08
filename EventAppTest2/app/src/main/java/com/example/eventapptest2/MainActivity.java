@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {//implements ExploreEventsRecyclerViewAdapter.OnExploreButtonClickListener {
 
     // Initialize the Explore ArrayList
    // Event addEventFragmentstore = new Event();
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //////////
                 // Navigate to UserProfileFragment with retrieved user
-                FragmentManager fragmentManager = getSupportFragmentManager(); //passing this into explore events fragment
+                FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.framelayout, new UserProfileFragment(testuser))//we should also pass
                         // CollectionReference usersRef
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                         } else if (itemId == R.id.ExploreEventNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore,savedEvents,deviceId,fragmentManager));
+                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore,savedEvents,deviceId,fragmentManager,bottomnav));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.SavedEventNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -141,12 +141,25 @@ public class MainActivity extends AppCompatActivity {
                             bottomnav.getMenu().clear();
                             bottomnav.inflateMenu(R.menu.bottom_nav_menu);
                             bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.UserProfileNav), 100);
-                        } else {
+                        } else if (itemId == R.id.GoBacknavDets) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser));
+                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore,savedEvents,deviceId,fragmentManager,bottomnav));
                             fragmentTransaction.commit();
+                            bottomnav.getMenu().clear();
+                            bottomnav.inflateMenu(R.menu.bottom_nav_menu);
+                            bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.ExploreEventNav), 100);
                         }
+                        //implement elif fragment change for new menus made from elsewhere
+
+
+                        //else is bad if we have no click menu
+//                        else {
+//                            FragmentManager fragmentManager = getSupportFragmentManager();
+//                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser));
+//                            fragmentTransaction.commit();
+//                        }
 
                         return true;
                     }
@@ -185,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                 user.setUserProfileImage((Image) doc.getData().get("UserProfileImage"));
 
 
-                getDataSave(deviceId); // maybe move outside getuser()
+                getDataSave(deviceId);
                 //maybe redunant but im scared
                 savedEvents = user.getSavedEvents();
 
@@ -310,4 +323,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+//    @Override
+//    public void onExploreButtonClick() {
+//
+//
+//    }
 }
