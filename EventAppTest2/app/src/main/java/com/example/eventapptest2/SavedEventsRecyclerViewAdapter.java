@@ -24,10 +24,21 @@ public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEv
 
     private final List<Event> events;
 
+    /**
+     * constructor
+     * @param saveEvents
+     */
     public SavedEventsRecyclerViewAdapter(List<Event> saveEvents) {
         events = saveEvents;
     }
 
+    /**
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -35,6 +46,12 @@ public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEv
 
     }
 
+    /**
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         int postini = position;
@@ -63,6 +80,9 @@ public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEv
         return events.size();
     }
 
+    /**
+     * creates the view of the fragment of the event
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView ExploreEventName;
 

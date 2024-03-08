@@ -43,6 +43,14 @@ import java.util.UUID;
 
 import io.grpc.Context;
 
+
+/**
+ * a {@link DialogFragment} subclass
+ * uses {@link AddEventFragment} to store the created event
+ * is a dialog fragment that pops up once clicked on the nav bar
+ * in an Event array and stores the information into a Firestore
+ * collection
+ * */
 public class AddEventFragment extends DialogFragment {
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -55,6 +63,14 @@ public class AddEventFragment extends DialogFragment {
     private ArrayList<Event> CreateEvents;
 
     private CollectionReference eventcreated;
+
+    /**
+     * Constructor
+     * @param exploreEvents the array of events that are made
+     * @param user the user that makes the event
+     * @param create used to store the unique event
+     * @param createEvents the array of events that are created
+     */
     public AddEventFragment(ArrayList<Event> exploreEvents, User user, String create,ArrayList<Event> createEvents){//CollectionReference eventref, CollectionReference usersref) {
         this.exploreEvents = exploreEvents;
         this.EditUser = user;
@@ -65,6 +81,18 @@ public class AddEventFragment extends DialogFragment {
 
     }
 
+    /**
+     * creates the view to make an event
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return the view to input information in to a new event
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -88,6 +116,11 @@ public class AddEventFragment extends DialogFragment {
         ImageView addEventImage = view.findViewById(R.id.AddEventImage);
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * receives the event information inputted by the user and creates the Event
+             * and stores into firebase
+             * @param v The view that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 ArrayList<User> addatendeelist = new ArrayList<>();
@@ -175,11 +208,25 @@ public class AddEventFragment extends DialogFragment {
         return view;
     }
 
+    /**
+     * asks user permission to open their image gallery
+     */
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
+    /**
+     * 
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -33,7 +33,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * MainActicty class handles managing the UI elements and the navigation of the app
+ * the methods in the class switch the fragments of the activty, initializes the Bottom Navigation Bar,
+ * stores the events into the correct event lists and stores them in the firebase, and also stores
+ * user information once logged in
+ */
 public class MainActivity extends AppCompatActivity {//implements ExploreEventsRecyclerViewAdapter.OnExploreButtonClickListener {
 
     // Initialize the Explore ArrayList
@@ -52,8 +57,14 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     public int inte = 0;
 
 
-
-
+    /**
+     * Initializes the activities UI elements and Navigation Bar.
+     * Has a listener to display the correct fragments of the Navigation Bar
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -240,6 +251,12 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     //one for user created saved and old events
     //then we will map each event to get their attendelist ss
     //all user stuff saved on create
+
+    /**
+     * gets the users data once logged in.
+     * @param deviceId
+     * @return
+     */
     private Task<User> getUser(String deviceId) {
         DocumentReference docRef = usersRef.document(deviceId);
         return docRef.get().continueWith(task -> {
@@ -277,9 +294,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     }
 
 
-
-
-
+    /**
+     * stores the event saved by the user into the collection
+     * @param id
+     */
     private void getDataSave(String id){
         final CollectionReference SavedeventsRef = db.collection("SavedEvents" + id);
 
@@ -314,6 +332,11 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
             }
         });
     }
+
+    /**
+     * stores the event created by the organizer in to firebase collection
+     * @param id
+     */
     private void getDataCreate(String id){
          final CollectionReference createeventsRef = db.collection("CreateEvents" + id);
 
@@ -348,8 +371,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         });
     }
 
+    /**
+     * Event information
+     */
     private void getData(){
-
 
         eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

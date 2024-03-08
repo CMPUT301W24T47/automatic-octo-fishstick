@@ -24,6 +24,9 @@ public class OldQrsFragments extends Fragment {
 //    private String mParam1;
 //    private String mParam2;
 
+    /**
+     * empty constructor
+     */
     public OldQrsFragments() {
         // Required empty public constructor
     }
