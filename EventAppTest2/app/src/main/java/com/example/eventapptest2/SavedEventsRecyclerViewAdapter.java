@@ -1,5 +1,7 @@
 package com.example.eventapptest2;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.eventapptest2.placeholder.PlaceholderContent.PlaceholderItem;
 import com.example.eventapptest2.databinding.FragmentSavedEventsBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,9 +26,15 @@ import java.util.List;
 public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEventsRecyclerViewAdapter.ViewHolder> {
 
     private final List<Event> events;
+    private static FragmentManager frag;
+    private BottomNavigationView bottomnav;
+    private static User did;
 
-    public SavedEventsRecyclerViewAdapter(List<Event> saveEvents) {
-        events = saveEvents;
+
+    public SavedEventsRecyclerViewAdapter(List<Event> saveEvents,FragmentManager freg,BottomNavigationView bottomNavigationview,User id) {
+        events = saveEvents;frag = freg;
+        bottomnav = bottomNavigationview;
+        did = id;
     }
 
     @Override
@@ -49,13 +58,24 @@ public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEv
         Glide.with(holder.itemView.getContext())
                 .load(imageUrl)
                 .into(holder.Imageing);
-//        holder.button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                saveevent.add(events.get(postini));
-//            }
-//        });
+        holder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                did.setLastsaved(position);
+                FragmentTransaction fragmentTransaction = frag.beginTransaction();
+                //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(events.get(position),frag)); //explore is temp
+                fragmentTransaction.commit();
+                if (bottomnav != null) {
+                    bottomnav.getMenu().clear();
+                    bottomnav.inflateMenu(R.menu.attendee_nav_menu);
+                    v.postDelayed(() -> bottomnav.setSelectedItemId(R.id.AttendeeDetails), 100);
+                }
+                //saveevent.add(events.get(postini));
+            }
+        });
     }
 
     @Override
@@ -70,7 +90,7 @@ public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEv
         public final TextView Eventdate;
         public final ImageView Imageing;
         public Event EventForView;
-        //public Button button;
+        public Button button;
 
         public ViewHolder(FragmentSavedEventsBinding binding) {
             super(binding.getRoot());
@@ -78,7 +98,7 @@ public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEv
             Eventlocation = binding.SavedEventlocation;
             Eventdate = binding.SavedEventDate;
             Imageing = binding.SaveduserImage;
-           // button = binding.ExploreEventDetialsButton;
+            button = binding.SavedEventDetialsButton;
         }
 
 

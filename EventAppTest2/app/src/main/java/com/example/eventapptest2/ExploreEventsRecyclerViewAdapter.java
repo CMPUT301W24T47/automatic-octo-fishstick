@@ -43,14 +43,16 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
     private  CollectionReference saveevent;
     private static FragmentManager frag;
     private BottomNavigationView bottomnav;
+    private User user;
 
-    public ExploreEventsRecyclerViewAdapter(List<Event> items,List<Event> saveEvents,String id,FragmentManager freg,BottomNavigationView bottomNavigationview) {
+    public ExploreEventsRecyclerViewAdapter(List<Event> items,List<Event> saveEvents,String id,FragmentManager freg,BottomNavigationView bottomNavigationview,User userr) {
         events = items;
         sevents = saveEvents;
         did = id;
         saveevent = db.collection("SavedEvents"+id);
         frag = freg;
         bottomnav = bottomNavigationview;
+        user = userr;
 
     }
 
@@ -135,7 +137,7 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
 //
                 FragmentTransaction fragmentTransaction = frag.beginTransaction();
                 //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(events.get(position),frag)); //explore is temp
+                fragmentTransaction.replace(R.id.framelayout, new ACTUALExploreEventDetsFragment(events.get(position),frag,did,user)); //explore is temp
                 fragmentTransaction.commit();
                 if (bottomnav != null) {
                     bottomnav.getMenu().clear();

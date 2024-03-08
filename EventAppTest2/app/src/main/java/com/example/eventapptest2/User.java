@@ -1,15 +1,15 @@
 package com.example.eventapptest2;
 
-import android.media.Image;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User {
+public class User implements Serializable {
     String userName;
     String userHomepage;
     String userEmail;
     String userPhoneNumber;
-    Image userProfileImage;
+    String userProfileString;
     ArrayList<Event> savedEvents;
     ArrayList<Event> createdEvents;
     ArrayList<Event> oldQRList;
@@ -22,25 +22,25 @@ public class User {
 
     int lastsaved; // goes in databse but should never be accesed through db //it will always be set first in code b4 we get it
 
-    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, Image userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList) {
+    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, String userProfileString, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList) {
         this.DeviceId = deviceId;
         this.userName = userName;
         this.userHomepage = userHomepage;
         this.userEmail = userEmail;
         this.userPhoneNumber = userPhoneNumber;
-        this.userProfileImage = userProfileImage;
+        this.userProfileString = userProfileString;
         this.savedEvents = savedEvents;
         this.createdEvents = createdEvents;
         this.oldQRList = oldQRList;
         this.lastsaved = 0;
     }
-    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, Image userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList,int pos) {
+    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, String userProfileString, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList,int pos) {
         this.DeviceId = deviceId;
         this.userName = userName;
         this.userHomepage = userHomepage;
         this.userEmail = userEmail;
         this.userPhoneNumber = userPhoneNumber;
-        this.userProfileImage = userProfileImage;
+        this.userProfileString = userProfileString;
         this.savedEvents = savedEvents;
         this.createdEvents = createdEvents;
         this.oldQRList = oldQRList;
@@ -81,11 +81,11 @@ public class User {
     }
 
 
-    public void setUserProfileImage(Image userProfileImage) {
-        this.userProfileImage = userProfileImage;
+    public void setUserProfileImage(String userProfileString) {
+        this.userProfileString = userProfileString;
     }
-    public Image getUserProfileImage() {
-        return userProfileImage;
+    public String getUserProfileImage() {
+        return userProfileString;
     }
 
 

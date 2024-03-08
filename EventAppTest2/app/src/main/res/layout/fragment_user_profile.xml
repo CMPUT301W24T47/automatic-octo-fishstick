@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:layout_marginTop="30dp"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -33,7 +34,7 @@
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="250dp"
 
-            app:layout_constraintBottom_toTopOf="@+id/editImageButton"
+            app:layout_constraintBottom_toTopOf="@+id/replaceImageButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -44,12 +45,29 @@
                 android:layout_gravity="center"
                 app:cardCornerRadius="250dp">
 
-                <ImageView
-                    android:id="@+id/userImage"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/charliekimimage" />
+                <RelativeLayout
+                    android:id="@+id/rel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/userImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="5dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/generatedimage" />
+
+                    <TextView
+                        android:id="@+id/textOnImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:maxLength="4"
+                        android:textColor="@color/black"
+                        android:layout_centerInParent="true"
+                        />
+                </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
 
@@ -69,39 +87,57 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editImageButton" />
+            app:layout_constraintTop_toBottomOf="@+id/replaceImageButton" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/editImageButton"
+            android:id="@+id/replaceImageButton"
             android:layout_width="140dp"
             android:layout_height="41dp"
             android:layout_margin="16dp"
             android:backgroundTint="@color/purple"
             android:drawableStart="@drawable/ic_editbutton_image"
-            android:drawablePadding="8dp"
-            android:text="Edit Image"
-            android:textColor="@android:color/white"
+            android:drawablePadding="5dp"
             android:gravity="center_vertical"
+            android:text="Replace"
+            android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.834" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/deleteImageButton"
+            android:layout_width="140dp"
+            android:layout_height="41dp"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/purple"
+            android:drawableStart="@drawable/ic_editbutton_image"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:text="Delete"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.8"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.834" />
 
 
-
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/editUsernameButton"
-            android:layout_width="33dp"
+            android:layout_width="39dp"
             android:layout_height="34dp"
             android:layout_margin="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="16dp"
             android:backgroundTint="@color/purple"
+            android:drawableStart="@drawable/ic_editbutton_image"
             android:src="@drawable/ic_editbutton_image"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/usernameTextViewProfile"
-            app:layout_constraintTop_toBottomOf="@+id/editImageButton" />
+            app:layout_constraintStart_toEndOf="@+id/usernameTextViewProfile" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -149,6 +185,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:hint="Type Your Phone Number"
+            android:inputType="number"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -163,8 +200,8 @@
             android:layout_margin="16dp"
             android:layout_marginTop="16dp"
             android:text="Enable Geolocation Tracking"
-            android:textStyle="bold"
             android:textColor="@color/black"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.01"
             app:layout_constraintStart_toStartOf="parent"

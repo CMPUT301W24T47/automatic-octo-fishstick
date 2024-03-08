@@ -10,7 +10,7 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/QRSignUp"
+            android:id="@+id/QRSignUpQR"
             android:layout_width="194dp"
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
@@ -20,18 +20,18 @@
             android:backgroundTint="@color/purple"
             android:drawableEnd="@drawable/ic_buttonarrow"
             android:drawablePadding="8dp"
-            android:text="QR Sign in"
+            android:text="Sign up"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ProfilePic_Event"
+            app:layout_constraintTop_toBottomOf="@+id/ProfilePic_EventQR"
             app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
-            android:id="@+id/EventImage"
+            android:id="@+id/EventImageQR"
             android:layout_width="0dp"
             android:layout_height="275dp"
             android:contentDescription="Event Image"
@@ -41,7 +41,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/EventDetailName"
+            android:id="@+id/EventDetailNameQR"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Event Name"
@@ -49,10 +49,10 @@
             android:paddingLeft="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EventImage" />
+            app:layout_constraintTop_toBottomOf="@+id/EventImageQR" />
 
         <TextView
-            android:id="@+id/EventDetailSubName"
+            android:id="@+id/EventDetailSubNameQR"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Welcome"
@@ -60,10 +60,10 @@
             android:layout_marginLeft="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EventDetailName" />
+            app:layout_constraintTop_toBottomOf="@+id/EventDetailNameQR" />
 
         <ImageView
-            android:id="@+id/EventDateIcon"
+            android:id="@+id/EventDateIconQR"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginLeft="10dp"
@@ -71,11 +71,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EventDetailSubName"
+            app:layout_constraintTop_toBottomOf="@+id/EventDetailSubNameQR"
             app:srcCompat="@drawable/date" />
 
         <TextView
-            android:id="@+id/CalenderDate"
+            android:id="@+id/CalenderDateQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -84,11 +84,11 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/EventDateIcon"
-            app:layout_constraintTop_toBottomOf="@+id/EventDetailSubName" />
+            app:layout_constraintStart_toEndOf="@+id/EventDateIconQR"
+            app:layout_constraintTop_toBottomOf="@+id/EventDetailSubNameQR" />
 
         <TextView
-            android:id="@+id/DayTimeDate"
+            android:id="@+id/DayTimeDateQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -96,11 +96,11 @@
             android:text="Day, Time"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/EventDateIcon"
-            app:layout_constraintTop_toBottomOf="@+id/CalenderDate" />
+            app:layout_constraintStart_toEndOf="@+id/EventDateIconQR"
+            app:layout_constraintTop_toBottomOf="@+id/CalenderDateQR" />
 
         <ImageView
-            android:id="@+id/EventLocationIcon"
+            android:id="@+id/EventLocationIconQR"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginLeft="10dp"
@@ -108,11 +108,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EventDateIcon"
+            app:layout_constraintTop_toBottomOf="@+id/EventDateIconQR"
             app:srcCompat="@drawable/location" />
 
         <TextView
-            android:id="@+id/LocationName"
+            android:id="@+id/LocationNameQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -121,11 +121,11 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/EventDateIcon"
-            app:layout_constraintTop_toBottomOf="@+id/DayTimeDate" />
+            app:layout_constraintStart_toEndOf="@+id/EventDateIconQR"
+            app:layout_constraintTop_toBottomOf="@+id/DayTimeDateQR" />
 
         <TextView
-            android:id="@+id/EventAddress"
+            android:id="@+id/EventAddressQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -133,11 +133,11 @@
             android:text="Address"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/EventLocationIcon"
-            app:layout_constraintTop_toBottomOf="@+id/LocationName" />
+            app:layout_constraintStart_toEndOf="@+id/EventLocationIconQR"
+            app:layout_constraintTop_toBottomOf="@+id/LocationNameQR" />
 
         <ImageView
-            android:id="@+id/ShareIcon"
+            android:id="@+id/ShareIconQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -145,11 +145,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EventLocationIcon"
+            app:layout_constraintTop_toBottomOf="@+id/EventLocationIconQR"
             app:srcCompat="@drawable/share" />
 
         <TextView
-            android:id="@+id/EventShare"
+            android:id="@+id/EventShareQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -158,11 +158,11 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/ShareIcon"
-            app:layout_constraintTop_toBottomOf="@+id/EventAddress" />
+            app:layout_constraintStart_toEndOf="@+id/ShareIconQR"
+            app:layout_constraintTop_toBottomOf="@+id/EventAddressQR" />
 
         <TextView
-            android:id="@+id/AboutEvent"
+            android:id="@+id/AboutEventQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -172,10 +172,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/QRSignUp" />
+            app:layout_constraintTop_toBottomOf="@+id/QRSignUpQR" />
 
         <TextView
-            android:id="@+id/EventDescription"
+            android:id="@+id/EventDescriptionQR"
             android:layout_width="380dp"
             android:layout_height="27dp"
             android:layout_marginLeft="10dp"
@@ -185,10 +185,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.029"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/AboutEvent" />
+            app:layout_constraintTop_toBottomOf="@+id/AboutEventQR" />
 
         <ImageView
-            android:id="@+id/ProfilePic_Event"
+            android:id="@+id/ProfilePic_EventQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -196,11 +196,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ShareIcon"
+            app:layout_constraintTop_toBottomOf="@+id/ShareIconQR"
             app:srcCompat="@drawable/circleprofilepic" />
 
         <TextView
-            android:id="@+id/UsernameText"
+            android:id="@+id/UsernameTextQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -209,11 +209,11 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/ProfilePic_Event"
-            app:layout_constraintTop_toBottomOf="@+id/EventShare" />
+            app:layout_constraintStart_toEndOf="@+id/ProfilePic_EventQR"
+            app:layout_constraintTop_toBottomOf="@+id/EventShareQR" />
 
         <TextView
-            android:id="@+id/UserType"
+            android:id="@+id/UserTypeQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -221,8 +221,8 @@
             android:text="Attendee"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/ProfilePic_Event"
-            app:layout_constraintTop_toBottomOf="@+id/UsernameText" />
+            app:layout_constraintStart_toEndOf="@+id/ProfilePic_EventQR"
+            app:layout_constraintTop_toBottomOf="@+id/UsernameTextQR" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

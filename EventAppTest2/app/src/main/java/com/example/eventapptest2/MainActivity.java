@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 //                Explore.add(new Event(deviceId,"Test", "homepage","City", 1234, null,"karan",null,null));
 //                eventsRef.document().set(Explore.get(0).toMap()); // adding test event to database
 
-                getData();
+
                 BottomNavigationView bottomnav = findViewById(R.id.bottomNavView);
                 bottomnav.setSelectedItemId(R.id.UserProfileNav);
 
@@ -111,12 +111,12 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         } else if (itemId == R.id.ExploreEventNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore,savedEvents,deviceId,fragmentManager,bottomnav));
+                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore,savedEvents,deviceId,fragmentManager,bottomnav,testuser));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.SavedEventNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new SavedEventsFragment(savedEvents)); // prolly will need not get userid of attendee when they sign in for the attendee list maybe explore event if we wanna care abt it ltr
+                            fragmentTransaction.replace(R.id.framelayout, new SavedEventsFragment(savedEvents,fragmentManager,bottomnav,testuser)); // prolly will need not get userid of attendee when they sign in for the attendee list maybe explore event if we wanna care abt it ltr
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.OldQrNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         } else if (itemId == R.id.GoBacknavDets) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore,savedEvents,deviceId,fragmentManager,bottomnav));
+                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore,savedEvents,deviceId,fragmentManager,bottomnav,testuser));
                             fragmentTransaction.commit();
                             bottomnav.getMenu().clear();
                             bottomnav.inflateMenu(R.menu.bottom_nav_menu);
@@ -162,19 +162,15 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
                             fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser)); //explore is temp
                             fragmentTransaction.commit();
-                            bottomnav.getMenu().clear();
-                            bottomnav.inflateMenu(R.menu.organizer_nav_menu);
-                            bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.OrginzersEventsnav), 100);
+//                            bottomnav.getMenu().clear();
+//                            bottomnav.inflateMenu(R.menu.organizer_nav_menu);
+//                            bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.OrginzersEventsnav), 100);
                         }
                         else if (itemId == R.id.EventMapNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser));
                             fragmentTransaction.commit();
-                            bottomnav.getMenu().clear();
-                            bottomnav.inflateMenu(R.menu.organizer_nav_menu);
-                            bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.OrginzersEventsnav), 100);
                         }
                         else if (itemId == R.id.EventAttendeesNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -203,6 +199,45 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             fragmentTransaction.replace(R.id.framelayout, new OrganizeEventDetsFragment(createdEvents.get(testuser.getLastsaved()))); //explore is temp
                             fragmentTransaction.commit();
                         }
+
+
+
+                        else if (itemId == R.id.AttendeeNotifications) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.commit();
+                        }
+                        else if (itemId == R.id.AttendeeProfile) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser));
+                            fragmentTransaction.commit();
+                        }
+
+
+                        else if (itemId == R.id.AttendeeDetails) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                            fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(savedEvents.get(testuser.getLastsaved()),fragmentManager)); //explore is temp
+                            fragmentTransaction.commit();
+                        }
+
+
+                        else if (itemId == R.id.AttendeeGoBack) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                            fragmentTransaction.replace(R.id.framelayout, new SavedEventsFragment(savedEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.commit();
+                            bottomnav.getMenu().clear();
+                            bottomnav.inflateMenu(R.menu.bottom_nav_menu);
+                            bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.SavedEventNav), 100);
+                        }
+
+
 
 
 
@@ -244,14 +279,14 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         DocumentReference docRef = usersRef.document(deviceId);
         return docRef.get().continueWith(task -> {
             DocumentSnapshot doc = task.getResult();
-            User user = new User(deviceId,"","","","",null, savedEvents,  createdEvents,  oldQRList); // Create empty user with device ID
+            User user = new User(deviceId,"","","","","", savedEvents,  createdEvents,  oldQRList); // Create empty user with device ID
             if (doc.exists()) {
                 // Map Firestore data to User object
                 user.setUserName((String) doc.getData().get("userName"));
                 user.setUserHomepage((String) doc.getData().get("userHomepage"));
                 user.setUserEmail((String) doc.getData().get("userEmail"));
                 user.setUserPhoneNumber((String) doc.getData().get("userPhoneNumber"));
-                user.setUserProfileImage((Image) doc.getData().get("UserProfileImage"));
+                user.setUserProfileImage((String) doc.getData().get("userProfileImage"));
 
 
                 getDataSave(deviceId);
@@ -263,7 +298,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 user.setCreatedEvents(createdEvents);
                 createdEvents = user.getCreatedEvents();
 
-
+                getDataExplore(deviceId);
 
                 user.setOldQRList((ArrayList<Event>) doc.getData().get("oldQRList"));
                 oldQRList = user.getOldQRList();
@@ -348,7 +383,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         });
     }
 
-    private void getData(){
+    private void getDataExplore(String id){
 
 
         eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -372,7 +407,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                     String eventImage = (String) doc.getData().get("eventPoster");
                     //System.out.println("Image URL: " + eventImage);
                     // ... (add other event properties based on your Event class)
-                    Explore.add(new Event(EventId,eventName, eventLocation, eventDate,eventLimit, eventImage, Eventdes,attendelist,checkinlist)); // Assuming "karan" is a placeholder for organizer
+                    Event test = new Event(EventId,eventName, eventLocation, eventDate,eventLimit, eventImage, Eventdes,attendelist,checkinlist);
+                    //if (EventId != test.getEventid()){
+                    Explore.add(test);
+                    //}// Assuming "karan" is a placeholder for organizer
                 }
 
 
