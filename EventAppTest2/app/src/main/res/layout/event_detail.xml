@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/EventImageOrgdet"
+            android:layout_width="0dp"
+            android:layout_height="275dp"
+            android:contentDescription="Event Image"
+            android:src="@drawable/karansbackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/EventDetailNameOrgdet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Event Name"
+            android:textSize="35sp"
+            android:paddingLeft="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EventImageOrgdet" />
+
+        <TextView
+            android:id="@+id/EventDetailSubNameOrgdet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Welcome"
+            android:textSize="20sp"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EventDetailNameOrgdet" />
+
+        <ImageView
+            android:id="@+id/EventDateIconOrgdet"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EventDetailSubNameOrgdet"
+            app:srcCompat="@drawable/date" />
+
+        <TextView
+            android:id="@+id/CalenderDateOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="10dp"
+            android:text="Day/Month/Year"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/EventDateIconOrgdet"
+            app:layout_constraintTop_toBottomOf="@+id/EventDetailSubNameOrgdet" />
+
+        <TextView
+            android:id="@+id/DayTimeDateOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="10dp"
+            android:text="Day, Time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/EventDateIconOrgdet"
+            app:layout_constraintTop_toBottomOf="@+id/CalenderDateOrgdet" />
+
+        <ImageView
+            android:id="@+id/EventLocationIconOrgdet"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EventDateIconOrgdet"
+            app:srcCompat="@drawable/location" />
+
+        <TextView
+            android:id="@+id/LocationNameOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingLeft="10dp"
+            android:text="Location Name"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/EventDateIconOrgdet"
+            app:layout_constraintTop_toBottomOf="@+id/DayTimeDateOrgdet" />
+
+        <TextView
+            android:id="@+id/EventAddressOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="10dp"
+            android:text="Address"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/EventLocationIconOrgdet"
+            app:layout_constraintTop_toBottomOf="@+id/LocationNameOrgdet" />
+
+        <ImageView
+            android:id="@+id/ShareIconOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EventLocationIconOrgdet"
+            app:srcCompat="@drawable/share" />
+
+        <TextView
+            android:id="@+id/EventShareOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:paddingLeft="10dp"
+            android:text="Share Event"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/ShareIconOrgdet"
+            app:layout_constraintTop_toBottomOf="@+id/EventAddressOrgdet" />
+
+        <ImageView
+            android:id="@+id/ShareQRIconOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ShareIconOrgdet"
+            app:srcCompat="@drawable/shareqr" />
+
+        <TextView
+            android:id="@+id/ShareQRTextOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:paddingLeft="10dp"
+            android:text="Share QR"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/ShareQRIconOrgdet"
+            app:layout_constraintTop_toBottomOf="@+id/EventShareOrgdet" />
+
+        <TextView
+            android:id="@+id/CheckInTextOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="10dp"
+            android:text="Check-in"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/ShareQRIconOrgdet"
+            app:layout_constraintTop_toBottomOf="@+id/ShareQRTextOrgdet" />
+
+        <ImageView
+            android:id="@+id/AttendeeLimitIconOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ShareQRIconOrgdet"
+            app:srcCompat="@drawable/attendeelimit" />
+
+        <TextView
+            android:id="@+id/AttendeeLimitTextOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingLeft="10dp"
+            android:text="Attendee Limit"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/AttendeeLimitIconOrgdet"
+            app:layout_constraintTop_toBottomOf="@+id/CheckInTextOrgdet" />
+
+        <TextView
+            android:id="@+id/AttendeeLimitNumOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="10dp"
+            android:text="Number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/AttendeeLimitIconOrgdet"
+            app:layout_constraintTop_toBottomOf="@+id/AttendeeLimitTextOrgdet" />
+
+        <TextView
+            android:id="@+id/GeoLocationTextOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:text="Geo-Location Tracking"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/AttendeeLimitIconOrgdet" />
+
+        <Switch
+            android:id="@+id/GeoLocationButtonOrgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.344"
+            app:layout_constraintStart_toEndOf="@+id/GeoLocationTextOrgdet"
+            app:layout_constraintTop_toBottomOf="@+id/AttendeeLimitNumOrgdet" />
+
+        <TextView
+            android:id="@+id/textView11Orgdet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="About Event"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/GeoLocationTextOrgdet" />
+
+        <TextView
+            android:id="@+id/EventDescriptionOrgdet"
+            android:layout_width="380dp"
+            android:layout_height="27dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="10dp"
+            android:text="Description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.029"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11Orgdet" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

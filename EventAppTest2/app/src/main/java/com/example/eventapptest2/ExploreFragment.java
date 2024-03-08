@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.eventapptest2.placeholder.PlaceholderContent;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -23,18 +27,30 @@ public class ExploreFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    private static ArrayList<Event> events;
+    private static ArrayList<Event> sevents;
+    private static String id;
+    private static FragmentManager frag;
+    private static BottomNavigationView bottomnav;
 
+    private static User user;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ExploreFragment() {
+    public ExploreFragment(ArrayList<Event> Explore,ArrayList<Event> saveEvents,String did,FragmentManager freg,BottomNavigationView bottomNavigationview, User userr) {
+        events = Explore;
+        sevents = saveEvents;
+        id = did;
+        frag = freg;
+        bottomnav = bottomNavigationview;
+        user = userr;
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static ExploreFragment newInstance(int columnCount) {
-        ExploreFragment fragment = new ExploreFragment();
+        ExploreFragment fragment = new ExploreFragment(events,sevents,id,frag,bottomnav,user);
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -64,7 +80,10 @@ public class ExploreFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new ExploreEventsRecyclerViewAdapter(PlaceholderContent.ITEMS));
+
+
+            //give the list of explore events to the recyler view
+            recyclerView.setAdapter(new ExploreEventsRecyclerViewAdapter(events,sevents,id,frag,bottomnav,user));
         }
         return view;
     }
