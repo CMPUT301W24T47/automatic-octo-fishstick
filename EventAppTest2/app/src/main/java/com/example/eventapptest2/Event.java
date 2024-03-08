@@ -27,13 +27,17 @@ public class Event {
     String QrUrl;
 
 
+
+    String signINQR;
+
+
     ArrayList<User> attendeList;
     ArrayList<User> checkedinList;
 
     // QR signIn;
     // QR posterQR;
 
-    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventLimit, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl ) {
+    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventLimit, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss ) {
         this.Eventid = eventid;
         this.eventName = eventName;
         this.eventLocation = eventLocation;
@@ -44,8 +48,9 @@ public class Event {
         this.attendeList = attendelist;
         this.checkedinList = checkedinlist;
         this.QrUrl = qrUrl;
+        this.signINQR =ss;
     }
-    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl ) {
+    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss ) {
         this.Eventid = eventid;
         this.eventName = eventName;
         this.eventLocation = eventLocation;
@@ -56,6 +61,8 @@ public class Event {
         this.attendeList = attendelist;
         this.checkedinList = checkedinlist;
         this.QrUrl = qrUrl;
+        this.signINQR =ss;
+
     }
 
     public Event() {
@@ -65,6 +72,8 @@ public class Event {
         this.eventLimit = "-1";
         this.eventPoster = null;
         this.EventDesription = "EventDesription";
+        this.QrUrl = "qrUrl";
+        this.signINQR ="ss";
     }
     public String getEventName() {
         return eventName;
@@ -140,6 +149,14 @@ public class Event {
 
     public void setCheckedinList(ArrayList<User> checkedinList) {
         this.checkedinList = checkedinList;
+    }
+
+    public String getSignINQR() {
+        return signINQR;
+    }
+
+    public void setSignINQR(String signINQR) {
+        this.signINQR = signINQR;
     }
 
     public Map<String, Object> toMap() {

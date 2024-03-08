@@ -15,14 +15,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
 
 public class ExploreEventDetsFragment extends Fragment {
     Event event;
     FragmentManager fragmentManager;
-    public ExploreEventDetsFragment(Event events,FragmentManager fragment){
+    User user;
+    BottomNavigationView bottomnavi;
+    public ExploreEventDetsFragment(Event events,FragmentManager fragment,User usere,BottomNavigationView bottomnav){
         event = events;
         fragmentManager = fragment;
+        user = usere;
+        bottomnavi = bottomnav;
     }
     @Nullable
     @Override
@@ -47,7 +52,7 @@ public class ExploreEventDetsFragment extends Fragment {
             public void onClick(View v) {
 
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.framelayout,new QRCameraScannerFragment());
+                fragmentTransaction.replace(R.id.framelayout,new QRCameraScannerFragment(event,user,fragmentManager,bottomnavi));
                 fragmentTransaction.commit();
 
             }

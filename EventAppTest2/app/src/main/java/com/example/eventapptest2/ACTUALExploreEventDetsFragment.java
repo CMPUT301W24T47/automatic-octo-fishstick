@@ -56,10 +56,14 @@ public class ACTUALExploreEventDetsFragment extends Fragment {
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final CollectionReference attendelistfb = db.collection("FullAttendee" + event.getEventid() + event.getEventLimit() + event.getEventName());
+
+
                 ArrayList<Event> newlist =  user.getSavedEvents();
                 newlist.add(event);
                 user.setSavedEvents(newlist);
                 saveevent.add(event);
+                attendelistfb.add(user);
 //                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //                fragmentTransaction.replace(R.id.framelayout,new QRCameraScannerFragment());
 //                fragmentTransaction.commit();

@@ -135,7 +135,18 @@ public class AddEventFragment extends DialogFragment {
                     storageRefQR.putBytes(data);
 
 
-                    String urlqr = storageRefQR.getPath();
+                    String urlqr = storageRefQR.getName();
+
+                    BitMatrix bitMatrixi = multiFormatWriter.encode("Karan", BarcodeFormat.QR_CODE,300,300);
+                    BarcodeEncoder barcodeEncoderi = new BarcodeEncoder();
+                    Bitmap bitmapi = barcodeEncoderi.createBitmap(bitMatrixi);
+                    ByteArrayOutputStream baosi = new ByteArrayOutputStream();
+                    bitmapi.compress(Bitmap.CompressFormat.JPEG, 100, baosi);
+                    byte[] datai = baosi.toByteArray();
+                    storageRefQR.putBytes(datai);
+
+
+                    String secondqr = storageRefQR.getPath();
 
 
                     if (selectedImageUri != null) {
@@ -148,7 +159,7 @@ public class AddEventFragment extends DialogFragment {
                                         // this is adding imageURL to the databse --------------------------
                                         String imageURL = uri.toString();
                                         //////////////just a test
-                                        Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist,urlqr);
+                                        Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist,urlqr,secondqr);
                                         //lists
                                         // exploreEvents.add(newevent);
                                         //CreateEvents.add(newevent);
@@ -173,7 +184,7 @@ public class AddEventFragment extends DialogFragment {
                                 });
                     }
                     else {
-                        Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist,urlqr);
+                        Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist,urlqr,secondqr);
                         exploreEvents.add(newevent);
                         eventfb.add(newevent); /////////firebase
                         eventcreated.add(newevent);

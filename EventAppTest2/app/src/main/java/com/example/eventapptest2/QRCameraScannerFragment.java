@@ -16,11 +16,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 
@@ -45,10 +50,17 @@ public class QRCameraScannerFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private User mParam1;
+    private Event event;
+    FragmentManager frag;
+    BottomNavigationView bottomnav;
 
-    public QRCameraScannerFragment() {
+    public QRCameraScannerFragment(Event evnte, User param, FragmentManager fragi, BottomNavigationView bottomnavi) {
+        //needs user to add user to list
+        mParam1 = param;
+        event =evnte;
+         frag = fragi;
+         bottomnav = bottomnavi;
         // Required empty public constructor
     }
 
@@ -61,20 +73,20 @@ public class QRCameraScannerFragment extends Fragment {
      * @return A new instance of fragment QRScannerFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static QRCameraScannerFragment newInstance(String param1, String param2) {
-        QRCameraScannerFragment fragment = new QRCameraScannerFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static QRCameraScannerFragment newInstance(String param1, String param2) {
+//        QRCameraScannerFragment fragment = new QRCameraScannerFragment(param1,param2);
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
 
@@ -154,6 +166,20 @@ public class QRCameraScannerFragment extends Fragment {
                         @Override
                         public void run() {
                             //this is what happens after qr code scanned so like we can switch fragments here
+                             final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                            final CollectionReference attendelistfb = db.collection("SigninAttendee" + event.getEventid() + event.getEventLimit() + event.getEventName());
+                            attendelistfb.add(mParam1);
+
+                            FragmentTransaction fragmentTransaction = frag.beginTransaction();
+                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                            fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(event,frag,mParam1,bottomnav)); //explore is temp
+                            fragmentTransaction.commit();
+//                            if (bottomnav != null) {
+//                                bottomnav.getMenu().clear();
+//                                bottomnav.inflateMenu(R.menu.attendee_nav_menu);
+//                                v.postDelayed(() -> bottomnav.setSelectedItemId(R.id.AttendeeDetails), 100);
+//                            }
 
 
 //                            open_camera_button.setText("Go to event");
