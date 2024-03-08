@@ -1,18 +1,27 @@
 package com.example.eventapptest2;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventapptest2.databinding.FragmentOrgainzersEventBinding;
 import com.example.eventapptest2.placeholder.PlaceholderContent.PlaceholderItem;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEventsRecyclerViewAdapter.ViewHolder> {
@@ -42,6 +51,19 @@ public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEven
         Glide.with(holder.itemView.getContext())
                 .load(imageUrl)
                 .into(holder.Imageing);
+        holder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // well need to do something like we did in main to get data for the attende list and check if length is < the length of limit
+                //as well we should do else elif b/c the code will be faster for no limit then just check getlimit == ""
+                //to do the attende chcek in the just add a optinal boolean to the user init clause and only use it for create user as attendee here
+
+
+
+
+            }
+        });
+
     }
 
     @Override
@@ -57,6 +79,7 @@ public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEven
         public final TextView Eventdate;
         public final ImageView Imageing;
         public Event EventForView;
+        public Button button;
 
 
         public ViewHolder(@NonNull FragmentOrgainzersEventBinding binding) {
@@ -65,6 +88,7 @@ public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEven
             Eventlocation = binding.OpenEventlocation;
             Eventdate = binding.OpenEventDate;
             Imageing = binding.OpenUserImage;
+            button = binding.OpenEventButton;
         }
 
         @Override
