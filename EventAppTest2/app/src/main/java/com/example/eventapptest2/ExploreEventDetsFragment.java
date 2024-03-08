@@ -18,45 +18,17 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
 
-/**
- * a {@link Fragment} subclass
- * {@link ExploreEventDetsFragment} displays a fragment showing
- * the event details (name, location, description, etc.)
- */
 public class ExploreEventDetsFragment extends Fragment {
     Event event;
     FragmentManager fragmentManager;
-
-
-    /**
-     * initializes the fragment to display the event made
-     * @param events
-     * @param fragment
-     */
-    public ExploreEventDetsFragment(Event events,FragmentManager fragment){
-
     User user;
     BottomNavigationView bottomnavi;
     public ExploreEventDetsFragment(Event events,FragmentManager fragment,User usere,BottomNavigationView bottomnav){
-
         event = events;
         fragmentManager = fragment;
         user = usere;
         bottomnavi = bottomnav;
     }
-
-    /**
-     * creates a view based on the information given by the event
-     * @param inflater The LayoutInflater object that can be used to inflate
-     * any views in the fragment,
-     * @param container If non-null, this is the parent view that the fragment's
-     * UI should be attached to.  The fragment should not add the view itself,
-     * but this can be used to generate the LayoutParams of the view.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed
-     * from a previous saved state as given here.
-     *
-     * @return the view of the event to display
-     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

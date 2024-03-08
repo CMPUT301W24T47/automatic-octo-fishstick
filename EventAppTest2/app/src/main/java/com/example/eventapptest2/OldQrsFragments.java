@@ -40,12 +40,6 @@ public class OldQrsFragments extends Fragment {
     private static BottomNavigationView bottomnav;
     private static User inte;
 
-
-    /**
-     * empty constructor
-     */
-    public OldQrsFragments() {
-
     public OldQrsFragments(ArrayList<Event> createevents, FragmentManager freg, BottomNavigationView bottomNavigationview,User inti) {
         // Required empty public constructor
         this.events = createevents;
