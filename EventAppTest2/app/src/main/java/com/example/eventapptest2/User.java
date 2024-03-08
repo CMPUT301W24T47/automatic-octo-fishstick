@@ -1,11 +1,18 @@
 package com.example.eventapptest2;
 
 import android.media.Image;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User implements Serializable{
+/**
+ * This class represents a User
+ */
+public class User implements Parcelable {
     String userName;
     String userHomepage;
     String userEmail;
@@ -27,6 +34,27 @@ public class User implements Serializable{
         this.createdEvents = createdEvents;
         this.oldQRList = oldQRList;
     }
+
+    protected User(Parcel in) {
+        userName = in.readString();
+        userHomepage = in.readString();
+        userEmail = in.readString();
+        userPhoneNumber = in.readString();
+        userProfileImage = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -85,6 +113,21 @@ public class User implements Serializable{
     }
     public ArrayList<Event> getOldQRList() {
         return oldQRList;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(userName);
+        dest.writeString(userHomepage);
+        dest.writeString(userEmail);
+        dest.writeString(userPhoneNumber);
+        dest.writeString(userProfileImage);
     }
 }
 

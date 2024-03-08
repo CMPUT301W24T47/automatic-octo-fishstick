@@ -127,16 +127,17 @@
 
 
         <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/editUsernameButton"
-        android:layout_width="33dp"
-        android:layout_height="34dp"
-        android:layout_margin="16dp"
-        android:layout_marginTop="12dp"
-        android:backgroundTint="@color/purple"
-        android:drawableStart="@drawable/ic_editbutton_image"
-        android:src="@drawable/ic_editbutton_image"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/usernameTextViewProfile" />
+            android:id="@+id/editUsernameButton"
+            android:layout_width="39dp"
+            android:layout_height="34dp"
+            android:layout_margin="16dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/purple"
+            android:drawableStart="@drawable/ic_editbutton_image"
+            android:src="@drawable/ic_editbutton_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/usernameTextViewProfile" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -184,6 +185,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:hint="Type Your Phone Number"
+            android:inputType="number"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

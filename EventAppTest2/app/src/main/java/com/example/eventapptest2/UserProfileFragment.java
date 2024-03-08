@@ -1,10 +1,13 @@
 package com.example.eventapptest2;
 
 
+import static android.app.Activity.RESULT_OK;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,14 +49,19 @@ public class UserProfileFragment extends Fragment{
     private User user;
 
     private Button editProfileButton;
-    private EditText inputHomePage;
-    private EditText inputEmail;
-    private EditText inputPhoneNum;
+
+    private TextView userNameTextView;
+    private EditText userHomePageTextView;
+    private EditText userEmailTextView;
+    private EditText userPhoneNumTextView;
     // Geolocation switch
     private Switch geolocation;
 
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    // CollectionReference will store the collection of Users
+    //  - Which then each user will store different information
     private final CollectionReference usersRef = db.collection("users");
 
 //    // TODO: Rename parameter arguments, choose names that match
@@ -176,26 +184,52 @@ public class UserProfileFragment extends Fragment{
         // Edit users profile
         editProfileButton = v.findViewById(R.id.editUsernameButton);
 
-        editProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),EditUserProfileActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // Input user information
-        inputHomePage = v.findViewById(R.id.homepageEditText);
-        inputEmail = v.findViewById(R.id.emailEditText);
-        inputPhoneNum = v.findViewById(R.id.phoneEditText);
+        // Inputed user information
+        userNameTextView = v.findViewById(R.id.usernameTextViewProfile);
+        userHomePageTextView = v.findViewById(R.id.homepageEditText);
+        userEmailTextView = v.findViewById(R.id.emailEditText);
+        userPhoneNumTextView = v.findViewById(R.id.phoneEditText);
 
         // Store user information
 
+        // Testing profile information
+        // Set the text of all user information
+        userNameTextView.setText(user.getUserName());
+        userHomePageTextView.setText(user.getUserHomepage());
+        userEmailTextView.setText(user.getUserEmail());
+        userPhoneNumTextView.setText(user.getUserPhoneNumber());
 
 
 
+
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get text of user information
+                String userName = userNameTextView.getText().toString();
+                String userHomepage = userHomePageTextView.getText().toString();
+                String userEmail = userEmailTextView.getText().toString();
+                String userPhoneNum = userPhoneNumTextView.getText().toString();
+                // Carry the current information of the user and show it on the EdutUserProfile Activity
+                Intent intent = new Intent(getActivity(), EditUserProfileActivity.class);
+//  Karan
+//                intent.putExtra("user", user);
+
+                intent.putExtra("userName", userName);
+                intent.putExtra("homepage", userHomepage);
+//                intent.putExtra("email", userEmail);
+//                intent.putExtra("phoneNum", userPhoneNum);
+                startActivityForResult(intent,1);
+
+
+            }
+        });
         return v;
+
     }
+
+
+    // Testing profile information
 
 
     public void setImageInitially(Drawable originalPic){
@@ -214,7 +248,7 @@ public class UserProfileFragment extends Fragment{
     private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!= null){
+                if (result.getResultCode() == RESULT_OK && result.getData()!= null){
                     Uri picture = result.getData().getData();
 
                     assert picture != null;

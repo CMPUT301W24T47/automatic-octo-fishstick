@@ -10,21 +10,23 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="101dp"
+        android:layout_height="60dp"
         android:gravity="center"
         android:text="Edit Profile"
         android:textSize="25sp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="633dp">
+        android:layout_height="671dp">
 
         <LinearLayout
             android:layout_width="413dp"
             android:layout_height="597dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:ignore="MissingConstraints">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="-1dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -89,17 +91,17 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:hint="Type Your Email"
-                android:maxLength="10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="144dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="15dp"
-                android:text="Phone Number:"
+                android:inputType="number"
+                android:text="Phone number:"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/phoneEditText"
@@ -114,6 +116,7 @@
                 android:layout_margin="16dp"
                 android:hint="Type Your Phone Number"
                 android:inputType="number"
+                android:maxLength="10"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -123,7 +126,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <Button
