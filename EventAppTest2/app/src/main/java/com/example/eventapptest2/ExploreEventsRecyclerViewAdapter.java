@@ -45,7 +45,19 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
     private BottomNavigationView bottomnav;
     private User user;
 
+
+    /**
+     * a constructor to display the explore events array adapter
+     * @param items
+     * @param saveEvents
+     * @param id
+     * @param freg
+     * @param bottomNavigationview
+     */
+    public ExploreEventsRecyclerViewAdapter(List<Event> items,List<Event> saveEvents,String id,FragmentManager freg,BottomNavigationView bottomNavigationview) {
+
     public ExploreEventsRecyclerViewAdapter(List<Event> items,List<Event> saveEvents,String id,FragmentManager freg,BottomNavigationView bottomNavigationview,User userr) {
+
         events = items;
         sevents = saveEvents;
         did = id;
@@ -56,6 +68,13 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
 
     }
 
+    /**
+     * inflates the fragment of the event in the recyler view
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -63,6 +82,12 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
 
     }
 
+    /**
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         //setting events text
@@ -162,11 +187,19 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
 //        mListener = listener;
 //    }
 
+    /**
+     * gets the events item
+     * @return the number of items in the event
+     */
     @Override
     public int getItemCount() {
         return events.size();
     }
 
+    /**
+     * creates a new view to display the event as a fragment
+     * in the ReyclerView
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView ExploreEventName;
 
@@ -177,6 +210,10 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
         public Button button;
 
 
+        /**
+         * binds the XML ids to the events info
+         * @param binding
+         */
         public ViewHolder(FragmentExploreBinding binding) {
             super(binding.getRoot());
             ExploreEventName = binding.ExploreEventTitle;
@@ -188,6 +225,10 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
         }
 
 
+        /**
+         *
+         * @return the date
+         */
         @Override
         public String toString() {
             return super.toString() + " '" + Eventdate.getText() + "'";
