@@ -24,13 +24,16 @@ public class Event {
 
 
 
+    String QrUrl;
+
+
     ArrayList<User> attendeList;
     ArrayList<User> checkedinList;
 
     // QR signIn;
     // QR posterQR;
 
-    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventLimit, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist ) {
+    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventLimit, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl ) {
         this.Eventid = eventid;
         this.eventName = eventName;
         this.eventLocation = eventLocation;
@@ -40,8 +43,9 @@ public class Event {
         this.EventDesription = EventDesription;
         this.attendeList = attendelist;
         this.checkedinList = checkedinlist;
+        this.QrUrl = qrUrl;
     }
-    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist ) {
+    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl ) {
         this.Eventid = eventid;
         this.eventName = eventName;
         this.eventLocation = eventLocation;
@@ -51,6 +55,7 @@ public class Event {
         this.EventDesription = EventDesription;
         this.attendeList = attendelist;
         this.checkedinList = checkedinlist;
+        this.QrUrl = qrUrl;
     }
 
     public Event() {
@@ -63,6 +68,14 @@ public class Event {
     }
     public String getEventName() {
         return eventName;
+    }
+
+    public String getQrUrl() {
+        return QrUrl;
+    }
+
+    public void setQrUrl(String qrUrl) {
+        QrUrl = qrUrl;
     }
 
     public void setEventName(String eventName) {

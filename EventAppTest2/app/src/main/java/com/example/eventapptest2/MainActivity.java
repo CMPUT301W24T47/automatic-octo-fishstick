@@ -339,9 +339,11 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         ArrayList<User> attendelist = (ArrayList<User>) doc.getData().get("attendeeList");
                         ArrayList<User> checkinlist = (ArrayList<User>) doc.getData().get("Checkin-list");
                         String eventImage = (String) doc.getData().get("eventPoster");
+                        //QrUrl
+                        String qrlur = (String) doc.getData().get("QrUrl");
                         //System.out.println("Image URL: " + eventImage);
                         // ... (add other event properties based on your Event class)
-                        savedEvents.add(new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist));
+                        savedEvents.add(new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist,qrlur));
                     }// Assuming "karan" is a placeholder for organizer
                 }
 
@@ -372,9 +374,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         ArrayList<User> attendelist = (ArrayList<User>) doc.getData().get("attendeeList");
                         ArrayList<User> checkinlist = (ArrayList<User>) doc.getData().get("Checkin-list");
                         String eventImage = (String) doc.getData().get("eventPoster");
+                        String qrlur = (String) doc.getData().get("QrUrl");
                         //System.out.println("Image URL: " + eventImage);
                         // ... (add other event properties based on your Event class)
-                        createdEvents.add(new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist));
+                        createdEvents.add(new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist,qrlur));
                     }// Assuming "karan" is a placeholder for organizer
                 }
 
@@ -405,9 +408,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                     ArrayList<User> attendelist = (ArrayList<User>) doc.getData().get("attendeeList");
                     ArrayList<User> checkinlist = (ArrayList<User>) doc.getData().get("Checkin-list");
                     String eventImage = (String) doc.getData().get("eventPoster");
+                    String qrlur = (String) doc.getData().get("QrUrl");
                     //System.out.println("Image URL: " + eventImage);
                     // ... (add other event properties based on your Event class)
-                    Event test = new Event(EventId,eventName, eventLocation, eventDate,eventLimit, eventImage, Eventdes,attendelist,checkinlist);
+                    Event test = new Event(EventId,eventName, eventLocation, eventDate,eventLimit, eventImage, Eventdes,attendelist,checkinlist,qrlur);
                     //if (EventId != test.getEventid()){
                     Explore.add(test);
                     //}// Assuming "karan" is a placeholder for organizer

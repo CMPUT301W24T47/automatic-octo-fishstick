@@ -134,6 +134,51 @@ public class AddEventFragment extends DialogFragment {
                     byte[] data = baos.toByteArray();
                     storageRefQR.putBytes(data);
 
+
+                    String urlqr = storageRefQR.getPath();
+
+
+                    if (selectedImageUri != null) {
+
+                        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("event_images/" + UUID.randomUUID().toString());
+                        storageRef.putFile(selectedImageUri)
+                                .addOnSuccessListener(taskSnapshot -> {
+                                    // Image uploaded successfully, get download URL
+                                    storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                        // this is adding imageURL to the databse --------------------------
+                                        String imageURL = uri.toString();
+                                        //////////////just a test
+                                        Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist,urlqr);
+                                        //lists
+                                        // exploreEvents.add(newevent);
+                                        //CreateEvents.add(newevent);
+
+
+                                        eventfb.add(newevent); /////////firebase
+                                        //^^get the hash of this and then make it the created events hash
+
+
+
+                                        eventcreated.add(newevent);
+
+
+//                                    ArrayList<Event> userevent = EditUser.getCreatedEvents();
+//                                    userevent.add(newevent);
+//                                    EditUser.setCreatedEvents(userevent);
+//                                    useresfb.document(EditUser.getDeviceId()).set(EditUser);
+
+                                        // Store imageURL along with other event details in Firestore
+                                        // Example: firestore.collection("events").document(eventId).update("eventPoster", imageURL);
+                                    });
+                                });
+                    }
+                    else {
+                        Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist,urlqr);
+                        exploreEvents.add(newevent);
+                        eventfb.add(newevent); /////////firebase
+                        eventcreated.add(newevent);
+                    }
+
                     //   imageView.setImageBitmap(bitmap); //storing bitmap
 
                 }catch (WriterException e){
@@ -148,46 +193,7 @@ public class AddEventFragment extends DialogFragment {
 
                 ////qr^
 
-                if (selectedImageUri != null) {
 
-                    StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("event_images/" + UUID.randomUUID().toString());
-                    storageRef.putFile(selectedImageUri)
-                            .addOnSuccessListener(taskSnapshot -> {
-                                // Image uploaded successfully, get download URL
-                                storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                    // this is adding imageURL to the databse --------------------------
-                                    String imageURL = uri.toString();
-
-                                    Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist);
-                                    //lists
-                                   // exploreEvents.add(newevent);
-                                    //CreateEvents.add(newevent);
-
-
-                                    eventfb.add(newevent); /////////firebase
-                                    //^^get the hash of this and then make it the created events hash
-
-
-
-                                    eventcreated.add(newevent);
-
-
-//                                    ArrayList<Event> userevent = EditUser.getCreatedEvents();
-//                                    userevent.add(newevent);
-//                                    EditUser.setCreatedEvents(userevent);
-//                                    useresfb.document(EditUser.getDeviceId()).set(EditUser);
-
-                                    // Store imageURL along with other event details in Firestore
-                                    // Example: firestore.collection("events").document(eventId).update("eventPoster", imageURL);
-                                });
-                            });
-                }
-                else {
-                    Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist);
-                    exploreEvents.add(newevent);
-                    eventfb.add(newevent); /////////firebase
-                    eventcreated.add(newevent);
-                    }
                 eventName.setText("");
                  location.setText("");
                  limit.setText("");
