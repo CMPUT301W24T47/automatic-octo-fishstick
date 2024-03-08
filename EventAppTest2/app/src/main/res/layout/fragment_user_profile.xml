@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="20dp"
                         android:maxLength="4"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:layout_centerInParent="true"
                         />
                 </RelativeLayout>

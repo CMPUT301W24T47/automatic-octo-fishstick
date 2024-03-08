@@ -33,7 +33,10 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.util.UUID;
 
 
 /**
@@ -63,21 +66,33 @@ public class UserProfileFragment extends Fragment{
     private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData()!= null){
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!= null){
                     Uri picture = result.getData().getData();
 
+                    //getting successful image
                     assert picture != null;
+                    StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("profile_images/" + UUID.randomUUID().toString());
+                    storageRef.putFile(picture) .addOnSuccessListener(taskSnapshot -> {
+                        // Image uploaded successfully, get download URL
+                        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            //  adding imageURL to the db-
+                            String imageURL = uri.toString();
+                        });
+                    });
+
+                    profilePic.setVisibility(View.VISIBLE);
                     user.setUserProfileImage(picture.toString());
                     profilePic.setImageURI(picture);
 
-                    profilePic.setImageURI(Uri.parse(user.getUserProfileImage()));
+
+                    //profilePic.setImageURI(Uri.parse(user.getUserProfileImage()));
                     /*updates image user uses in firebase*/
                     textOnProfilePic.setText(null);
                     usersRef.document(user.getUserName()).set(user);
 
                 }
-            }
-    );
+
+            });
 
     private final ActivityResultLauncher<Intent> editProfileLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -92,6 +107,10 @@ public class UserProfileFragment extends Fragment{
                     userHomePageTextView.setText(updatedUserHomepage);
                     userEmailTextView.setText(updatedUserEmail);
                     userPhoneNumTextView.setText(updatedUserPhoneNum);
+
+
+
+
                 }
             }
     );
@@ -107,7 +126,6 @@ public class UserProfileFragment extends Fragment{
     }
 
 
-    @SuppressLint("WrongViewCast")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -115,21 +133,17 @@ public class UserProfileFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
         user = CreateUser();
 
-        // delete images
         profilePic = v.findViewById(R.id.userImage);
         textOnProfilePic = v.findViewById(R.id.textOnImage);
         Button replaceButton = v.findViewById(R.id.replaceImageButton);
         Button deleteButton = v.findViewById(R.id.deleteImageButton);
 
         Drawable originalPic = profilePic.getDrawable();
-        setImageInitially(originalPic);
+        generateImage(originalPic);
+
         usersRef.document(user.getUserName()).set(user);
-//        textOnProfilePic.setText(user.getUserName());
-//        user.setUserProfileImage(originalPic.toString());
-//        usersRef.document(user.getUserProfileImage());
 //
 
-        //Bitmap generatePic = createBitmapFromView(fullLayout);
         deleteButton.setOnClickListener(v1 -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("Do you want to delete?");
@@ -142,7 +156,7 @@ public class UserProfileFragment extends Fragment{
 //                    profilePic.setImageDrawable(originalPic);
                 //needed to delete image
                 //usersRef.document(user.setUserProfileImage())
-                setImageInitially(originalPic);
+                setImageDel(originalPic);
                 //usersRef.document(user.getUserName()).set(user);
                 dialog.dismiss();
             });
@@ -203,22 +217,23 @@ public class UserProfileFragment extends Fragment{
         return v;
     }
 
+    public void generateImage(Drawable originalPic){
+        if((user.getUserName() != null) && (user.getUserProfileImage()==null)){
+            textOnProfilePic.setText(user.getUserName());
+            profilePic.setVisibility(View.INVISIBLE);
+        }
+        if((user.getUserName() == null) && (user.getUserProfileImage()==null)){
+            profilePic.setImageDrawable(originalPic);
+        }
 
-    // Testing profile information
-
-
-    public void setImageInitially(Drawable originalPic){
-        profilePic.setImageDrawable(originalPic);
-//        Drawable originalPic = profilePic.getDrawable();
-        textOnProfilePic.setText(user.getUserName());
-        user.setUserProfileImage(originalPic.toString());
-        usersRef.document(user.getUserProfileImage());
-        usersRef.document(user.getUserName()).set(user);
-//        user.setUserProfileImage(null);
-//        Bitmap generatePic = createBitmapFromView(fullLayout);
-//        textOnProfilePic.setText(user.getUserName());
-//        profilePic.setImageBitmap(generatePic);
     }
 
+
+    public void setImageDel(Drawable originalPic){
+        profilePic.setVisibility(View.INVISIBLE);
+        textOnProfilePic.setText(user.getUserName());
+        profilePic.setImageDrawable(originalPic);
+
+    }
 
 }

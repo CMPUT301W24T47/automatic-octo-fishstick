@@ -2,6 +2,7 @@ package com.example.eventapptest2;
 
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity{
         fragmentTransaction.replace(R.id.framelayout,new UserProfileFragment());
         fragmentTransaction.commit();
         bottomnav.setSelectedItemId(R.id.UserProfileNav);
+
+        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         bottomnav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
