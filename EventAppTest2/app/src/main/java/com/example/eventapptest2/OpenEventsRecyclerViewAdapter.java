@@ -9,11 +9,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventapptest2.databinding.FragmentOrgainzersEventBinding;
 import com.example.eventapptest2.placeholder.PlaceholderContent.PlaceholderItem;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -27,9 +30,15 @@ import java.util.List;
 public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEventsRecyclerViewAdapter.ViewHolder> {
 
     private final List<Event> events;
+    private static FragmentManager frag;
+    private BottomNavigationView bottomnav;
+    private User inte;
 
-    public OpenEventsRecyclerViewAdapter(List<Event> items) {
+    public OpenEventsRecyclerViewAdapter(List<Event> items,FragmentManager freg,BottomNavigationView bottomNavigationview,User inting) {
         events = items;
+        frag = freg;
+        bottomnav = bottomNavigationview;
+        inte = inting;
     }
 
     @Override
@@ -57,7 +66,20 @@ public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEven
                 // well need to do something like we did in main to get data for the attende list and check if length is < the length of limit
                 //as well we should do else elif b/c the code will be faster for no limit then just check getlimit == ""
                 //to do the attende chcek in the just add a optinal boolean to the user init clause and only use it for create user as attendee here
+                FragmentTransaction fragmentTransaction = frag.beginTransaction();
+                //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
 
+                //inte = position;
+                inte.setLastsaved(position);
+                fragmentTransaction.replace(R.id.framelayout, new OrganizeEventDetsFragment(events.get(position))); //explore is temp -----------------------------change
+
+
+                fragmentTransaction.commit();
+                if (bottomnav != null) {
+                    bottomnav.getMenu().clear();
+                    bottomnav.inflateMenu(R.menu.event_nav_menu);
+                    v.postDelayed(() -> bottomnav.setSelectedItemId(R.id.EventDetailsNav), 100);
+                }
 
 
 

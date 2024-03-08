@@ -27,7 +27,11 @@ import androidx.fragment.app.DialogFragment;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -123,7 +127,12 @@ public class AddEventFragment extends DialogFragment {
                                    // exploreEvents.add(newevent);
                                     //CreateEvents.add(newevent);
 
+
                                     eventfb.add(newevent); /////////firebase
+                                    //^^get the hash of this and then make it the created events hash
+
+
+
                                     eventcreated.add(newevent);
 
 

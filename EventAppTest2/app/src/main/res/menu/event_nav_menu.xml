@@ -14,4 +14,7 @@
     <item android:title="Attendees"
         android:id="@+id/EventAttendeesNav"
         android:icon="@drawable/ic_event_attendees"/>
+    <item android:title="Back"
+        android:id="@+id/EventNavGoback"
+        android:icon="@drawable/ic_go_back"/>
 </menu>

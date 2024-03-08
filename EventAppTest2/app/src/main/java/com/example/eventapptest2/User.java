@@ -18,6 +18,10 @@ public class User {
 
     String DeviceId; // wont have a setter b/c should only every be init at start of code
 
+
+
+    int lastsaved; // goes in databse but should never be accesed through db //it will always be set first in code b4 we get it
+
     public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, Image userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList) {
         this.DeviceId = deviceId;
         this.userName = userName;
@@ -28,6 +32,19 @@ public class User {
         this.savedEvents = savedEvents;
         this.createdEvents = createdEvents;
         this.oldQRList = oldQRList;
+        this.lastsaved = 0;
+    }
+    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, Image userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList,int pos) {
+        this.DeviceId = deviceId;
+        this.userName = userName;
+        this.userHomepage = userHomepage;
+        this.userEmail = userEmail;
+        this.userPhoneNumber = userPhoneNumber;
+        this.userProfileImage = userProfileImage;
+        this.savedEvents = savedEvents;
+        this.createdEvents = createdEvents;
+        this.oldQRList = oldQRList;
+        this.lastsaved = pos;
     }
     public User() {
 
@@ -93,5 +110,12 @@ public class User {
     }
     public String getDeviceId() {
         return DeviceId;
+    }
+    public int getLastsaved() {
+        return lastsaved;
+    }
+
+    public void setLastsaved(int lastsaved) {
+        this.lastsaved = lastsaved;
     }
 }

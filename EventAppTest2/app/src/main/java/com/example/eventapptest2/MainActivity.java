@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     ArrayList<Event> oldQRList= new ArrayList<>();
 
     ArrayList<Event> Explore = new ArrayList<>();
+    public int inte = 0;
 
 
 
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 //                Explore.add(new Event(deviceId,"Test", "homepage","City", 1234, null,"karan",null,null));
 //                eventsRef.document().set(Explore.get(0).toMap()); // adding test event to database
 
-
+                getData();
                 BottomNavigationView bottomnav = findViewById(R.id.bottomNavView);
                 bottomnav.setSelectedItemId(R.id.UserProfileNav);
 
@@ -90,14 +91,14 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                        getData();
+
 
                         int itemId = item.getItemId();
                         if (itemId == R.id.OrganizeEventNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents)); //explore is temp
+                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser)); //explore is temp
                             fragmentTransaction.commit();
                             bottomnav.getMenu().clear();
                             bottomnav.inflateMenu(R.menu.organizer_nav_menu);
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         } else if (itemId == R.id.OrginzersEventsnav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents));
+                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.GoBacknav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -150,6 +151,61 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             bottomnav.inflateMenu(R.menu.bottom_nav_menu);
                             bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.ExploreEventNav), 100);
                         }
+
+
+
+
+                        //test so change
+                        else if (itemId == R.id.EventNotifyNav) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.commit();
+                            bottomnav.getMenu().clear();
+                            bottomnav.inflateMenu(R.menu.organizer_nav_menu);
+                            bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.OrginzersEventsnav), 100);
+                        }
+                        else if (itemId == R.id.EventMapNav) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.commit();
+                            bottomnav.getMenu().clear();
+                            bottomnav.inflateMenu(R.menu.organizer_nav_menu);
+                            bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.OrginzersEventsnav), 100);
+                        }
+                        else if (itemId == R.id.EventAttendeesNav) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.commit();
+//                            bottomnav.getMenu().clear();
+//                            bottomnav.inflateMenu(R.menu.organizer_nav_menu);
+//                            bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.OrginzersEventsnav), 100);
+                        }
+                        else if (itemId == R.id.EventNavGoback) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.commit();
+                            bottomnav.getMenu().clear();
+                            bottomnav.inflateMenu(R.menu.organizer_nav_menu);
+                            bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.OrginzersEventsnav), 100);
+                        }
+                        else if (itemId == R.id.EventDetailsNav) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                            fragmentTransaction.replace(R.id.framelayout, new OrganizeEventDetsFragment(createdEvents.get(testuser.getLastsaved()))); //explore is temp
+                            fragmentTransaction.commit();
+                        }
+
+
+
                         //implement elif fragment change for new menus made from elsewhere
 
 
@@ -304,7 +360,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
                 Explore.clear(); // Clear the old list
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-//                    String eventId = doc.getId();
+//                   String eventId = doc.getId(); //I belive this is a has
                     String eventName = (String) doc.getData().get("eventName");
                     String eventLimit = (String) doc.getData().get("eventLimit");
                     String eventLocation = (String) doc.getData().get("eventLocation");
