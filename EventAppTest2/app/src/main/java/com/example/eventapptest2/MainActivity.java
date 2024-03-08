@@ -37,7 +37,7 @@ import java.util.Map;
  * MainActicty class handles managing the UI elements and the navigation of the app
  * the methods in the class switch the fragments of the activty, initializes the Bottom Navigation Bar,
  * stores the events into the correct event lists and stores them in the firebase, and also stores
- * user information once logged in
+ * user information once logged in. Handles intent of new user edit activity
  */
 public class MainActivity extends AppCompatActivity {//implements ExploreEventsRecyclerViewAdapter.OnExploreButtonClickListener {
 
