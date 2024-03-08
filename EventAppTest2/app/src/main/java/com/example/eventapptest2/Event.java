@@ -27,6 +27,13 @@ public class Event {
 
 
 
+    String QrUrl;
+
+
+
+    String signINQR;
+
+
     ArrayList<User> attendeList;
     ArrayList<User> checkedinList;
 
@@ -46,6 +53,9 @@ public class Event {
      * @param checkedinlist
      */
     public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventLimit, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist ) {
+
+    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventLimit, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss ) {
+
         this.Eventid = eventid;
         this.eventName = eventName;
         this.eventLocation = eventLocation;
@@ -55,7 +65,10 @@ public class Event {
         this.EventDesription = EventDesription;
         this.attendeList = attendelist;
         this.checkedinList = checkedinlist;
+        this.QrUrl = qrUrl;
+        this.signINQR =ss;
     }
+
 
     /**
      * constructor that is made without an attendee limit
@@ -69,6 +82,9 @@ public class Event {
      * @param checkedinlist
      */
     public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist ) {
+
+    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss ) {
+
         this.Eventid = eventid;
         this.eventName = eventName;
         this.eventLocation = eventLocation;
@@ -78,6 +94,9 @@ public class Event {
         this.EventDesription = EventDesription;
         this.attendeList = attendelist;
         this.checkedinList = checkedinlist;
+        this.QrUrl = qrUrl;
+        this.signINQR =ss;
+
     }
 
     /**
@@ -90,6 +109,8 @@ public class Event {
         this.eventLimit = "-1";
         this.eventPoster = null;
         this.EventDesription = "EventDesription";
+        this.QrUrl = "qrUrl";
+        this.signINQR ="ss";
     }
 
     /**
@@ -100,10 +121,21 @@ public class Event {
         return eventName;
     }
 
+
     /**
      * sets event name
      * @param eventName
      */
+
+    public String getQrUrl() {
+        return QrUrl;
+    }
+
+    public void setQrUrl(String qrUrl) {
+        QrUrl = qrUrl;
+    }
+
+
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
@@ -228,10 +260,21 @@ public class Event {
         this.checkedinList = checkedinList;
     }
 
+
     /**
      * stores an objects data in a hashmap
      * @return a the event data of the event
      */
+
+    public String getSignINQR() {
+        return signINQR;
+    }
+
+    public void setSignINQR(String signINQR) {
+        this.signINQR = signINQR;
+    }
+
+
     public Map<String, Object> toMap() {
         Map<String, Object> eventData = new HashMap<>();
         eventData.put("eventId", Eventid);

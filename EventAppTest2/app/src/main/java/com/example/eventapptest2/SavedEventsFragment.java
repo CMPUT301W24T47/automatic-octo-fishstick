@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.eventapptest2.placeholder.PlaceholderContent;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -26,19 +28,25 @@ public class SavedEventsFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private static ArrayList<Event> sevents;
+    private static FragmentManager frag;
+    private static BottomNavigationView bottomnav;
+    private static User id;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public SavedEventsFragment(ArrayList<Event> saveEvents) {
+    public SavedEventsFragment(ArrayList<Event> saveEvents, FragmentManager freg, BottomNavigationView bottomNavigationview,User did) {
         sevents = saveEvents;
+        frag = freg;
+        bottomnav = bottomNavigationview;
+        id = did;
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static SavedEventsFragment newInstance(int columnCount) {
-        SavedEventsFragment fragment = new SavedEventsFragment(sevents);
+        SavedEventsFragment fragment = new SavedEventsFragment(sevents,frag,bottomnav,id);
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -85,7 +93,7 @@ public class SavedEventsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new SavedEventsRecyclerViewAdapter(sevents));
+            recyclerView.setAdapter(new SavedEventsRecyclerViewAdapter(sevents,frag,bottomnav,id));
         }
         return view;
     }

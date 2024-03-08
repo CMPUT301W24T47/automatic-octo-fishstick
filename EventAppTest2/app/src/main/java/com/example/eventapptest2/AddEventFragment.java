@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,9 +36,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import static android.app.Activity.RESULT_OK;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -123,6 +130,9 @@ public class AddEventFragment extends DialogFragment {
              */
             @Override
             public void onClick(View v) {
+                // need a loading screen so app dont crash cause things take time to store in db
+
+
                 ArrayList<User> addatendeelist = new ArrayList<>();
                 ArrayList<User> checkedinlist = new ArrayList<>();
                 String name = eventName.getText().toString();
@@ -144,29 +154,56 @@ public class AddEventFragment extends DialogFragment {
 //                            }
 //                        });
                 // Inside AddEventFragment after selecting an image
-
-                if (selectedImageUri != null) {
-
-                    StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("event_images/" + UUID.randomUUID().toString());
-                    storageRef.putFile(selectedImageUri)
-                            .addOnSuccessListener(taskSnapshot -> {
-                                // Image uploaded successfully, get download URL
-                                storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                    // this is adding imageURL to the databse --------------------------
-                                    String imageURL = uri.toString();
-
-                                    Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist);
-                                    //lists
-                                   // exploreEvents.add(newevent);
-                                    //CreateEvents.add(newevent);
+                StorageReference storageRefQR = FirebaseStorage.getInstance().getReference().child("QR/" + UUID.randomUUID().toString());
 
 
-                                    eventfb.add(newevent); /////////firebase
-                                    //^^get the hash of this and then make it the created events hash
+                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+                try {
+                    BitMatrix bitMatrix = multiFormatWriter.encode("Karan", BarcodeFormat.QR_CODE,300,300);
+                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                    Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+                    storageRefQR.putBytes(data);
+
+
+                    String urlqr = storageRefQR.getName();
+
+                    BitMatrix bitMatrixi = multiFormatWriter.encode("Karan", BarcodeFormat.QR_CODE,300,300);
+                    BarcodeEncoder barcodeEncoderi = new BarcodeEncoder();
+                    Bitmap bitmapi = barcodeEncoderi.createBitmap(bitMatrixi);
+                    ByteArrayOutputStream baosi = new ByteArrayOutputStream();
+                    bitmapi.compress(Bitmap.CompressFormat.JPEG, 100, baosi);
+                    byte[] datai = baosi.toByteArray();
+                    storageRefQR.putBytes(datai);
+
+
+                    String secondqr = storageRefQR.getPath();
+
+
+                    if (selectedImageUri != null) {
+
+                        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("event_images/" + UUID.randomUUID().toString());
+                        storageRef.putFile(selectedImageUri)
+                                .addOnSuccessListener(taskSnapshot -> {
+                                    // Image uploaded successfully, get download URL
+                                    storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                        // this is adding imageURL to the databse --------------------------
+                                        String imageURL = uri.toString();
+                                        //////////////just a test
+                                        Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist,urlqr,secondqr);
+                                        //lists
+                                        // exploreEvents.add(newevent);
+                                        //CreateEvents.add(newevent);
+
+
+                                        eventfb.add(newevent); /////////firebase
+                                        //^^get the hash of this and then make it the created events hash
 
 
 
-                                    eventcreated.add(newevent);
+                                        eventcreated.add(newevent);
 
 
 //                                    ArrayList<Event> userevent = EditUser.getCreatedEvents();
@@ -174,17 +211,44 @@ public class AddEventFragment extends DialogFragment {
 //                                    EditUser.setCreatedEvents(userevent);
 //                                    useresfb.document(EditUser.getDeviceId()).set(EditUser);
 
-                                    // Store imageURL along with other event details in Firestore
-                                    // Example: firestore.collection("events").document(eventId).update("eventPoster", imageURL);
+                                        // Store imageURL along with other event details in Firestore
+                                        // Example: firestore.collection("events").document(eventId).update("eventPoster", imageURL);
+                                    });
                                 });
-                            });
-                }
-                else {
-                    Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist);
-                    exploreEvents.add(newevent);
-                    eventfb.add(newevent); /////////firebase
-                    eventcreated.add(newevent);
                     }
+                    else {
+                        Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist,urlqr,secondqr);
+                        exploreEvents.add(newevent);
+                        eventfb.add(newevent); /////////firebase
+                        eventcreated.add(newevent);
+                    }
+
+                    //   imageView.setImageBitmap(bitmap); //storing bitmap
+
+                }catch (WriterException e){
+                    throw new RuntimeException(e);
+                }
+
+
+
+
+
+
+
+                ////qr^
+
+
+                eventName.setText("");
+                 location.setText("");
+                 limit.setText("");
+                 date.setText("");
+                 desc.setText("");
+                //addEventImage.setImageResource();
+                Glide.with(addEventImage.getContext())
+                        .load("https://firebasestorage.googleapis.com/v0/b/charlie-kim-fans.appspot.com/o/event_images%2Fjujutsu-kaisen-4k-geto-suguru-6i4yc80acocfj7go.jpg?alt=media&token=d5390dbc-f352-47ac-aade-950b1cee5466")
+                        .into(addEventImage);
+
+
 //
 //
 //

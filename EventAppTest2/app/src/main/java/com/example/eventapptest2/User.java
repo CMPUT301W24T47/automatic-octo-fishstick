@@ -1,18 +1,22 @@
 package com.example.eventapptest2;
 
-import android.media.Image;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+
 
 /**
  * this class represents a user object
  */
 public class User {
+
+public class User implements Serializable {
+
     String userName;
     String userHomepage;
     String userEmail;
     String userPhoneNumber;
-    Image userProfileImage;
+    String userProfileString;
     ArrayList<Event> savedEvents;
     ArrayList<Event> createdEvents;
     ArrayList<Event> oldQRList;
@@ -24,6 +28,7 @@ public class User {
 
 
     int lastsaved; // goes in databse but should never be accesed through db //it will always be set first in code b4 we get it
+
 
     /**
      * constructor with no position saved in the activity
@@ -38,17 +43,21 @@ public class User {
      * @param oldQRList
      */
     public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, Image userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList) {
+
+    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, String userProfileString, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList) {
+
         this.DeviceId = deviceId;
         this.userName = userName;
         this.userHomepage = userHomepage;
         this.userEmail = userEmail;
         this.userPhoneNumber = userPhoneNumber;
-        this.userProfileImage = userProfileImage;
+        this.userProfileString = userProfileString;
         this.savedEvents = savedEvents;
         this.createdEvents = createdEvents;
         this.oldQRList = oldQRList;
         this.lastsaved = 0;
     }
+
 
     /**
      * constructor with a position where they last clicked in the activity
@@ -64,12 +73,15 @@ public class User {
      * @param pos
      */
     public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, Image userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList,int pos) {
+
+    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, String userProfileString, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList,int pos) {
+
         this.DeviceId = deviceId;
         this.userName = userName;
         this.userHomepage = userHomepage;
         this.userEmail = userEmail;
         this.userPhoneNumber = userPhoneNumber;
-        this.userProfileImage = userProfileImage;
+        this.userProfileString = userProfileString;
         this.savedEvents = savedEvents;
         this.createdEvents = createdEvents;
         this.oldQRList = oldQRList;
@@ -147,6 +159,7 @@ public class User {
         return userPhoneNumber;
     }
 
+
     /**
      * sets the users profile pic
      * @param userProfileImage
@@ -161,6 +174,14 @@ public class User {
      */
     public Image getUserProfileImage() {
         return userProfileImage;
+
+
+    public void setUserProfileImage(String userProfileString) {
+        this.userProfileString = userProfileString;
+    }
+    public String getUserProfileImage() {
+        return userProfileString;
+
     }
 
     /**

@@ -1,9 +1,5 @@
 package com.example.eventapptest2;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,63 +7,41 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.example.eventapptest2.placeholder.PlaceholderContent.PlaceholderItem;
-import com.example.eventapptest2.databinding.FragmentSavedEventsBinding;
+import com.example.eventapptest2.databinding.FragmentOldQrsBinding;
+import com.example.eventapptest2.databinding.FragmentOrgainzersEventBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
- * TODO: Replace the implementation with code for your data type.
- */
-public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEventsRecyclerViewAdapter.ViewHolder> {
+public class OldEventsRecyclerViewAdapter extends RecyclerView.Adapter<OldEventsRecyclerViewAdapter.ViewHolder> {
 
     private final List<Event> events;
     private static FragmentManager frag;
     private BottomNavigationView bottomnav;
-    private static User did;
+    private User inte;
 
-
-    /**
-     * constructor
-     * @param saveEvents
-     */
-    public SavedEventsRecyclerViewAdapter(List<Event> saveEvents) {
-        events = saveEvents;
-
-
-    public SavedEventsRecyclerViewAdapter(List<Event> saveEvents,FragmentManager freg,BottomNavigationView bottomNavigationview,User id) {
-        events = saveEvents;frag = freg;
+    public OldEventsRecyclerViewAdapter(List<Event> items, FragmentManager freg, BottomNavigationView bottomNavigationview, User inting) {
+        events = items;
+        frag = freg;
         bottomnav = bottomNavigationview;
-        did = id;
+        inte = inting;
     }
 
-    /**
-     *
-     * @param parent   The ViewGroup into which the new View will be added after it is bound to
-     *                 an adapter position.
-     * @param viewType The view type of the new View.
-     * @return
-     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        return new ViewHolder(FragmentSavedEventsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-
+        return new ViewHolder(FragmentOldQrsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
-    /**
-     *
-     * @param holder   The ViewHolder which should be updated to represent the contents of the
-     *                 item at the given position in the data set.
-     * @param position The position of the item within the adapter's data set.
-     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        int postini = position;
         holder.EventForView = events.get(position);
         holder.ExploreEventName.setText(events.get(position).getEventName());
         holder.Eventdate.setText(events.get(position).getEventDate());
@@ -82,49 +56,55 @@ public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEv
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                did.setLastsaved(position);
+                // well need to do something like we did in main to get data for the attende list and check if length is < the length of limit
+                //as well we should do else elif b/c the code will be faster for no limit then just check getlimit == ""
+                //to do the attende chcek in the just add a optinal boolean to the user init clause and only use it for create user as attendee here
                 FragmentTransaction fragmentTransaction = frag.beginTransaction();
                 //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(events.get(position),frag,did,bottomnav)); //explore is temp
+
+                //inte = position;
+                inte.setLastsaved(position);
+                fragmentTransaction.replace(R.id.framelayout, new OrganizeEventDetsFragment(events.get(position))); //explore is temp -----------------------------change
+
+
                 fragmentTransaction.commit();
                 if (bottomnav != null) {
                     bottomnav.getMenu().clear();
-                    bottomnav.inflateMenu(R.menu.attendee_nav_menu);
-                    v.postDelayed(() -> bottomnav.setSelectedItemId(R.id.AttendeeDetails), 100);
+                    bottomnav.inflateMenu(R.menu.event_nav_menu);
+                    v.postDelayed(() -> bottomnav.setSelectedItemId(R.id.EventDetailsNav), 100);
                 }
-                //saveevent.add(events.get(postini));
+
+
+
             }
         });
+
     }
 
     @Override
     public int getItemCount() {
+
         return events.size();
     }
 
-    /**
-     * creates the view of the fragment of the event
-     */
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView ExploreEventName;
 
+        public final TextView ExploreEventName;
         public final TextView Eventlocation;
         public final TextView Eventdate;
         public final ImageView Imageing;
         public Event EventForView;
         public Button button;
 
-        public ViewHolder(FragmentSavedEventsBinding binding) {
-            super(binding.getRoot());
-            ExploreEventName = binding.SavedEventTitle;
-            Eventlocation = binding.SavedEventlocation;
-            Eventdate = binding.SavedEventDate;
-            Imageing = binding.SaveduserImage;
-            button = binding.SavedEventDetialsButton;
-        }
 
+        public ViewHolder(@NonNull FragmentOldQrsBinding binding) {
+            super(binding.getRoot());
+            ExploreEventName = binding.ExploreEventTitlee;
+            Eventlocation = binding.ExploreEventlocatione;
+            Eventdate = binding.ExploreEventDatee;
+            Imageing = binding.ExploreuserImagee;
+            button = binding.ExploreEventDetialsButtone;
+        }
 
         @Override
         public String toString() {

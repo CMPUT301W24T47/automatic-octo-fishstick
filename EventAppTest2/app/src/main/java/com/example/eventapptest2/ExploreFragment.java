@@ -33,7 +33,7 @@ public class ExploreFragment extends Fragment {
     private static FragmentManager frag;
     private static BottomNavigationView bottomnav;
 
-
+    private static User user;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -43,18 +43,19 @@ public class ExploreFragment extends Fragment {
      * @param freg
      * @param bottomNavigationview
      */
-    public ExploreFragment(ArrayList<Event> Explore,ArrayList<Event> saveEvents,String did,FragmentManager freg,BottomNavigationView bottomNavigationview) {
+    public ExploreFragment(ArrayList<Event> Explore,ArrayList<Event> saveEvents,String did,FragmentManager freg,BottomNavigationView bottomNavigationview, User userr) {
         events = Explore;
         sevents = saveEvents;
         id = did;
         frag = freg;
         bottomnav = bottomNavigationview;
+        user = userr;
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static ExploreFragment newInstance(int columnCount) {
-        ExploreFragment fragment = new ExploreFragment(events,sevents,id,frag,bottomnav);
+        ExploreFragment fragment = new ExploreFragment(events,sevents,id,frag,bottomnav,user);
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -104,7 +105,7 @@ public class ExploreFragment extends Fragment {
 
 
             //give the list of explore events to the recyler view
-            recyclerView.setAdapter(new ExploreEventsRecyclerViewAdapter(events,sevents,id,frag,bottomnav));
+            recyclerView.setAdapter(new ExploreEventsRecyclerViewAdapter(events,sevents,id,frag,bottomnav,user));
         }
         return view;
     }
