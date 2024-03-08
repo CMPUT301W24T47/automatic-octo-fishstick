@@ -124,13 +124,9 @@ import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
-
- * Use the {@link UserProfileFragment} factory method to
-
  * Use the {@link
  * UserProfileFragment#
  * newInstance} factory method to
-
  * create an instance of this fragment.
  */
 public class UserProfileFragment extends Fragment{
@@ -222,19 +218,6 @@ public class UserProfileFragment extends Fragment{
 //                ,"7807088263", null, null, null,null);
 //        return user;
 //    }
-
-    /**
-     *
-     * @param inflater The LayoutInflater object that can be used to inflate
-     * any views in the fragment,
-     * @param container If non-null, this is the parent view that the fragment's
-     * UI should be attached to.  The fragment should not add the view itself,
-     * but this can be used to generate the LayoutParams of the view.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed
-     * from a previous saved state as given here.
-     *
-     * @return
-     */
 
 
     @Override

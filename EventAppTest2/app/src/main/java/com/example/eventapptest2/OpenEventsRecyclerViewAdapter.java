@@ -27,9 +27,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This class is an adapter to display the organizers events
- */
 public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEventsRecyclerViewAdapter.ViewHolder> {
 
     private final List<Event> events;
@@ -37,13 +34,6 @@ public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEven
     private BottomNavigationView bottomnav;
     private User inte;
 
-    /**
-     * constructor
-     * @param items
-     * @param freg
-     * @param bottomNavigationview
-     * @param inting
-     */
     public OpenEventsRecyclerViewAdapter(List<Event> items,FragmentManager freg,BottomNavigationView bottomNavigationview,User inting) {
         events = items;
         frag = freg;
@@ -51,25 +41,12 @@ public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEven
         inte = inting;
     }
 
-    /**
-     * creates the view of event recycler for the organizer
-     * @param parent   The ViewGroup into which the new View will be added after it is bound to
-     *                 an adapter position.
-     * @param viewType The view type of the new View.
-     * @return the view of the recycler adapter
-     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         return new ViewHolder(FragmentOrgainzersEventBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
-    /**
-     * binds the events items to the xml ids
-     * @param holder   The ViewHolder which should be updated to represent the contents of the
-     *                 item at the given position in the data set.
-     * @param position The position of the item within the adapter's data set.
-     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.EventForView = events.get(position);
@@ -111,16 +88,12 @@ public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEven
 
     }
 
-
     @Override
     public int getItemCount() {
 
         return events.size();
     }
 
-    /**
-     * creates the fragment shown in the Recyler View of the OrganizersEventFragment
-     */
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView ExploreEventName;
