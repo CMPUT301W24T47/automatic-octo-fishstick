@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,9 +44,12 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import io.grpc.Context;
@@ -137,29 +141,42 @@ public class AddEventFragment extends DialogFragment {
 
                     String urlqr = storageRefQR.getName();
 
+
+
                     BitMatrix bitMatrixi = multiFormatWriter.encode("Karan", BarcodeFormat.QR_CODE,300,300);
                     BarcodeEncoder barcodeEncoderi = new BarcodeEncoder();
                     Bitmap bitmapi = barcodeEncoderi.createBitmap(bitMatrixi);
                     ByteArrayOutputStream baosi = new ByteArrayOutputStream();
                     bitmapi.compress(Bitmap.CompressFormat.JPEG, 100, baosi);
                     byte[] datai = baosi.toByteArray();
-                    storageRefQR.putBytes(datai);
+                    storageRefQR.putBytes(datai).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Uri testri = taskSnapshot.getUploadSessionUri();
+
+                            String hashtest = taskSnapshot.getMetadata().getName();
+                            Log.d(TAG, "aaaaaaaaaaaaaaaaaaaaa"+hashtest);
+
+                            String secondqr = testri.toString();
 
 
-                    String secondqr = storageRefQR.getPath();
+
+                    // = storageRefQR.getPath();
 
 
                     if (selectedImageUri != null) {
 
                         StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("event_images/" + UUID.randomUUID().toString());
                         storageRef.putFile(selectedImageUri)
-                                .addOnSuccessListener(taskSnapshot -> {
+                                .addOnSuccessListener(taskSnapshoteeee -> {
                                     // Image uploaded successfully, get download URL
                                     storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                                         // this is adding imageURL to the databse --------------------------
                                         String imageURL = uri.toString();
                                         //////////////just a test
+//                                        Map<String, Event> eventData = new HashMap<>();
                                         Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist,urlqr,secondqr);
+//                                        eventData.put("event",newevent);
                                         //lists
                                         // exploreEvents.add(newevent);
                                         //CreateEvents.add(newevent);
@@ -168,8 +185,7 @@ public class AddEventFragment extends DialogFragment {
                                         eventfb.add(newevent); /////////firebase
                                         //^^get the hash of this and then make it the created events hash
 
-
-
+                                        // the unique hash we will use for
                                         eventcreated.add(newevent);
 
 
@@ -189,6 +205,8 @@ public class AddEventFragment extends DialogFragment {
                         eventfb.add(newevent); /////////firebase
                         eventcreated.add(newevent);
                     }
+                        }
+                    });
 
                     //   imageView.setImageBitmap(bitmap); //storing bitmap
 

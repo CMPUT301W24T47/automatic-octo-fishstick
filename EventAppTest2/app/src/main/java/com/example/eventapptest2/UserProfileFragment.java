@@ -253,7 +253,7 @@ public class UserProfileFragment extends Fragment{
         Glide.with(profilePic.getContext())
                 .load(imageUrl)
                 .into(profilePic);
-        if(user.getUserProfileImage() != ""){
+        if(user.getUserProfileImage() == "" || user.getUserProfileImage() == null){
 
             generateImage(originalPic);}
 //        usersRef.document(user.getUserName()).set(user);
@@ -266,7 +266,7 @@ public class UserProfileFragment extends Fragment{
             builder.setCancelable(false);
 
             builder.setPositiveButton("Yes", (dialog, which)-> {
-                    user.setUserProfileImage(null);
+                    user.setUserProfileImage("");
 //                  user.setUserProfileImage(originalPic.toString());
 //                    profilePic.setImageDrawable(originalPic);
                 //needed to delete image
@@ -335,10 +335,10 @@ public class UserProfileFragment extends Fragment{
 //            String userPhoneNum = userPhoneNumTextView.getText().toString();
             // Carry the current information of the user and show it on the EdutUserProfile Activity
             Intent intent = new Intent(getActivity(), EditUserProfileActivity.class);
-            intent.putExtra("userName", userName);
-            intent.putExtra("homepage", userHomepage);
-            intent.putExtra("email", userEmail);
-            intent.putExtra("phoneNum", userPhoneNum);
+            intent.putExtra("userName", user.getUserName());
+            intent.putExtra("homepage", user.getUserHomepage());
+            intent.putExtra("email", user.getUserEmail());
+            intent.putExtra("phoneNum", user.getUserPhoneNumber());
 
 
             editProfileLauncher.launch(intent);
@@ -348,11 +348,11 @@ public class UserProfileFragment extends Fragment{
     }
 
     public void generateImage(Drawable originalPic){
-        if((user.getUserName() != null) && (user.getUserProfileImage()==null) || (user.getUserProfileImage() != "")){
+        if((user.getUserName() != null) && (user.getUserProfileImage()==null) || (user.getUserProfileImage() == "")){
             textOnProfilePic.setText(user.getUserName());
             profilePic.setVisibility(View.INVISIBLE);
         }
-        if((user.getUserName() == null) && (user.getUserProfileImage()==null)){
+        if((user.getUserName() == null) && (user.getUserProfileImage()==null) || (user.getUserProfileImage() == "")){
             profilePic.setImageDrawable(originalPic);
         }
 
@@ -363,6 +363,8 @@ public class UserProfileFragment extends Fragment{
         profilePic.setVisibility(View.INVISIBLE);
         textOnProfilePic.setText(user.getUserName());
         profilePic.setImageDrawable(originalPic);
+        user.setUserProfileImage(null); // alway make it null when deleting images its just easir that way
+        usersRef.document(user.getDeviceId()).set(user);
 
     }
 

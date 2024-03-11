@@ -298,7 +298,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 user.setCreatedEvents(createdEvents);
                 createdEvents = user.getCreatedEvents();
 
-                getDataExplore(deviceId);
+                getDataExplore(deviceId); // underneath created and saved b/c we should remove all saved and created from the users viewble explore list
+                // this means adding to saved events code and add event fragment may need fixes // we can just delete all old by date events from explore in the list and db (cleans up db) b/c we will
+                // filter all old dates from created and put them into oldQRList
+                // we dont even need a databse collection for oldQR then
 
                 user.setOldQRList((ArrayList<Event>) doc.getData().get("oldQRList"));
                 oldQRList = user.getOldQRList();
