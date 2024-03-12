@@ -34,10 +34,16 @@ public class Event {
     ArrayList<User> attendeList;
     ArrayList<User> checkedinList;
 
+
+    String owner;
+
     // QR signIn;
     // QR posterQR;
 
-    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventLimit, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss ) {
+    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventLimit, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss,String id ) {
+        //will need to add a notfications list
+        //each event hashed by event id
+        // id+attendee id+checkin id id+notfic
         this.Eventid = eventid;
         this.eventName = eventName;
         this.eventLocation = eventLocation;
@@ -49,8 +55,10 @@ public class Event {
         this.checkedinList = checkedinlist;
         this.QrUrl = qrUrl;
         this.signINQR =ss;
+        this.owner = id;
     }
-    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss ) {
+    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss,String id) {
+        //remove the two users list from this and make this constructer "attendee event" this is meant for sign-up, so it will not a notfication list but has no care for other attendees
         this.Eventid = eventid;
         this.eventName = eventName;
         this.eventLocation = eventLocation;
@@ -62,6 +70,7 @@ public class Event {
         this.checkedinList = checkedinlist;
         this.QrUrl = qrUrl;
         this.signINQR =ss;
+        this.owner = id;
 
     }
 
@@ -74,6 +83,7 @@ public class Event {
         this.EventDesription = "EventDesription";
         this.QrUrl = "qrUrl";
         this.signINQR ="ss";
+        this.owner = "0";
     }
     public String getEventName() {
         return eventName;
@@ -158,19 +168,14 @@ public class Event {
     public void setSignINQR(String signINQR) {
         this.signINQR = signINQR;
     }
-
-    public Map<String, Object> toMap() {
-        Map<String, Object> eventData = new HashMap<>();
-        eventData.put("eventId", Eventid);
-        eventData.put("eventName", eventName);
-        eventData.put("eventLocation", eventLocation);
-        eventData.put("eventDate", eventDate);
-        eventData.put("eventLimit", eventLimit);
-        eventData.put("eventDescription", EventDesription);
-        eventData.put("eventStringURL",eventPoster);
-        eventData.put("attendeeList",attendeList);
-        eventData.put("Checkin-list",checkedinList);
-        return eventData;
+    public String getOwner() {
+        return owner;
     }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+
 }
 

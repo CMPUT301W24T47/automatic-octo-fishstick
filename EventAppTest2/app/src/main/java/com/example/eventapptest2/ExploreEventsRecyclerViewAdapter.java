@@ -137,7 +137,7 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
 //
                 FragmentTransaction fragmentTransaction = frag.beginTransaction();
                 //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                fragmentTransaction.replace(R.id.framelayout, new ACTUALExploreEventDetsFragment(events.get(position),frag,did,user)); //explore is temp
+                fragmentTransaction.replace(R.id.framelayout, new ACTUALExploreEventDetsFragment(events.get(position),frag,did,user,bottomnav,events)); //explore is temp
                 fragmentTransaction.commit();
                 if (bottomnav != null) {
                     bottomnav.getMenu().clear();

@@ -16,6 +16,8 @@ import com.bumptech.glide.Glide;
 import com.example.eventapptest2.databinding.FragmentOldQrsBinding;
 import com.example.eventapptest2.databinding.FragmentOrgainzersEventBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,15 +25,14 @@ import java.util.List;
 public class OldEventsRecyclerViewAdapter extends RecyclerView.Adapter<OldEventsRecyclerViewAdapter.ViewHolder> {
 
     private final List<Event> events;
-    private static FragmentManager frag;
-    private BottomNavigationView bottomnav;
-    private User inte;
 
-    public OldEventsRecyclerViewAdapter(List<Event> items, FragmentManager freg, BottomNavigationView bottomNavigationview, User inting) {
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private String id;
+    public OldEventsRecyclerViewAdapter(List<Event> items,String did) {
         events = items;
-        frag = freg;
-        bottomnav = bottomNavigationview;
-        inte = inting;
+        id = did;
+
     }
 
     @Override
@@ -56,26 +57,16 @@ public class OldEventsRecyclerViewAdapter extends RecyclerView.Adapter<OldEvents
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //we need a way to get a new date... rn our code in main will just not care abt this so we need change the date
+
+
+
+                final CollectionReference createeventsRef = db.collection("CreateEvents" + id);
+                final CollectionReference OldQreventsRef = db.collection("OldQrsList" + id);
                 // well need to do something like we did in main to get data for the attende list and check if length is < the length of limit
-                //as well we should do else elif b/c the code will be faster for no limit then just check getlimit == ""
-                //to do the attende chcek in the just add a optinal boolean to the user init clause and only use it for create user as attendee here
-                FragmentTransaction fragmentTransaction = frag.beginTransaction();
-                //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-
-                //inte = position;
-                inte.setLastsaved(position);
-                fragmentTransaction.replace(R.id.framelayout, new OrganizeEventDetsFragment(events.get(position))); //explore is temp -----------------------------change
-
-
-                fragmentTransaction.commit();
-                if (bottomnav != null) {
-                    bottomnav.getMenu().clear();
-                    bottomnav.inflateMenu(R.menu.event_nav_menu);
-                    v.postDelayed(() -> bottomnav.setSelectedItemId(R.id.EventDetailsNav), 100);
-                }
-
-
-
+                createeventsRef.document(holder.EventForView.getEventid()).set(holder.EventForView);
+                OldQreventsRef.document(holder.EventForView.getEventid()).delete();
+                //events.remove(position);
             }
         });
 

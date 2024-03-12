@@ -19,15 +19,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -168,9 +172,27 @@ public class QRCameraScannerFragment extends Fragment {
                             //this is what happens after qr code scanned so like we can switch fragments here
                              final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                            final CollectionReference attendelistfb = db.collection("SigninAttendee" + event.getEventid() + event.getEventLimit() + event.getEventName());
-                            attendelistfb.add(mParam1);
+                            //final CollectionReference attendelistfb = db.collection;
+                            //attendelistfb.add(mParam1);
+                            //lets convert a string to int and do +1 then make it a string
+                            DocumentReference docRef = db.collection("AttendeeList" + event.getEventid()).document(mParam1.getDeviceId());
 
+                            // Get the document snapshot
+                            Task<DocumentSnapshot> future = docRef.get();
+                            DocumentSnapshot document = future.getResult();
+                            if (document.exists()) {
+                                // Get the integer value stored in the document
+                                String intValueStr = document.getString("count");
+                                int intValue = Integer.parseInt(intValueStr);
+
+                                // Increment the integer value by 1
+                                intValue++;
+
+                                // Update the document with the new incremented value
+                                docRef.update("count", String.valueOf(intValue));
+                            } else {
+                                System.out.println("Document not found!");
+                            }
                             FragmentTransaction fragmentTransaction = frag.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
                             fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(event,frag,mParam1,bottomnav)); //explore is temp

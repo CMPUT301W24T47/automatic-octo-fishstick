@@ -48,11 +48,18 @@ import static android.content.ContentValues.TAG;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Date;
+import java.util.Calendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import io.grpc.Context;
+import io.grpc.Internal;
 
 public class AddEventFragment extends DialogFragment {
 
@@ -66,6 +73,7 @@ public class AddEventFragment extends DialogFragment {
     private ArrayList<Event> CreateEvents;
 
     private CollectionReference eventcreated;
+    //public String urlqr;
     public AddEventFragment(ArrayList<Event> exploreEvents, User user, String create,ArrayList<Event> createEvents){//CollectionReference eventref, CollectionReference usersref) {
         this.exploreEvents = exploreEvents;
         this.EditUser = user;
@@ -98,11 +106,91 @@ public class AddEventFragment extends DialogFragment {
         EditText desc = view.findViewById(R.id.AddEventDescription);
         ImageView addEventImage = view.findViewById(R.id.AddEventImage);
 
+        date.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+            private String ddmmyyyy = "DDMMYYYY";
+            private Calendar cal = Calendar.getInstance();
+
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //        https://techprogrammingideas.blogspot.com/2020/05/android-edit-text-to-show-dd-mm-yyyy.html
+                if (!s.toString().equals(current)) {
+                    String clean = s.toString().replaceAll("[^\\d.]", "");
+                    String cleanC = current.replaceAll("[^\\d.]", "");
+
+                    int cl = clean.length();
+                    int sel = cl;
+                    for (int i = 2; i <= cl && i < 6; i += 2) {
+                        sel++;
+                    }
+                    //Fix for pressing delete next to a forward slash
+                    if (clean.equals(cleanC)) sel--;
+
+                    if (clean.length() < 8) {
+                        clean = clean + ddmmyyyy.substring(clean.length());
+                    } else {
+                        //This part makes sure that when we finish entering numbers
+                        //the date is correct, fixing it otherwise
+                        int day = Integer.parseInt(clean.substring(0, 2));
+                        int mon = Integer.parseInt(clean.substring(2, 4));
+                        int year = Integer.parseInt(clean.substring(4, 8));
+
+                        if (mon > 12) mon = 12;
+                        cal.set(Calendar.MONTH, mon - 1);
+
+                        year = (year < 1900) ? 1900 : (year > 2100) ? 2100 : year;
+                        cal.set(Calendar.YEAR, year);
+                        // ^ first set year for the line below to work correctly
+                        //with leap years - otherwise, date e.g. 29/02/2012
+                        //would be automatically corrected to 28/02/2012
+
+                        day = (day > cal.getActualMaximum(Calendar.DATE)) ? cal.getActualMaximum(Calendar.DATE) : day;
+                        clean = String.format("%02d%02d%02d", day, mon, year);
+                    }
+
+                    clean = String.format("%s/%s/%s", clean.substring(0, 2),
+                            clean.substring(2, 4),
+                            clean.substring(4, 8));
+
+                    sel = sel < 0 ? 0 : sel;
+                    current = clean;
+                    date.setText(current);
+                    date.setSelection(sel < current.length() ? sel : current.length());
+
+
+                }
+            }
+
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+
+
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // need a loading screen so app dont crash cause things take time to store in db
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Calendar calendar = Calendar.getInstance();
+                Date currentDate = calendar.getTime();
 
+                Date date1 = null;
+                try {
+                    date1 = simpleDateFormat.parse(date.getText().toString());
+                    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa " + date.getText().toString() + "   >=   " + date1);
+                } catch (ParseException e) {
+                    e.printStackTrace(); // Handle parsing exception appropriately
+                }
+
+                if (date1 != null && date1.compareTo(currentDate) >= 0){
 
                 ArrayList<User> addatendeelist = new ArrayList<>();
                 ArrayList<User> checkedinlist = new ArrayList<>();
@@ -126,108 +214,123 @@ public class AddEventFragment extends DialogFragment {
 //                        });
                 // Inside AddEventFragment after selecting an image
                 StorageReference storageRefQR = FirebaseStorage.getInstance().getReference().child("QR/" + UUID.randomUUID().toString());
-
+                StorageReference storageRefQR2 = FirebaseStorage.getInstance().getReference().child("QR/" + UUID.randomUUID().toString());
 
                 MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                 try {
-                    BitMatrix bitMatrix = multiFormatWriter.encode("Karan", BarcodeFormat.QR_CODE,300,300);
+                    BitMatrix bitMatrix = multiFormatWriter.encode("Karan", BarcodeFormat.QR_CODE, 300, 300);
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                     Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] data = baos.toByteArray();
-                    storageRefQR.putBytes(data);
 
-
-                    String urlqr = storageRefQR.getName();
-
-
-
-                    BitMatrix bitMatrixi = multiFormatWriter.encode("Karan", BarcodeFormat.QR_CODE,300,300);
+                    //sign in qr
+                    BitMatrix bitMatrixi = multiFormatWriter.encode("Karan", BarcodeFormat.QR_CODE, 300, 300);
                     BarcodeEncoder barcodeEncoderi = new BarcodeEncoder();
                     Bitmap bitmapi = barcodeEncoderi.createBitmap(bitMatrixi);
                     ByteArrayOutputStream baosi = new ByteArrayOutputStream();
                     bitmapi.compress(Bitmap.CompressFormat.JPEG, 100, baosi);
                     byte[] datai = baosi.toByteArray();
-                    storageRefQR.putBytes(datai).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+
+                    //String urlqr = storageRefQR.getName();
+                    storageRefQR.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Uri testri = taskSnapshot.getUploadSessionUri();
-
-                            String hashtest = taskSnapshot.getMetadata().getName();
-                            Log.d(TAG, "aaaaaaaaaaaaaaaaaaaaa"+hashtest);
-
-                            String secondqr = testri.toString();
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshote) {
+                            storageRefQR.getDownloadUrl().addOnSuccessListener(uri -> {
+                                String urlqr = uri.toString();
 
 
+                                storageRefQR2.putBytes(datai).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        storageRefQR2.getDownloadUrl().addOnSuccessListener(urit -> {
+                                            String secondqr = urit.toString();
+                                            int hashe = taskSnapshot.hashCode();
+                                            String eventid = Integer.toString(hashe);
+                                            //Log.d(TAG, "aaaaaaaaaaaaaaaaaaaaa"+hashtest);
 
-                    // = storageRefQR.getPath();
+                                            //String secondqr = testri.toString();
 
 
-                    if (selectedImageUri != null) {
+                                            // = storageRefQR.getPath();
 
-                        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("event_images/" + UUID.randomUUID().toString());
-                        storageRef.putFile(selectedImageUri)
-                                .addOnSuccessListener(taskSnapshoteeee -> {
-                                    // Image uploaded successfully, get download URL
-                                    storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                        // this is adding imageURL to the databse --------------------------
-                                        String imageURL = uri.toString();
-                                        //////////////just a test
+
+                                            if (selectedImageUri != null) {
+
+                                                StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("event_images/" + UUID.randomUUID().toString());
+                                                storageRef.putFile(selectedImageUri)
+                                                        .addOnSuccessListener(taskSnapshoteeee -> {
+                                                            // Image uploaded successfully, get download URL
+                                                            storageRef.getDownloadUrl().addOnSuccessListener(uriy -> {
+                                                                // this is adding imageURL to the databse --------------------------
+                                                                String imageURL = uriy.toString();
+                                                                //////////////just a test
 //                                        Map<String, Event> eventData = new HashMap<>();
-                                        Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist,urlqr,secondqr);
+                                                                Event newevent = new Event(eventid, name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist, urlqr, secondqr, EditUser.getDeviceId());
 //                                        eventData.put("event",newevent);
-                                        //lists
-                                        // exploreEvents.add(newevent);
-                                        //CreateEvents.add(newevent);
+                                                                //lists
+                                                                // exploreEvents.add(newevent);
+                                                                //CreateEvents.add(newevent);
 
 
-                                        eventfb.add(newevent); /////////firebase
-                                        //^^get the hash of this and then make it the created events hash
-
-                                        // the unique hash we will use for
-                                        eventcreated.add(newevent);
-
+//                                        int how = eventfb.document().set(newevent).hashCode(); /////////firebase
+//                                        //^^get the hash of this and then make it the created events hash
+//                                        String howid = Integer.toString(how);
+//                                        Event newevente = new Event(howid, name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist,urlqr,secondqr, EditUser.getDeviceId());
+                                                                // the unique hash we will use for
+                                                                eventfb.document(eventid).set(newevent);
+                                                                eventcreated.document(eventid).set(newevent);
+                                                                exploreEvents.remove(newevent);
 
 //                                    ArrayList<Event> userevent = EditUser.getCreatedEvents();
 //                                    userevent.add(newevent);
 //                                    EditUser.setCreatedEvents(userevent);
 //                                    useresfb.document(EditUser.getDeviceId()).set(EditUser);
 
-                                        // Store imageURL along with other event details in Firestore
-                                        // Example: firestore.collection("events").document(eventId).update("eventPoster", imageURL);
-                                    });
+                                                                // Store imageURL along with other event details in Firestore
+                                                                // Example: firestore.collection("events").document(eventId).update("eventPoster", imageURL);
+                                                            });
+                                                        });
+                                            } else {
+                                                Event newevent = new Event(eventid, name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist, urlqr, secondqr, EditUser.getDeviceId()); //easier to do null for images
+                                                //exploreEvents.add(newevent); --> just faster then db but db clears list so nw, we can add these things for faster UI
+                                                eventfb.document(eventid).set(newevent);
+                                                eventcreated.document(eventid).set(newevent);
+                                                exploreEvents.remove(newevent);
+
+//                        int how = eventfb.document().set(newevent).hashCode(); /////////firebase
+//                        //^^get the hash of this and then make it the created events hash
+//                        String howid = Integer.toString(how);
+//                        Event newevente = new Event(howid, name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist,urlqr,secondqr, EditUser.getDeviceId());
+//                        // the unique hash we will use for
+//                        eventfb.document(eventid).set(newevente);
+//                        eventcreated.document(eventid).set(newevente);
+                                            }
+                                        });
+                                    }
                                 });
-                    }
-                    else {
-                        Event newevent = new Event(EditUser.getDeviceId(), name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist,urlqr,secondqr);
-                        exploreEvents.add(newevent);
-                        eventfb.add(newevent); /////////firebase
-                        eventcreated.add(newevent);
-                    }
+                            });
                         }
                     });
 
+
                     //   imageView.setImageBitmap(bitmap); //storing bitmap
 
-                }catch (WriterException e){
+                } catch (WriterException e) {
                     throw new RuntimeException(e);
                 }
-
-
-
-
-
 
 
                 ////qr^
 
 
                 eventName.setText("");
-                 location.setText("");
-                 limit.setText("");
-                 date.setText("");
-                 desc.setText("");
+                location.setText("");
+                limit.setText("");
+                date.setText("");
+                desc.setText("");
                 //addEventImage.setImageResource();
                 Glide.with(addEventImage.getContext())
                         .load("https://firebasestorage.googleapis.com/v0/b/charlie-kim-fans.appspot.com/o/event_images%2Fjujutsu-kaisen-4k-geto-suguru-6i4yc80acocfj7go.jpg?alt=media&token=d5390dbc-f352-47ac-aade-950b1cee5466")
@@ -250,7 +353,7 @@ public class AddEventFragment extends DialogFragment {
 //
 //                // add a list in Events called Array<(User,Boolean Chekin Status)> attendelist; -- just a side note not for code
 
-            }
+            }        }
         });
 
 

@@ -16,6 +16,8 @@ public class User implements Serializable {
 
 
 
+    String CheckInCount;
+
     String DeviceId; // wont have a setter b/c should only every be init at start of code
 
 
@@ -45,6 +47,11 @@ public class User implements Serializable {
         this.createdEvents = createdEvents;
         this.oldQRList = oldQRList;
         this.lastsaved = pos;
+    }
+    public User(String AttendeeName,String AttendeeImage, String CheckInCount) {
+        this.userName = AttendeeName;
+        this.userProfileImage = AttendeeImage;
+        this.CheckInCount = CheckInCount;
     }
     public User() {
 
@@ -117,5 +124,12 @@ public class User implements Serializable {
 
     public void setLastsaved(int lastsaved) {
         this.lastsaved = lastsaved;
+    }
+    public String getCheckInCount() {
+        return CheckInCount;
+    }
+
+    public void setCheckInCount(String checkInCount) {
+        CheckInCount = checkInCount;
     }
 }

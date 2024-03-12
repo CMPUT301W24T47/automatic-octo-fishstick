@@ -360,6 +360,15 @@ public class UserProfileFragment extends Fragment{
 
 
     public void setImageDel(Drawable originalPic){
+        //either delete the image on firestore so everything in app "updates" with the image deleted
+        // on text edits and profile image edits we need to update these db collections:
+        // for eventid in savedevents of current user:
+        // attendeelist = firbase collection AttendeeList + eventid
+        //attendeelist.document(userid).set(current user)
+        // we can just move the generate image code to the attendeeList so we aint gotta figure out how to make it a URL
+        //also to make life easier since we have a "attendee" User from the class lets add a field for checkin count str ofc
+        //check in count updated on a sucsseful scan
+
         profilePic.setVisibility(View.INVISIBLE);
         textOnProfilePic.setText(user.getUserName());
         profilePic.setImageDrawable(originalPic);
