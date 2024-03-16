@@ -244,7 +244,7 @@ public class UserProfileFragment extends Fragment{
 
         Drawable originalPic = profilePic.getDrawable();
 
-        Picasso.get().load(user.getUserProfileImage()).into(profilePic);
+        //Picasso.get().load(user.getUserProfileImage()).into(profilePic);
         String imageUrl = user.getUserProfileImage();
         /////////might wanna delete picasso or glide casue it redundant to display twice
 
