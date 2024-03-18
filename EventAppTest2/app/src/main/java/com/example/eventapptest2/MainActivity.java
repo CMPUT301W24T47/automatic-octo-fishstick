@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     ArrayList<Event> oldQRList= new ArrayList<>();
 
     ArrayList<Event> Explore = new ArrayList<>();
+    ArrayList<String> notifyList = new ArrayList<>();
     public int inte = 0;
 
 
@@ -166,7 +167,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.replace(R.id.framelayout, new OragnizersNotificationFragment(createdEvents.get(testuser.getLastsaved()))); //explore is temp
                             fragmentTransaction.commit();
 //                            bottomnav.getMenu().clear();
 //                            bottomnav.inflateMenu(R.menu.organizer_nav_menu);
@@ -214,12 +215,55 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
 
                         else if (itemId == R.id.AttendeeNotifications) {
+                          // getNotifyList(savedEvents.get(testuser.getLastsaved()).getEventid());//takes eventid
+
+
+
+                            final CollectionReference NotifyListRef = db.collection("Notify" + savedEvents.get(testuser.getLastsaved()).getEventid());
+                            notifyList.clear();
+                            NotifyListRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                                    if (error != null) {
+                                        return ;
+                                    }
+
+                                    // savedEvents.clear(); // Clear the old list
+                                    for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+//                    String eventId = doc.getId();
+                                        if (doc.exists()) {
+                                            String UserName = (String) doc.getData().get("note");
+                                            //System.out.println("Image URL: " + eventImage);
+                                            // ... (add other event properties based on your Event class)
+
+                                            notifyList.add(UserName);
+                                        }// Assuming "karan" is a placeholder for organizer
+                                    }
+
+
+
+
+
+
+
+
+
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.replace(R.id.framelayout, new AttendeeNotifyFragment(notifyList)); //explore is temp
                             fragmentTransaction.commit();
+
+
+
+                                }
+                            });
+
+
                         }
+
+
+
                         else if (itemId == R.id.AttendeeProfile) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -376,6 +420,11 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
 
     private void getDataSave(String id){
+        // create event notfications are only made there so no list needed b/c they will only update notfication list of event like attendeelist
+        // this means saved data stores a notfication list
+
+
+
         final CollectionReference SavedeventsRef = db.collection("SavedEvents" + id);
 
         SavedeventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -594,9 +643,38 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
             return false;
         }
     }
-//    @Override
-//    public void onExploreButtonClick() {
-//
-//
-//    }
+    private void getNotifyList(String id){ //takes event id
+        final CollectionReference NotifyListRef = db.collection("Notify" + id);
+
+        NotifyListRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    return ;
+                }
+
+                // savedEvents.clear(); // Clear the old list
+                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+//                    String eventId = doc.getId();
+                    if (doc.exists()) {
+                        String UserName = (String) doc.getData().get("note");
+                        //System.out.println("Image URL: " + eventImage);
+                        // ... (add other event properties based on your Event class)
+
+                        notifyList.add(UserName);
+                    }// Assuming "karan" is a placeholder for organizer
+                }
+
+            }
+        });
+        //return notifyList;
+    }
+
+
+
+
+
+
+
+
 }
