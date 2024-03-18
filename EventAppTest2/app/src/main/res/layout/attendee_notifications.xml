@@ -15,27 +15,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/notification_scroll_view"
+        app:layout_constraintBottom_toTopOf="@id/NotificationRecyclerView"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"/>
 
-    <ScrollView
-        android:id="@+id/notification_scroll_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/AttendeeNotificationTitle"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/NotificationRecyclerView"
+        android:layout_width="409dp"
+        android:layout_height="681dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AttendeeNotificationTitle"
+        tools:listitem="@layout/attendee_notification_fragment"/>
 
-        <ImageView
-            android:id="@+id/AdminNoNotificaitonsIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/attendee_no_notifications"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"/>
-    </ScrollView>
+    <ImageView
+        android:id="@+id/NoNotificationsAttendee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/NotificationRecyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/NotificationRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/NotificationRecyclerView"
+        app:layout_constraintTop_toTopOf="@+id/NotificationRecyclerView"
+        app:srcCompat="@drawable/attendee_no_notifications" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
