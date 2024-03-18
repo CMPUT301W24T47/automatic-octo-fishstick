@@ -7,10 +7,10 @@
 
 
     <TextView
-        android:id="@+id/AdminEventsTextView"
+        android:id="@+id/AdminProfilesTextView"
         android:layout_width="match_parent"
         android:layout_height="37dp"
-        android:text="Events"
+        android:text="Profiles"
         android:textSize="32sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -22,25 +22,27 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/AdminEventsNameText"
+        android:id="@+id/AdminProfileNameText"
         android:layout_width="match_parent"
         android:layout_height="22dp"
         android:text="Admin: Name"
         android:textStyle="bold"
         android:paddingLeft="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="AdminProfilesRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AdminEventsTextView"
+        app:layout_constraintTop_toBottomOf="@+id/AdminProfilesTextView"
         app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="409dp"
         android:layout_height="670dp"
+        android:id="@+id/AdminProfilesRecyclerView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AdminEventsNameText" />
+        app:layout_constraintTop_toBottomOf="@+id/AdminProfileNameText"
+        tools:listitem="@layout/admin_profiles_fragment"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

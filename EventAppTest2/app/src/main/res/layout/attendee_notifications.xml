@@ -23,11 +23,13 @@
         android:id="@+id/NotificationRecyclerView"
         android:layout_width="409dp"
         android:layout_height="681dp"
+        android:paddingStart="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AttendeeNotificationTitle"
-        tools:listitem="@layout/attendee_notification_fragment"/>
+        tools:listitem="@layout/attendee_notification_fragment"
+        tools:ignore="RtlSymmetry" />
 
     <ImageView
         android:id="@+id/NoNotificationsAttendee"

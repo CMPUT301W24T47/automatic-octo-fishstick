@@ -7,7 +7,7 @@
 
 
     <ImageView
-        android:id="@+id/attendee_event_icon"
+        android:id="@+id/admin_event_icon"
         android:layout_width="66dp"
         android:layout_height="62dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,29 +19,29 @@
         app:srcCompat="@drawable/circleprofilepic" />
 
     <TextView
-        android:id="@+id/attendee_event_notify"
+        android:id="@+id/admin_events"
         android:layout_width="262dp"
         android:layout_height="62dp"
-        android:text="Event Notification"
+        android:text="Event"
         android:paddingStart="10dp"
         android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/attendee_event_icon"
+        app:layout_constraintStart_toEndOf="@+id/admin_event_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/attendee_notification_time"
-        android:layout_width="84dp"
-        android:layout_height="62dp"
-        android:text="Time"
-        android:gravity="center_vertical"
+    <ImageButton
+        android:id="@+id/admin_deletebtn_events"
+        android:layout_width="80dp"
+        android:layout_height="21dp"
+        android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/attendee_event_notify"
+        app:layout_constraintStart_toEndOf="@+id/admin_events"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.035"
+        app:srcCompat="@drawable/delete_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
