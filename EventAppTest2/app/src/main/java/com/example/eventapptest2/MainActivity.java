@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         else if (itemId == R.id.EventMapNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav));
+                            fragmentTransaction.replace(R.id.framelayout, new MapsFragment());
                             fragmentTransaction.commit();
                         }
                         else if (itemId == R.id.EventAttendeesNav) {
@@ -632,7 +632,12 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         });
     }
     private ArrayList<User> getAttendeList(String id){ //takes event id
-        final CollectionReference AttendeListRef = db.collection("AttendeeList" + id);
+        /// this should instead fetch the user from the users collection so attendee updates if the user changes images or whatever
+
+
+
+
+        final CollectionReference AttendeListRef = db.collection("AttendeeList" + id); // maybe this still need we could get all device id from the collections documents
         ArrayList<User> attendeeList = new ArrayList<>();
         AttendeListRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
