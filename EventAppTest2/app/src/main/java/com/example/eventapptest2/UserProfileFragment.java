@@ -111,14 +111,17 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 
@@ -141,14 +144,19 @@ public class UserProfileFragment extends Fragment{
     // Geolocation switch
     private Switch geolocation;
 
+    private static FragmentManager frag;
+    private BottomNavigationView bottomnav;
+
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     // CollectionReference will store the collection of Users
     //  - Which then each user will store different information
     private final CollectionReference usersRef = db.collection("users");
 //    private User user;
-    public UserProfileFragment(User useri) {
+    public UserProfileFragment(User useri,FragmentManager freg,BottomNavigationView bottomNavigationview) {
         // Required empty public constructor
         user = useri;
+        frag = freg;
+        bottomnav = bottomNavigationview;
 
     }
 
@@ -226,6 +234,52 @@ public class UserProfileFragment extends Fragment{
         // Inflate the layout for this fragment
 
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        ArrayList<String> admin_ids = new ArrayList<>();
+        admin_ids.add("fae6f715c0a59b56"); //karans at home phone
+
+
+
+
+        if( admin_ids.contains(user.getDeviceId()) ){
+            Button adminbut = v.findViewById(R.id.admin_open_button);
+
+            adminbut.setVisibility(View.VISIBLE);
+            adminbut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (bottomnav != null) {
+                        bottomnav.getMenu().clear();
+                        bottomnav.inflateMenu(R.menu.admin_nav_menu);
+                        v.postDelayed(() -> bottomnav.setSelectedItemId(R.id.AdminEvents), 100);
+                    }
+
+
+
+                }
+            });
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

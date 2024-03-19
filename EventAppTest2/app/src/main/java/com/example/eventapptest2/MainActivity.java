@@ -76,13 +76,13 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
 
                 //////////
-                // Navigate to UserProfileFragment with retrieved user
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.framelayout, new UserProfileFragment(testuser))//we should also pass
-                        // CollectionReference usersRef
-                        // we should init a uid from testuser.getdeviceid() to we can do userRef.document(deviceid).set(editeduser) for editing
-                        .commit();
+//                // Navigate to UserProfileFragment with retrieved user
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+//                fragmentManager.beginTransaction()
+//                        .replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav))//we should also pass
+//                        // CollectionReference usersRef
+//                        // we should init a uid from testuser.getdeviceid() to we can do userRef.document(deviceid).set(editeduser) for editing
+//                        .commit();
 
 
 //                Explore.add(new Event(deviceId,"Test", "homepage","City", 1234, null,"karan",null,null));
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         } else if (itemId == R.id.UserProfileNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser));
+                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.ExploreEventNav) {
                             getDataExplore(deviceId); //dk why but pervents glitch when the user of deviceid can see there created events in explore
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         } else if (itemId == R.id.GoBacknav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser));
+                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav));
                             fragmentTransaction.commit();
                             bottomnav.getMenu().clear();
                             bottomnav.inflateMenu(R.menu.bottom_nav_menu);
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         else if (itemId == R.id.EventMapNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser));
+                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav));
                             fragmentTransaction.commit();
                         }
                         else if (itemId == R.id.EventAttendeesNav) {
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         else if (itemId == R.id.AttendeeProfile) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser));
+                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav));
                             fragmentTransaction.commit();
                         }
 
@@ -291,6 +291,52 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             bottomnav.inflateMenu(R.menu.bottom_nav_menu);
                             bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.SavedEventNav), 100);
                         }
+
+                        else if (itemId == R.id.AdminGoBack) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                            fragmentTransaction.replace(R.id.framelayout, new SavedEventsFragment(savedEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.commit();
+                            bottomnav.getMenu().clear();
+                            bottomnav.inflateMenu(R.menu.bottom_nav_menu);
+                            bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.SavedEventNav), 100);
+                        }
+
+
+                        else if (itemId == R.id.AdminImages) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                            fragmentTransaction.replace(R.id.framelayout, new AdminImageFragment(createdEvents)); // the passed list is temporary
+                            fragmentTransaction.commit();
+                        }
+
+
+                        else if (itemId == R.id.AdminEvents) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                            fragmentTransaction.replace(R.id.framelayout, new AdminEventsFragment(createdEvents)); //explore is temp
+                            fragmentTransaction.commit();
+                        }
+
+                        else if (itemId == R.id.AdminProfiles) {
+                            ArrayList<User> sad = new ArrayList<>();
+
+
+                            sad.add(testuser);
+
+
+
+
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                            fragmentTransaction.replace(R.id.framelayout, new AdminProfileFragment(sad)); //this is temporary takes an array of users
+                            fragmentTransaction.commit();
+                        }
+
 
 
 

@@ -1,5 +1,8 @@
 package com.example.eventapptest2;
 import com.example.eventapptest2.Event;
+
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,6 +99,39 @@ public class ACTUALExploreEventDetsFragment extends Fragment {
             }
         });
 
+
+
+        ImageView postersharebut = v.findViewById(R.id.ShareIconQR);
+
+        postersharebut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent shareIntent = new Intent();
+//                shareIntent.setAction(Intent.ACTION_SEND);
+//// Example: content://com.google.android.apps.photos.contentprovider/...
+//                shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(event.getSignINQR()));
+//                shareIntent.setType("image/jpeg");
+//                startActivity(Intent.createChooser(shareIntent, null));
+
+
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, event.getQrUrl());
+
+// (Optional) Here you're setting the title of the content
+                sendIntent.putExtra(Intent.EXTRA_TITLE, "Introducing content previews");
+
+// (Optional) Here you're passing a content URI to an image to be displayed
+                sendIntent.setData(Uri.parse(event.getQrUrl()));
+                sendIntent.setType("image/jpeg");
+                sendIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+// Show the Sharesheet
+                startActivity(Intent.createChooser(sendIntent, null));
+
+
+
+            }
+        });
 
 
 

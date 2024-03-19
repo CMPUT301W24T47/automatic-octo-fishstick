@@ -4,11 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
+
         <ImageView
             android:id="@+id/ProfilePicList"
             android:layout_width="59dp"
@@ -41,6 +37,6 @@
             android:text="TextView"
             app:layout_constraintStart_toEndOf="@+id/ProfilePicList"
             app:layout_constraintTop_toBottomOf="@+id/attendeeNameList" />
-    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,17 +50,17 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
         holder.EventForView = AttendeeList.get(position);
         holder.userName.setText(holder.EventForView.getUserName());
         //String imageUrl = "https://firebasestorage.googleapis.com/v0/b/charlie-kim-fans.appspot.com/o/event_images%2F7aa31d9e-1539-49f9-bc21-4ec823cdbfdb?alt=media&token=7afc1c14-11f4-48c7-8ab1-99ee1e96eaa4";
-        Picasso.get().load(holder.EventForView.getUserProfileImage()).into(holder.Imageing);
+//        Picasso.get().load(holder.EventForView.getUserProfileImage()).into(holder.Imageing);
         String imageUrl = holder.EventForView.getUserProfileImage();
          /////////might wanna delete picasso or glide casue it redundant to display twice
 
         // display image url
-        System.out.println("Image URL: " + imageUrl);
+        //System.out.println("Image URL: " + imageUrl);
         Glide.with(holder.itemView.getContext())
                 .load(imageUrl)
                 .into(holder.Imageing);
 
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+holder.EventForView.getCheckInCount());
+        //System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+holder.EventForView.getCheckInCount());
 
         if (Integer.parseInt( holder.EventForView.getCheckInCount()) == 0){
             holder.Status.setText("Not Signed-in");

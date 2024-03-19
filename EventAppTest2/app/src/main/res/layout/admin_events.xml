@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.recyclerview.widget.RecyclerView
+xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+
+        android:id="@+id/AdminEventsRecyclerView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AdminEventsNameText"
+        tools:listitem="@layout/admin_events_fragments"
+        android:name="com.example.eventapptest2.AdminEventsFragment"
+        app:layoutManager="LinearLayoutManager"
+
+        tools:context='.AdminEventsFragment'
+
+        />
