@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,34 +72,56 @@ public class ACTUALExploreEventDetsFragment extends Fragment {
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final CollectionReference attendelistfb = db.collection("AttendeeList" + event.getEventid());
-                //we should check if the event is full or not first // or this can be another filter on main where explore list has no full events in it
-
-                ArrayList<Event> newlist =  user.getSavedEvents();
-                //newlist.add(event); //we should instead create a attendee specfic event which only stores notfications
-                //user.setSavedEvents(newlist);
-                // remove the event from the useres explore list as well not with db tho
-
-                saveevent.document(event.getEventid()).set(event); // we should be adding a attendee version of event here so no attendee lists only a notfication list
 
 
-                Map<String, Object> newuser = new HashMap<>();
-                newuser.put("userName", user.getUserName());
-                newuser.put("userProfileImage", user.getUserProfileImage());
-                newuser.put("CheckInCount", "0");
+                if (event.getEventLimit().equals("")) {
 
+                    final CollectionReference attendelistfb = db.collection("AttendeeList" + event.getEventid());
 
-                attendelistfb.document(user.getDeviceId()).set(newuser); //databse is being funny should directly create keys
+                    ArrayList<Event> newlist = user.getSavedEvents();
 
+                    saveevent.document(event.getEventid()).set(event);
 
+                    Map<String, Object> newuser = new HashMap<>();
+                    newuser.put("userName", user.getUserName());
+                    newuser.put("userProfileImage", user.getUserProfileImage());
+                    newuser.put("CheckInCount", "0");
 
-                exploreevents.remove(event);
-                bottomnav.getMenu().clear();
-                bottomnav.inflateMenu(R.menu.bottom_nav_menu);
-                bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.ExploreEventNav), 100);
+                    attendelistfb.document(user.getDeviceId()).set(newuser);
 
-                //we should change the fragment to savedEvents after as well remove the event from the users explore list
-                //I think if handled in main it will work automatically
+                    exploreevents.remove(event);
+                    bottomnav.getMenu().clear();
+                    bottomnav.inflateMenu(R.menu.bottom_nav_menu);
+                    bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.ExploreEventNav), 100);
+
+                }
+                else{
+                    if ((event.getAttendeList().size() + 1 <= Integer.parseInt(event.getEventLimit()))){
+
+                        final CollectionReference attendelistfb = db.collection("AttendeeList" + event.getEventid());
+
+                        ArrayList<Event> newlist = user.getSavedEvents();
+
+                        saveevent.document(event.getEventid()).set(event);
+
+                        Map<String, Object> newuser = new HashMap<>();
+                        newuser.put("userName", user.getUserName());
+                        newuser.put("userProfileImage", user.getUserProfileImage());
+                        newuser.put("CheckInCount", "0");
+
+                        attendelistfb.document(user.getDeviceId()).set(newuser);
+
+                        exploreevents.remove(event);
+                        bottomnav.getMenu().clear();
+                        bottomnav.inflateMenu(R.menu.bottom_nav_menu);
+                        bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.ExploreEventNav), 100);}
+
+                    else {
+
+                        Toast.makeText(getActivity().getApplicationContext(), "The Event is Full", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
 
             }
         });

@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         } else if (itemId == R.id.OldQrNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new OldQrsFragments(oldQRList,deviceId));
+                            fragmentTransaction.replace(R.id.framelayout, new OldQrsFragments(oldQRList,deviceId,fragmentManager));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.AddEventnav) {
                             //FragmentManager fragmentManager = getSupportFragmentManager();
@@ -598,7 +598,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                     String eventDate = (String) doc.getData().get("eventDate");
                     String EventId = (String) doc.getData().get("eventid");
                     String Eventdes = (String) doc.getData().get("eventDesription");
-                    ArrayList<User> attendelist = (ArrayList<User>) doc.getData().get("attendeeList"); //not needed in saved or explore events we can remove theses to save space
+                    ArrayList<User> attendelist = getAttendeList(EventId); //not needed in saved or explore events we can remove theses to save space
                     ArrayList<User> checkinlist = (ArrayList<User>) doc.getData().get("Checkin-list");
                     String eventImage = (String) doc.getData().get("eventPoster");
                     String qrlur = (String) doc.getData().get("qrUrl");
@@ -659,13 +659,20 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
 //                    String eventId = doc.getId();
                     if (doc.exists()) {
-                        String UserName = (String) doc.getData().get("userName");
-                        String UserImage = (String) doc.getData().get("userProfileImage");
-                        String checkin = (String) doc.getData().get("CheckInCount");
-                         //System.out.println("Image URL: " + eventImage);
-                        // ... (add other event properties based on your Event class)
+                        String attendeeid = doc.getId();
+                        final CollectionReference userref = db.collection("users");
+                        //get user from user collection if any changes happened to user
+                        userref.document(attendeeid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                        attendeeList.add(new User(UserName,UserImage,checkin));
+                                String UserName = (String) value.get("userName");
+                                String UserImage = (String) value.getData().get("userProfileImage");
+                                String checkin = (String) doc.getData().get("CheckInCount"); // the doc contains the count
+                                attendeeList.add(new User(UserName,UserImage,checkin));
+
+                            }
+                        });
                     }// Assuming "karan" is a placeholder for organizer
                 }
 

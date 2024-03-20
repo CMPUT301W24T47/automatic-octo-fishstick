@@ -41,10 +41,12 @@ public class OldQrsFragments extends Fragment {
     private static User inte;
     private static String id;
 
-    public OldQrsFragments(ArrayList<Event> createevents,String did) {
+
+    public OldQrsFragments(ArrayList<Event> createevents,String did, FragmentManager freg) {
         // Required empty public constructor
         this.events = createevents;
         this.id = did;
+        frag = freg;
     }
 
     /**
@@ -55,7 +57,7 @@ public class OldQrsFragments extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static OldQrsFragments newInstance(int columnCount) {
-        OldQrsFragments fragment = new OldQrsFragments(events,id);
+        OldQrsFragments fragment = new OldQrsFragments(events,id,frag);
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -86,7 +88,7 @@ public class OldQrsFragments extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new OldEventsRecyclerViewAdapter(events,id));
+            recyclerView.setAdapter(new OldEventsRecyclerViewAdapter(events,id,frag));
         }
         return view;
     }
