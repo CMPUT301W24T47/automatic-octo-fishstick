@@ -7,19 +7,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 public class OrganizeEventDetsFragment extends Fragment {
     Event event;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    User user;
 
-    public OrganizeEventDetsFragment(Event events){
+    public OrganizeEventDetsFragment(Event events,User userr){
         event = events;
+        user = userr;
     }
     @Nullable
     @Override
@@ -31,6 +37,8 @@ public class OrganizeEventDetsFragment extends Fragment {
         TextView detloc = v.findViewById(R.id.LocationNameOrgdet);
         TextView detdesc = v.findViewById(R.id.EventDescriptionOrgdet);
         TextView detlim = v.findViewById(R.id.AttendeeLimitNumOrgdet);
+        Switch geolocation = v.findViewById(R.id.GeoLocationButtonOrgdet);
+
         detlim.setText(event.getEventLimit());
         detname.setText(event.getEventName());
         detdate.setText(event.getEventDate());
@@ -39,6 +47,38 @@ public class OrganizeEventDetsFragment extends Fragment {
         Picasso.get().load(event.getEventPoster()).into(detimage);
         //set the share button make it functional
         ImageView checkinsharebut = v.findViewById(R.id.ShareQRIconOrgdet);
+
+
+
+    if(event.getTracking() instanceof String){
+        if (event.getTracking().equals("on")){
+            geolocation.setChecked(true);
+        }}
+
+
+
+        geolocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (geolocation.isChecked()){
+                    event.setTracking("on");
+                    //update explore,created, saved is delt with by explore
+                    final CollectionReference eventsRef = db.collection("ExploreEvents");
+                    final CollectionReference createeventsRef = db.collection("CreateEvents" + user.getDeviceId());
+                    eventsRef.document(event.getEventid()).set(event);
+                    createeventsRef.document(event.getEventid()).set(event);
+
+                }
+                else{
+                    event.setTracking("off");
+                    //update explore,created, saved is delt with by explore
+                    final CollectionReference eventsRef = db.collection("ExploreEvents");
+                    final CollectionReference createeventsRef = db.collection("CreateEvents" + user.getDeviceId());
+                    eventsRef.document(event.getEventid()).set(event);
+                    createeventsRef.document(event.getEventid()).set(event);
+                }
+            }
+        });
 
         checkinsharebut.setOnClickListener(new View.OnClickListener() {
             @Override

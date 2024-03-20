@@ -22,9 +22,13 @@ public class User implements Serializable {
 
 
 
+    String tracking;
+
+
+
     int lastsaved; // goes in databse but should never be accesed through db //it will always be set first in code b4 we get it
 
-    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, String userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList) {
+    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, String userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList,String track) {
         this.DeviceId = deviceId;
         this.userName = userName;
         this.userHomepage = userHomepage;
@@ -35,8 +39,9 @@ public class User implements Serializable {
         this.createdEvents = createdEvents;
         this.oldQRList = oldQRList;
         this.lastsaved = 0;
+        this.tracking = track;
     }
-    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, String userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList,int pos) {
+    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, String userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList,int pos,String track) {
         this.DeviceId = deviceId;
         this.userName = userName;
         this.userHomepage = userHomepage;
@@ -47,6 +52,8 @@ public class User implements Serializable {
         this.createdEvents = createdEvents;
         this.oldQRList = oldQRList;
         this.lastsaved = pos;
+        this.tracking = track;
+
     }
     public User(String AttendeeName,String AttendeeImage, String CheckInCount) {
         this.userName = AttendeeName;
@@ -55,6 +62,15 @@ public class User implements Serializable {
     }
     public User() {
 
+    }
+
+
+    public String getTracking() {
+        return tracking;
+    }
+
+    public void setTracking(String tracking) {
+        this.tracking = tracking;
     }
     public void setUserName(String userName) {
         this.userName = userName;

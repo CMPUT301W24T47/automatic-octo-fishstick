@@ -268,7 +268,7 @@ public class AddEventFragment extends DialogFragment {
                                                                 String imageURL = uriy.toString();
                                                                 //////////////just a test
 //                                        Map<String, Event> eventData = new HashMap<>();
-                                                                Event newevent = new Event(eventid, name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist, urlqr, secondqr, EditUser.getDeviceId());
+                                                                Event newevent = new Event(eventid, name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist, urlqr, secondqr, EditUser.getDeviceId(),"off");
 //                                        eventData.put("event",newevent);
                                                                 //lists
                                                                 // exploreEvents.add(newevent);
@@ -294,7 +294,7 @@ public class AddEventFragment extends DialogFragment {
                                                             });
                                                         });
                                             } else {
-                                                Event newevent = new Event(eventid, name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist, urlqr, secondqr, EditUser.getDeviceId()); //easier to do null for images
+                                                Event newevent = new Event(eventid, name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist, urlqr, secondqr, EditUser.getDeviceId(),"off"); //easier to do null for images
                                                 //exploreEvents.add(newevent); --> just faster then db but db clears list so nw, we can add these things for faster UI
                                                 eventfb.document(eventid).set(newevent);
                                                 eventcreated.document(eventid).set(newevent);

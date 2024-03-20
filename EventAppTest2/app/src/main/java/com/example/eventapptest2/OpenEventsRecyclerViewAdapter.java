@@ -71,7 +71,7 @@ public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEven
 
                 //inte = position;
                 inte.setLastsaved(position);
-                fragmentTransaction.replace(R.id.framelayout, new OrganizeEventDetsFragment(events.get(position))); //explore is temp -----------------------------change
+                fragmentTransaction.replace(R.id.framelayout, new OrganizeEventDetsFragment(events.get(position),inte)); //explore is temp -----------------------------change
 
 
                 fragmentTransaction.commit();

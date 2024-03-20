@@ -110,6 +110,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -142,7 +143,7 @@ public class UserProfileFragment extends Fragment{
     private EditText userEmailTextView;
     private EditText userPhoneNumTextView;
     // Geolocation switch
-    private Switch geolocation;
+    private SwitchCompat geolocation;
 
     private static FragmentManager frag;
     private BottomNavigationView bottomnav;
@@ -233,7 +234,34 @@ public class UserProfileFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+
+
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+
+        geolocation = v.findViewById(R.id.UsergeolocationSwitch);
+
+
+        if (user.getTracking() instanceof String){
+        if (user.getTracking().equals("on")){
+            geolocation.setChecked(true);
+        }
+        }
+
+
+
+        geolocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (geolocation.isChecked()){
+                    user.setTracking("on");
+                    usersRef.document(user.getDeviceId()).set(user);
+                }
+                else {user.setTracking("off");
+                    usersRef.document(user.getDeviceId()).set(user);}
+            }
+        });
+
 
         ArrayList<String> admin_ids = new ArrayList<>();
         admin_ids.add("fae6f715c0a59b56"); //karans at home phone

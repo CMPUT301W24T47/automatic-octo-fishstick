@@ -37,10 +37,14 @@ public class Event {
 
     String owner;
 
+
+
+    String tracking;
+
     // QR signIn;
     // QR posterQR;
 
-    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventLimit, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss,String id ) {
+    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventLimit, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss,String id,String track ) {
         //will need to add a notfications list
         //each event hashed by event id
         // id+attendee id+checkin id id+notfic
@@ -56,8 +60,9 @@ public class Event {
         this.QrUrl = qrUrl;
         this.signINQR =ss;
         this.owner = id;
+        this.tracking = track;
     }
-    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss,String id) {
+    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss,String id,String track) {
         //remove the two users list from this and make this constructer "attendee event" this is meant for sign-up, so it will not a notfication list but has no care for other attendees
         this.Eventid = eventid;
         this.eventName = eventName;
@@ -71,6 +76,7 @@ public class Event {
         this.QrUrl = qrUrl;
         this.signINQR =ss;
         this.owner = id;
+        this.tracking = track;
 
     }
 
@@ -84,6 +90,14 @@ public class Event {
         this.QrUrl = "qrUrl";
         this.signINQR ="ss";
         this.owner = "0";
+    }
+
+    public String getTracking() {
+        return tracking;
+    }
+
+    public void setTracking(String tracking) {
+        this.tracking = tracking;
     }
     public String getEventName() {
         return eventName;

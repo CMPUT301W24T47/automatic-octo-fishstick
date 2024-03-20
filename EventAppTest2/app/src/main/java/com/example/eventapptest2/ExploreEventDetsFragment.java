@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,10 +53,44 @@ public class ExploreEventDetsFragment extends Fragment {
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(event.getTracking() instanceof String) {
+                    if (user.getTracking() instanceof String) {
 
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.framelayout,new QRCameraScannerFragment(event,user,fragmentManager,bottomnavi));
-                fragmentTransaction.commit();
+                        if (event.getTracking().equals("on")) {
+                            if (user.getTracking().equals("on")) {
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.framelayout, new QRCameraScannerFragment(event, user, fragmentManager, bottomnavi));
+                                fragmentTransaction.commit();
+
+
+
+                            }
+                            else{
+                                //toast
+                                Toast.makeText(getActivity().getApplicationContext(), "Event Requires Geolocation ON", Toast.LENGTH_SHORT).show();
+
+                            }
+
+
+                        }else{
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.framelayout, new QRCameraScannerFragment(event, user, fragmentManager, bottomnavi));
+                            fragmentTransaction.commit();
+
+                        }
+
+
+                    }else{
+                        Toast.makeText(getActivity().getApplicationContext(), "Event Requires Geolocation ON", Toast.LENGTH_SHORT).show();
+
+
+                    }
+
+
+                }else{
+                    Toast.makeText(getActivity().getApplicationContext(), "Event Requires Geolocation ON", Toast.LENGTH_SHORT).show();
+                    
+                }
 
             }
         });
