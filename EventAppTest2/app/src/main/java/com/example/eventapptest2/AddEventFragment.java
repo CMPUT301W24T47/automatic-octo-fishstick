@@ -185,7 +185,7 @@ public class AddEventFragment extends DialogFragment {
                 Date date1 = null;
                 try {
                     date1 = simpleDateFormat.parse(date.getText().toString());
-                    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa " + date.getText().toString() + "   >=   " + date1);
+                    //System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa " + date.getText().toString() + "   >=   " + date1);
                 } catch (ParseException e) {
                     e.printStackTrace(); // Handle parsing exception appropriately
                 }

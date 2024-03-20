@@ -64,6 +64,10 @@ public class ACTUALExploreEventDetsFragment extends Fragment {
         Picasso.get().load(event.getEventPoster()).into(detimage);
 
         //set the share button make it functional
+
+        //make the limit work
+
+
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

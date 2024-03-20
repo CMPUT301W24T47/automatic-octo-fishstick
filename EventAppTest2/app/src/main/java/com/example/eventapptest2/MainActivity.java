@@ -92,6 +92,13 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 BottomNavigationView bottomnav = findViewById(R.id.bottomNavView);
                 bottomnav.setSelectedItemId(R.id.UserProfileNav);
 
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav));
+                fragmentTransaction.commit();
+
+
+
                 bottomnav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -304,7 +311,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         }
 
 
-                        else if (itemId == R.id.AdminImages) {
+                        else if (itemId == R.id.AdminImages) { ///easyish
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
@@ -313,7 +320,9 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         }
 
 
-                        else if (itemId == R.id.AdminEvents) {
+                        else if (itemId == R.id.AdminEvents) { //  hard              // should take in a list of event and user
+                            //delte the events creators event easy // delete all users saved events if event in their saved event hard// delete event attendee list easy
+                            //delete event notfications as well easy
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
@@ -321,7 +330,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             fragmentTransaction.commit();
                         }
 
-                        else if (itemId == R.id.AdminProfiles) {
+                        else if (itemId == R.id.AdminProfiles) { //the most easy casue we never delete a profile realisitcly just set everything to "" except the id
                             ArrayList<User> sad = new ArrayList<>();
 
 
