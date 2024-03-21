@@ -139,9 +139,9 @@ public class UserProfileFragment extends Fragment{
     private User user;
     private Button editProfileButton;
     private TextView userNameTextView;
-    private EditText userHomePageTextView;
-    private EditText userEmailTextView;
-    private EditText userPhoneNumTextView;
+    private TextView userHomePageTextView;
+    private TextView userEmailTextView;
+    private TextView userPhoneNumTextView;
     // Geolocation switch
     private SwitchCompat geolocation;
 

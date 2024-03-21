@@ -57,7 +57,7 @@
             android:id="@+id/CalenderDateOrgdet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="24dp"
             android:paddingLeft="10dp"
             android:text="Day/Month/Year"
             android:textStyle="bold"
@@ -65,18 +65,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/EventDateIconOrgdet"
             app:layout_constraintTop_toBottomOf="@+id/EventDetailSubNameOrgdet" />
-
-        <TextView
-            android:id="@+id/DayTimeDateOrgdet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:paddingLeft="10dp"
-            android:text="Day, Time"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/EventDateIconOrgdet"
-            app:layout_constraintTop_toBottomOf="@+id/CalenderDateOrgdet" />
 
         <ImageView
             android:id="@+id/EventLocationIconOrgdet"
@@ -94,26 +82,14 @@
             android:id="@+id/LocationNameOrgdet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="28dp"
             android:paddingLeft="10dp"
             android:text="Location Name"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/EventDateIconOrgdet"
-            app:layout_constraintTop_toBottomOf="@+id/DayTimeDateOrgdet" />
-
-        <TextView
-            android:id="@+id/EventAddressOrgdet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:paddingLeft="10dp"
-            android:text="Address"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/EventLocationIconOrgdet"
-            app:layout_constraintTop_toBottomOf="@+id/LocationNameOrgdet" />
+            app:layout_constraintTop_toBottomOf="@+id/CalenderDateOrgdet" />
 
         <ImageView
             android:id="@+id/ShareIconOrgdet"
@@ -131,14 +107,14 @@
             android:id="@+id/EventShareOrgdet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="40dp"
             android:paddingLeft="10dp"
             android:text="Share Event"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/ShareIconOrgdet"
-            app:layout_constraintTop_toBottomOf="@+id/EventAddressOrgdet" />
+            app:layout_constraintTop_toBottomOf="@+id/LocationNameOrgdet" />
 
         <ImageView
             android:id="@+id/ShareQRIconOrgdet"
@@ -156,7 +132,7 @@
             android:id="@+id/ShareQRTextOrgdet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="28dp"
             android:paddingLeft="10dp"
             android:text="Share QR"
             android:textStyle="bold"

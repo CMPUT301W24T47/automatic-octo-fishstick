@@ -14,8 +14,7 @@
             android:layout_width="194dp"
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="152dp"
+            android:layout_marginTop="28dp"
             android:background="@drawable/roundedbuttonstyle"
             android:backgroundTint="@color/purple"
             android:drawableEnd="@drawable/ic_buttonarrow"
@@ -23,12 +22,10 @@
             android:text="QR Scan Sign in"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ProfilePic_EventUp"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@+id/ShareIconUp" />
 
         <ImageView
             android:id="@+id/EventImageSignup"
@@ -78,7 +75,7 @@
             android:id="@+id/CalenderDateUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:paddingLeft="10dp"
             android:text="Day/Month/Year"
             android:textStyle="bold"
@@ -86,18 +83,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/EventDateIconUp"
             app:layout_constraintTop_toBottomOf="@+id/EventDetailSubNameUp" />
-
-        <TextView
-            android:id="@+id/DayTimeDateUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:paddingLeft="10dp"
-            android:text="Day, Time"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/EventDateIconUp"
-            app:layout_constraintTop_toBottomOf="@+id/CalenderDateUp" />
 
         <ImageView
             android:id="@+id/EventLocationIconUp"
@@ -115,26 +100,14 @@
             android:id="@+id/LocationNameUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="36dp"
             android:paddingLeft="10dp"
             android:text="Location Name"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/EventDateIconUp"
-            app:layout_constraintTop_toBottomOf="@+id/DayTimeDateUp" />
-
-        <TextView
-            android:id="@+id/EventAddressUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:paddingLeft="10dp"
-            android:text="Address"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/EventLocationIconUp"
-            app:layout_constraintTop_toBottomOf="@+id/LocationNameUp" />
+            app:layout_constraintTop_toBottomOf="@+id/CalenderDateUp" />
 
         <ImageView
             android:id="@+id/ShareIconUp"
@@ -152,14 +125,16 @@
             android:id="@+id/EventShareUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="36dp"
             android:paddingLeft="10dp"
             android:text="Share Event"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/QRSignUpbut"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/ShareIconUp"
-            app:layout_constraintTop_toBottomOf="@+id/EventAddressUp" />
+            app:layout_constraintTop_toBottomOf="@+id/LocationNameUp"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/AboutEventUp"
@@ -186,43 +161,6 @@
             app:layout_constraintHorizontal_bias="0.029"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/AboutEventUp" />
-
-        <ImageView
-            android:id="@+id/ProfilePic_EventUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ShareIconUp"
-            app:srcCompat="@drawable/circleprofilepic" />
-
-        <TextView
-            android:id="@+id/UsernameTextUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="44dp"
-            android:text="Charlie Kim"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/ProfilePic_EventUp"
-            app:layout_constraintTop_toBottomOf="@+id/EventShareUp" />
-
-        <TextView
-            android:id="@+id/UserTypeUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="10dp"
-            android:text="Attendee"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/ProfilePic_EventUp"
-            app:layout_constraintTop_toBottomOf="@+id/UsernameTextUp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

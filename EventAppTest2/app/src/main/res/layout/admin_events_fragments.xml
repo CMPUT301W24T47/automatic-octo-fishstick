@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/admin_eventsname"
-            android:layout_width="183dp"
+            android:layout_width="147dp"
             android:layout_height="62dp"
             android:gravity="center_vertical"
             android:paddingStart="10dp"

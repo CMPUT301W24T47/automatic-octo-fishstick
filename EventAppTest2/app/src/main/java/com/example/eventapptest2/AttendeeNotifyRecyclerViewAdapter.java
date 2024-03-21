@@ -21,11 +21,13 @@ import java.util.ArrayList;
  */
 public class AttendeeNotifyRecyclerViewAdapter extends RecyclerView.Adapter<AttendeeNotifyRecyclerViewAdapter.ViewHolder> {
 
-    private  ArrayList<String> AttendeeList;
+    private  ArrayList<String> NotficationList;
+    private String EventImage;
 
-    public AttendeeNotifyRecyclerViewAdapter(ArrayList<String> Attendees) {
-        AttendeeList = Attendees;
 
+    public AttendeeNotifyRecyclerViewAdapter(ArrayList<String> Attendees,String ei) {
+        NotficationList = Attendees;
+        EventImage = ei;
     }
 
     @Override
@@ -38,10 +40,15 @@ public class AttendeeNotifyRecyclerViewAdapter extends RecyclerView.Adapter<Atte
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         //setting events text
+        if(!NotficationList.isEmpty()){
         int postini = position;
 
-        System.out.println("testtttttttttt " + AttendeeList.get(postini));
-        holder.userName.setText(AttendeeList.get(postini));
+        Glide.with(holder.itemView.getContext())
+                .load(EventImage)
+                .into(holder.Imageing);
+
+        //System.out.println("testtttttttttt " + NotficationList.get(postini));
+        holder.userName.setText(NotficationList.get(postini));}
 
 
     }
@@ -57,7 +64,7 @@ public class AttendeeNotifyRecyclerViewAdapter extends RecyclerView.Adapter<Atte
 
     @Override
     public int getItemCount() {
-        return AttendeeList.size();
+        return NotficationList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

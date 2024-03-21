@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new AttendeeNotifyFragment(notifyList)); //explore is temp
+                            fragmentTransaction.replace(R.id.framelayout, new AttendeeNotifyFragment(notifyList,savedEvents.get(testuser.getLastsaved()).getEventPoster())); //explore is temp
                             fragmentTransaction.commit();
 
 

@@ -23,21 +23,23 @@ public class AttendeeNotifyFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private static ArrayList<String> AttendeeList;
+    private static String EventImage;
 
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public AttendeeNotifyFragment(ArrayList<String> Attendees) {
+    public AttendeeNotifyFragment(ArrayList<String> Attendees,String ei) {
         AttendeeList = Attendees;
+        EventImage = ei;
 
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static AttendeeNotifyFragment newInstance(int columnCount) {
-        AttendeeNotifyFragment fragment = new AttendeeNotifyFragment(AttendeeList);
+        AttendeeNotifyFragment fragment = new AttendeeNotifyFragment(AttendeeList,EventImage);
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -70,7 +72,7 @@ public class AttendeeNotifyFragment extends Fragment {
 
 
             //give the list of explore events to the recyler view
-            recyclerView.setAdapter(new AttendeeNotifyRecyclerViewAdapter(AttendeeList));
+            recyclerView.setAdapter(new AttendeeNotifyRecyclerViewAdapter(AttendeeList,EventImage));
 
         }
         return view;

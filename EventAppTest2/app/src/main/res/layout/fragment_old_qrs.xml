@@ -66,7 +66,7 @@
                 android:id="@+id/ExploreEventlocatione"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="ssssssssssssssss"
+
                 android:textSize="9sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/ExploreEventDatee"
@@ -78,7 +78,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="76dp"
-                android:hint="ssssssssssssssss"
                 android:textSize="9sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -107,7 +106,7 @@
                 android:drawableEnd="@drawable/ic_buttonarrow"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
-                android:text="Detials"
+                android:text="ReNew"
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
