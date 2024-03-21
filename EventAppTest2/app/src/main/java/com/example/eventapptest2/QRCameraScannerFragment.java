@@ -82,6 +82,19 @@ public class QRCameraScannerFragment extends Fragment {
 
 
     }
+
+    /**
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -101,6 +114,12 @@ public class QRCameraScannerFragment extends Fragment {
         // Inflate the layout for this fragment
         return rootView;
     }
+
+    /**
+     * Builds camera surface to implant onto surface view.
+     * initializes qr code detector, which will invoke run() immediately upon detection
+     *
+     */
     private void initialiseDetectorsandSources(){
         Toast.makeText(getActivity().getApplicationContext(), "Please scan your QR code", Toast.LENGTH_SHORT).show();
         barcodeDetector = new BarcodeDetector.Builder(getActivity().getApplicationContext())
@@ -113,6 +132,7 @@ public class QRCameraScannerFragment extends Fragment {
 
 
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+
             @Override
             public void surfaceCreated(@NonNull SurfaceHolder holder) {
 
@@ -136,17 +156,28 @@ public class QRCameraScannerFragment extends Fragment {
 
             }
 
+            /**
+             * Stops camera if the surfaceview is removed, for example when the fragment is changed.
+             * @param holder The SurfaceHolder whose surface is being destroyed.
+             */
             @Override
             public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
                 cameraSource.stop();
             }
         });
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
+            /**
+             * When camera is stopped, display a toast.
+             */
             @Override
             public void release() {
                 Toast.makeText(getActivity().getApplicationContext(), "QR scanner stopped", Toast.LENGTH_SHORT).show();
             }
 
+            /**
+             * listener for QR code, run() is invoked immediately upon scanning.
+             * @param detections
+             */
             @Override
             public void receiveDetections(@NonNull Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
@@ -170,11 +201,18 @@ public class QRCameraScannerFragment extends Fragment {
         });
     }
 
+    /**
+     * When the frame is interrupted, camera is paused
+     */
     @Override
     public void onPause(){
         super.onPause();
         cameraSource.release();
     }
+
+    /**
+     * invoked upon camera restart
+     */
     @Override
     public void onResume(){
         super.onResume();

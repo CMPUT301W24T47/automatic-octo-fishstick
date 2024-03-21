@@ -86,7 +86,7 @@ public class GeneratedQRFragment extends Fragment {
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                     Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                     imageView.setImageBitmap(bitmap);
-
+                    BitMatrix bitMatrix1 = 
                 }catch (WriterException e){
                     throw new RuntimeException(e);
                 }
