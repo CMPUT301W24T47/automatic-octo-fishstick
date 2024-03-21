@@ -502,27 +502,29 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         eventsRef.document(ExEid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                                String eventName = (String) value.getData().get("eventName");
-                                String eventLimit = (String) value.getData().get("eventLimit");
-                                String eventLocation = (String) value.getData().get("eventLocation");
-                                String eventDate = (String) value.getData().get("eventDate");
-                                String EventId = (String) value.getData().get("eventid");
-                                String Eventdes = (String) value.getData().get("eventDesription");
-                                //we can get arround theses arrays the same way we did above for the user event lists the quniue id for this should be the QR
-                                ArrayList<User> attendelist = (ArrayList<User>) value.getData().get("attendeeList");
-                                ArrayList<User> checkinlist = (ArrayList<User>) value.getData().get("Checkin-list");
-                                String eventImage = (String) value.getData().get("eventPoster");
-                                //QrUrl
-                                String qrlur = (String) value.getData().get("qrUrl");
-                                String qrelur = (String) value.getData().get("signINQR");
-                                String owner = (String) value.getData().get("owner");
-                                String track = (String) value.getData().get("tracking");
-                                //System.out.println("Image URL: " + eventImage);
-                                // ... (add other event properties based on your Event class)
-                                if(!isDateBeforeCurrentDate(eventDate)){
-                                    savedEvents.add(new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist,qrlur,qrelur,owner,track));}
-                                else{//remove event from explore events fb do the same with saved events fb remove from created fb and add to oldqrfb
-                                    SavedeventsRef.document(EventId).delete();
+                                if (value.exists()) { //if user exists
+                                    String eventName = (String) value.getData().get("eventName");
+                                    String eventLimit = (String) value.getData().get("eventLimit");
+                                    String eventLocation = (String) value.getData().get("eventLocation");
+                                    String eventDate = (String) value.getData().get("eventDate");
+                                    String EventId = (String) value.getData().get("eventid");
+                                    String Eventdes = (String) value.getData().get("eventDesription");
+                                    //we can get arround theses arrays the same way we did above for the user event lists the quniue id for this should be the QR
+                                    ArrayList<User> attendelist = (ArrayList<User>) value.getData().get("attendeeList");
+                                    ArrayList<User> checkinlist = (ArrayList<User>) value.getData().get("Checkin-list");
+                                    String eventImage = (String) value.getData().get("eventPoster");
+                                    //QrUrl
+                                    String qrlur = (String) value.getData().get("qrUrl");
+                                    String qrelur = (String) value.getData().get("signINQR");
+                                    String owner = (String) value.getData().get("owner");
+                                    String track = (String) value.getData().get("tracking");
+                                    //System.out.println("Image URL: " + eventImage);
+                                    // ... (add other event properties based on your Event class)
+                                    if (!isDateBeforeCurrentDate(eventDate)) {
+                                        savedEvents.add(new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist, qrlur, qrelur, owner, track));
+                                    } else {//remove event from explore events fb do the same with saved events fb remove from created fb and add to oldqrfb
+                                        SavedeventsRef.document(EventId).delete();
+                                    }
                                 }
                             }
                         });
@@ -727,7 +729,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
             Date date = simpleDateFormat.parse(dateString);
             return date.before(currentDate);
         } catch (ParseException e) {
-            e.printStackTrace(); // Handle parsing exception appropriately
+           // e.printStackTrace(); // Handle parsing exception appropriately
             // You might want to return false here since parsing failed
             return false;
         }

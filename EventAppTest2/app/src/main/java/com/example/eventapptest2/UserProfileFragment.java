@@ -331,7 +331,7 @@ public class UserProfileFragment extends Fragment{
         /////////might wanna delete picasso or glide casue it redundant to display twice
 
         // display image url
-        System.out.println("Image URL: " + imageUrl);
+        //System.out.println("Image URL: " + imageUrl);
         Glide.with(profilePic.getContext())
                 .load(imageUrl)
                 .into(profilePic);
