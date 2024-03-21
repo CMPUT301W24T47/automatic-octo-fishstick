@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -28,7 +29,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -166,53 +169,40 @@ public class QRCameraScannerFragment extends Fragment {
             public void receiveDetections(@NonNull Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0){
-                    open_camera_button.post(new Runnable() {
+                    surfaceView.post(new Runnable() {
                         @Override
                         public void run() {
                             //this is what happens after qr code scanned so like we can switch fragments here
                              final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                            //final CollectionReference attendelistfb = db.collection;
-                            //attendelistfb.add(mParam1);
-                            //lets convert a string to int and do +1 then make it a string
                             DocumentReference docRef = db.collection("AttendeeList" + event.getEventid()).document(mParam1.getDeviceId());
 
                             // Get the document snapshot
-                            Task<DocumentSnapshot> future = docRef.get();
-                            DocumentSnapshot document = future.getResult();
-                            if (document.exists()) {
-                                // Get the integer value stored in the document
-                                String intValueStr = document.getString("count");
-                                int intValue = Integer.parseInt(intValueStr);
+                            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable DocumentSnapshot document, @Nullable FirebaseFirestoreException error) {
 
-                                // Increment the integer value by 1
-                                intValue++;
+                                    String intValueStr = document.getString("CheckInCount");
+                                    int intValue = Integer.parseInt(intValueStr);
 
-                                // Update the document with the new incremented value
-                                docRef.update("count", String.valueOf(intValue));
-                            } else {
-                                System.out.println("Document not found!");
-                            }
+                                    // Increment the integer value by 1
+                                    intValue++;
+
+                                    // Update the document with the new incremented value
+                                    docRef.update("CheckInCount", String.valueOf(intValue));
+                                }
+                            });
+
+
+
+                            cameraSource.stop();
+
+
+
                             FragmentTransaction fragmentTransaction = frag.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
                             fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(event,frag,mParam1,bottomnav)); //explore is temp
                             fragmentTransaction.commit();
-//                            if (bottomnav != null) {
-//                                bottomnav.getMenu().clear();
-//                                bottomnav.inflateMenu(R.menu.attendee_nav_menu);
-//                                v.postDelayed(() -> bottomnav.setSelectedItemId(R.id.AttendeeDetails), 100);
-//                            }
-
-
-//                            open_camera_button.setText("Go to event");
-//                            intentData = barcodes.valueAt(0).displayValue;
-//                            generate_qr_button.setText(intentData);
-//                            open_camera_button.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    mActivityCallback.switchToGenerateQRFragment();
-//                                }
-//                            });
 
 
 
