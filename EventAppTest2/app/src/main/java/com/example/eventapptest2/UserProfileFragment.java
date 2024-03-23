@@ -265,6 +265,8 @@ public class UserProfileFragment extends Fragment{
 
         ArrayList<String> admin_ids = new ArrayList<>();
         admin_ids.add("fae6f715c0a59b56"); //karans at home phone
+        admin_ids.add("f329161d009f1ec4");
+        admin_ids.add("019120a48899b3e3");
 
 
 
@@ -292,33 +294,7 @@ public class UserProfileFragment extends Fragment{
 
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //        user = CreateUser();
-
-
-
-
-
         profilePic = v.findViewById(R.id.userImage);
         textOnProfilePic = v.findViewById(R.id.textOnImage);
         Button replaceButton = v.findViewById(R.id.replaceImageButton);

@@ -55,6 +55,7 @@ public class User implements Serializable {
         this.tracking = track;
 
     }
+    // Attendde List
     public User(String AttendeeName,String AttendeeImage, String CheckInCount) {
         this.userName = AttendeeName;
         this.userProfileImage = AttendeeImage;
@@ -62,6 +63,11 @@ public class User implements Serializable {
     }
     public User() {
 
+    }
+
+    public User(String userName, String userImage) {
+        this.userName = userName;
+        this.userProfileImage = userImage;
     }
 
 

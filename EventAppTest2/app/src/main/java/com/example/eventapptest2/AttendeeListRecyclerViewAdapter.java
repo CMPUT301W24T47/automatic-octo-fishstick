@@ -28,9 +28,10 @@ import java.util.List;
  * TODO: Replace the implementation with code for your data type.
  */
 public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<AttendeeListRecyclerViewAdapter.ViewHolder> {
-
+    // ArrayList user objects representing attendees
     private  ArrayList<User> AttendeeList;
 
+    // Constructor initialize adapter with list of attendees
     public AttendeeListRecyclerViewAdapter(ArrayList<User> Attendees) {
         AttendeeList = Attendees;
 
@@ -43,6 +44,8 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
 
     }
 
+    // bind data to each item in the RecyclerView
+    // User name, profile image, and check in
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         //setting events text

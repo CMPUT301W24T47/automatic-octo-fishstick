@@ -56,6 +56,8 @@ public class AttendeeListFragment extends Fragment {
         }
     }
 
+
+    // Get and show the correct xml
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

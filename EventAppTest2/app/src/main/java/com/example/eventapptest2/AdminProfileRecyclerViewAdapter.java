@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.eventapptest2.databinding.AdminImageFragmentBinding;
 import com.example.eventapptest2.databinding.AdminProfilesFragmentBinding;
 import com.example.eventapptest2.placeholder.PlaceholderContent.PlaceholderItem;
@@ -19,10 +20,10 @@ import java.util.ArrayList;
  */
 public class AdminProfileRecyclerViewAdapter extends RecyclerView.Adapter<AdminProfileRecyclerViewAdapter.ViewHolder> {
 
-    private  ArrayList<User> allusers;
+    private  ArrayList<User> userList;
 
-    public AdminProfileRecyclerViewAdapter(ArrayList<User> allusersinput) {
-        allusers = allusersinput;
+    public AdminProfileRecyclerViewAdapter(ArrayList<User> allUsers) {
+        userList = allUsers;
 
     }
 
@@ -33,6 +34,8 @@ public class AdminProfileRecyclerViewAdapter extends RecyclerView.Adapter<AdminP
 
     }
 
+    // bind data to each item in the RecyclerView
+    // User name, profile image, and check in
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         //setting events text
@@ -40,36 +43,43 @@ public class AdminProfileRecyclerViewAdapter extends RecyclerView.Adapter<AdminP
 //
 //        System.out.println("testtttttttttt " + allusers.get(postini));
 //        holder.userName.setText(allusers.get(postini));
+//        holder.EventForView = userList.get(position);
+        holder.EventForView = userList.get(position);
+        holder.userName.setText(holder.EventForView.getUserName());
+        String imageURL = holder.EventForView.getUserProfileImage();
 
-
+        Glide.with(holder.itemView.getContext())
+                .load(imageURL)
+                .into(holder.Imageing);
     }
 
 
     @Override
     public int getItemCount() {
-        return allusers.size();
+        return userList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         
         public final ImageView Imageing;
         public final ImageView deletebut;
-        public final TextView Textname;
-        public Event EventForView;
+
+        public final TextView userName;
+        public User EventForView;
 
 
 
         public ViewHolder(AdminProfilesFragmentBinding binding) {
             super(binding.getRoot());
-            
             Imageing = binding.adminProfileIcon;
             deletebut = binding.adminDeletebtnProfiles;
-            Textname = binding.adminProfiles;
-
-
+            userName = binding.adminProfiles;
         }
 
+        @Override
+        public String toString() {
+            return super.toString() + " '" + userName.getText() + "'";
+        }
 
-      
     }
 }
