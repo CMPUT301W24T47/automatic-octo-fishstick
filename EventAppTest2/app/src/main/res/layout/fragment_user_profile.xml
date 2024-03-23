@@ -62,11 +62,10 @@
                         android:id="@+id/textOnImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20dp"
+                        android:layout_centerInParent="true"
                         android:maxLength="4"
                         android:textColor="@color/black"
-                        android:layout_centerInParent="true"
-                        />
+                        android:textSize="20dp" />
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
@@ -195,8 +194,8 @@
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/UsergeolocationSwitch"
-            android:layout_width="380dp"
-            android:layout_height="45dp"
+            android:layout_width="364dp"
+            android:layout_height="38dp"
             android:layout_margin="16dp"
             android:layout_marginTop="16dp"
             android:text="Enable Geolocation Tracking"
@@ -266,14 +265,24 @@
             android:id="@+id/admin_open_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="39dp"
+            android:backgroundTint="#f96161"
             android:text="Admin Open"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/QRbutton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/UsergeolocationSwitch"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="1.0" />
+
+        <Button
+            android:id="@+id/QRbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="64dp"
+            android:text="Scan Detials"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

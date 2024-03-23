@@ -59,7 +59,7 @@ public class ExploreEventDetsFragment extends Fragment {
                         if (event.getTracking().equals("on")) {
                             if (user.getTracking().equals("on")) {
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                fragmentTransaction.replace(R.id.framelayout, new QRCameraScannerFragment(event, user, fragmentManager, bottomnavi));
+                                fragmentTransaction.replace(R.id.framelayout, new QRCameraScannerFragment(event, user, fragmentManager, bottomnavi,false));
                                 fragmentTransaction.commit();
 
 
@@ -74,7 +74,7 @@ public class ExploreEventDetsFragment extends Fragment {
 
                         }else{
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new QRCameraScannerFragment(event, user, fragmentManager, bottomnavi));
+                            fragmentTransaction.replace(R.id.framelayout, new QRCameraScannerFragment(event, user, fragmentManager, bottomnavi,false));
                             fragmentTransaction.commit();
 
                         }

@@ -218,12 +218,7 @@ public class AddEventFragment extends DialogFragment {
 
                 MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                 try {
-                    BitMatrix bitMatrix = multiFormatWriter.encode("Karan", BarcodeFormat.QR_CODE, 300, 300);
-                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                    Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] data = baos.toByteArray();
+
 
                     //sign in qr
                     BitMatrix bitMatrixi = multiFormatWriter.encode("Karan", BarcodeFormat.QR_CODE, 300, 300);
@@ -235,20 +230,31 @@ public class AddEventFragment extends DialogFragment {
 
 
                     //String urlqr = storageRefQR.getName();
-                    storageRefQR.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    storageRefQR.putBytes(datai).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshote) {
                             storageRefQR.getDownloadUrl().addOnSuccessListener(uri -> {
-                                String urlqr = uri.toString();
+                                String secondqr = uri.toString();
 
+                                int hashe = taskSnapshote.hashCode();
+                                String eventid = Integer.toString(hashe);
+                                BitMatrix bitMatrix = null;
+                                try { // storing the qr that takes u to event detials 
+                                    bitMatrix = multiFormatWriter.encode(eventid, BarcodeFormat.QR_CODE, 300, 300);
+                                } catch (WriterException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                                Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                byte[] data = baos.toByteArray();
 
-                                storageRefQR2.putBytes(datai).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                storageRefQR2.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                         storageRefQR2.getDownloadUrl().addOnSuccessListener(urit -> {
-                                            String secondqr = urit.toString();
-                                            int hashe = taskSnapshot.hashCode();
-                                            String eventid = Integer.toString(hashe);
+                                            String urlqr = urit.toString();
                                             //Log.d(TAG, "aaaaaaaaaaaaaaaaaaaaa"+hashtest);
 
                                             //String secondqr = testri.toString();

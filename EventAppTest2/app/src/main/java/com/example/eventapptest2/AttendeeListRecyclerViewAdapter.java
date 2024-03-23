@@ -64,7 +64,9 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
 
         if (Integer.parseInt( holder.EventForView.getCheckInCount()) == 0){
             holder.Status.setText("Not Signed-in");
-        }else{holder.Status.setText("Signed-in");}
+            holder.count.setText("Check-in Count: 0");
+        }else{holder.Status.setText("Signed-in");
+            holder.count.setText("Check-in Count: "+holder.EventForView.getCheckInCount());}
 
 
     }
@@ -87,6 +89,8 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
 
         public final TextView userName;
         public final TextView Status;
+
+        public final TextView count;
         public final ImageView Imageing;
         public User EventForView;
 
@@ -97,6 +101,7 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
             userName = binding.attendeeNameList;
             Status = binding.CheckText;
             Imageing = binding.ProfilePicList;
+            count = binding.CheckInCountList;
 
 
         }

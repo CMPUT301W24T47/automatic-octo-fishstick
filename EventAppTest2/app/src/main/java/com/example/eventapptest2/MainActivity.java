@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav));
+                fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav,Explore));
                 fragmentTransaction.commit();
 
 
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         } else if (itemId == R.id.UserProfileNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav));
+                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav,Explore));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.ExploreEventNav) {
                             getDataExplore(deviceId); //dk why but pervents glitch when the user of deviceid can see there created events in explore
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         } else if (itemId == R.id.GoBacknav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav));
+                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav,Explore));
                             fragmentTransaction.commit();
                             bottomnav.getMenu().clear();
                             bottomnav.inflateMenu(R.menu.bottom_nav_menu);
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         else if (itemId == R.id.AttendeeProfile) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav));
+                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav,Explore));
                             fragmentTransaction.commit();
                         }
 
@@ -390,7 +390,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         DocumentReference docRef = usersRef.document(deviceId);
         return docRef.get().continueWith(task -> {
             DocumentSnapshot doc = task.getResult();
-            User user = new User(deviceId,"","","","","", savedEvents,  createdEvents,  oldQRList,""); // Create empty user with device ID
+            User user = new User(deviceId,"","","","","", savedEvents,  createdEvents,  oldQRList,"on"); // Create empty user with device ID
             if (doc.exists()) {
                 // Map Firestore data to User object
                 user.setUserName((String) doc.getData().get("userName"));
@@ -678,7 +678,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 if (error != null) {
                     return ;
                 }
-
+                attendeeList.clear();
                // savedEvents.clear(); // Clear the old list
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
 //                    String eventId = doc.getId();

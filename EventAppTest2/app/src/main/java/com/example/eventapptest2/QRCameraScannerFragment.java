@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -34,11 +35,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link QRCameraScannerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class QRCameraScannerFragment extends Fragment {
@@ -57,17 +58,30 @@ public class QRCameraScannerFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private User mParam1;
+    private User user;
     private Event event;
     FragmentManager frag;
     BottomNavigationView bottomnav;
+    boolean getdet;
+    ArrayList<Event> explore;
 
-    public QRCameraScannerFragment(Event evnte, User param, FragmentManager fragi, BottomNavigationView bottomnavi) {
+    public QRCameraScannerFragment(Event evnte, User param, FragmentManager fragi, BottomNavigationView bottomnavi,boolean getdete) {
         //needs user to add user to list
-        mParam1 = param;
+        user = param;
         event =evnte;
          frag = fragi;
          bottomnav = bottomnavi;
+         getdet = getdete;
+        // Required empty public constructor
+    }
+    public QRCameraScannerFragment(Event evnte, User param, FragmentManager fragi, BottomNavigationView bottomnavi, boolean getdete, ArrayList<Event> Explore) {
+        //needs user to add user to list
+        user = param;
+        event =evnte;
+        frag = fragi;
+        bottomnav = bottomnavi;
+        getdet = getdete;
+        explore = Explore;
         // Required empty public constructor
     }
 
@@ -75,8 +89,7 @@ public class QRCameraScannerFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     *
      * @return A new instance of fragment QRScannerFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -92,7 +105,7 @@ public class QRCameraScannerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            user = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
@@ -166,43 +179,126 @@ public class QRCameraScannerFragment extends Fragment {
             }
 
             @Override
+
             public void receiveDetections(@NonNull Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0){
                     surfaceView.post(new Runnable() {
                         @Override
                         public void run() {
-                            //this is what happens after qr code scanned so like we can switch fragments here
-                             final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                            DocumentReference docRef = db.collection("AttendeeList" + event.getEventid()).document(mParam1.getDeviceId());
+
+
+
+
+                            if(!getdet){
+                            //this is what happens after qr code scanned so like we can switch fragments here
+                            final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                            DocumentReference docRef = db.collection("AttendeeList" + event.getEventid()).document(user.getDeviceId());
 
                             // Get the document snapshot
-                            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+
+
+                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
-                                public void onEvent(@Nullable DocumentSnapshot document, @Nullable FirebaseFirestoreException error) {
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            // Perform the count increment and update
+                                            // ...
 
-                                    String intValueStr = document.getString("CheckInCount");
-                                    int intValue = Integer.parseInt(intValueStr);
+                                            // Cleanup after successful update
+                                            String intValueStr = document.getString("CheckInCount");
+                                            int intValue = Integer.parseInt(intValueStr);
 
-                                    // Increment the integer value by 1
-                                    intValue++;
+                                            // Increment the integer value by 1
+                                            intValue+= 1;
+                                            docRef.update("CheckInCount", String.valueOf(intValue));
+                                            //event.getAttendeList().clear();
 
-                                    // Update the document with the new incremented value
-                                    docRef.update("CheckInCount", String.valueOf(intValue));
+
+
+                                            cameraSource.stop();
+                                            cameraSource.release();
+                                            barcodeDetector.release();
+                                            //event.getAttendeList().notify();
+
+                                            FragmentTransaction fragmentTransaction = frag.beginTransaction();
+                                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                                            
+                                            //this isnt the actual exploreeventsdets its actualy savedeventdets
+                                            fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(event,frag,user,bottomnav)); 
+                                            fragmentTransaction.commit();
+
+
+                                            // Switch fragments
+                                            // ...
+                                        } else {
+                                            // Handle the case where the document doesn't exist
+                                        }
+                                    } else {
+                                        // Handle errors
+                                    }
                                 }
-                            });
+
+                            });}
+                            else{// open
+                                ArrayList<Event> saveevent = new ArrayList<>();
+                                intentData = barcodes.valueAt(0).displayValue; // this should store event id
+                                for(Event event: explore){
+                                    if (event.getEventid().equals(intentData)){
+                                        saveevent.add(event);
+                                    }
+
+                                }
+                                if(saveevent.isEmpty()){
+                                    cameraSource.stop();
+                                    cameraSource.release();
+                                    barcodeDetector.release();
+                                    FragmentTransaction fragmentTransaction = frag.beginTransaction();
+                                    //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+
+                                    //this isnt the actual exploreeventsdets its actualy savedeventdets
+                                    fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(user,frag,bottomnav,explore));
+                                    fragmentTransaction.commit();
 
 
 
-                            cameraSource.stop();
+                                    Toast.makeText(getActivity().getApplicationContext(), "Event is Full, Expired,you already signed-Up, or You own the event", Toast.LENGTH_LONG).show();
+
+                                    //print message
+                                }
+                                else{
+                                    cameraSource.stop();
+                                    cameraSource.release();
+                                    barcodeDetector.release();
+                                    //event.getAttendeList().notify();
 
 
 
-                            FragmentTransaction fragmentTransaction = frag.beginTransaction();
-                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(event,frag,mParam1,bottomnav)); //explore is temp
-                            fragmentTransaction.commit();
+
+
+                                    FragmentTransaction fragmentTransaction = frag.beginTransaction();
+                                    //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+
+                                    //this isnt the actual exploreeventsdets its actualy savedeventdets
+                                    fragmentTransaction.replace(R.id.framelayout, new ACTUALExploreEventDetsFragment(saveevent.get(0),frag,user.getDeviceId(),user,bottomnav,explore));
+                                    fragmentTransaction.commit();
+
+
+                                }
+
+
+                            }
+
+
+
+//                            cameraSource.stop();
+//                            cameraSource.release();
+
+
 
 
 

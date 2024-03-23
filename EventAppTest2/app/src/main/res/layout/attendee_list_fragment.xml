@@ -19,12 +19,10 @@
 
         <TextView
             android:id="@+id/attendeeNameList"
-            android:layout_width="343dp"
-            android:layout_height="25dp"
+            android:layout_width="198dp"
+            android:layout_height="29dp"
             android:text="Attendees Name"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/ProfilePicList"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,6 +35,17 @@
             android:text="TextView"
             app:layout_constraintStart_toEndOf="@+id/ProfilePicList"
             app:layout_constraintTop_toBottomOf="@+id/attendeeNameList" />
+
+        <TextView
+            android:id="@+id/CheckInCountList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/attendeeNameList"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

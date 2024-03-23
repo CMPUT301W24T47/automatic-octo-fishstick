@@ -113,6 +113,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -147,17 +148,19 @@ public class UserProfileFragment extends Fragment{
 
     private static FragmentManager frag;
     private BottomNavigationView bottomnav;
+    private ArrayList<Event> explore;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     // CollectionReference will store the collection of Users
     //  - Which then each user will store different information
     private final CollectionReference usersRef = db.collection("users");
 //    private User user;
-    public UserProfileFragment(User useri,FragmentManager freg,BottomNavigationView bottomNavigationview) {
+    public UserProfileFragment(User useri,FragmentManager freg,BottomNavigationView bottomNavigationview,ArrayList<Event> exploree) {
         // Required empty public constructor
         user = useri;
         frag = freg;
         bottomnav = bottomNavigationview;
+        explore =exploree;
 
     }
 
@@ -237,6 +240,20 @@ public class UserProfileFragment extends Fragment{
 
 
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        Button scanbut = v.findViewById(R.id.QRbutton);
+
+        scanbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = frag.beginTransaction();   //explore.get(0)     //will never be used from this side of code but is here for constructer
+                fragmentTransaction.replace(R.id.framelayout, new QRCameraScannerFragment(explore.get(0), user, frag, bottomnav,true,explore));
+                fragmentTransaction.commit();
+
+
+            }
+        });
+
 
 
         geolocation = v.findViewById(R.id.UsergeolocationSwitch);
