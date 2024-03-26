@@ -282,7 +282,7 @@ public class UserProfileFragment extends Fragment{
 
         ArrayList<String> admin_ids = new ArrayList<>();
         admin_ids.add("fae6f715c0a59b56"); //karans at home phone
-
+        admin_ids.add("8243d40d7a24172b");
 
 
 
