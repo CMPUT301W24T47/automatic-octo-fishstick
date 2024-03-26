@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 /**
- * A fragment representing a list of Items.
+ * Represents a fragment that displays a list of user profiles
+ * Receive List of all the Users and sets up the RecyclerView to display user profiles
+ * using AdminProfileRecyclerViewAdapter
  */
 public class AdminProfileFragment extends Fragment {
 

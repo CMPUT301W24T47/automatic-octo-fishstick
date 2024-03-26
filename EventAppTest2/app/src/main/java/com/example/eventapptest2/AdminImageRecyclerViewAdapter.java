@@ -1,17 +1,19 @@
 package com.example.eventapptest2;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eventapptest2.databinding.AdminEventsFragmentsBinding;
+import com.bumptech.glide.Glide;
 import com.example.eventapptest2.databinding.AdminImageFragmentBinding;
 import com.example.eventapptest2.placeholder.PlaceholderContent.PlaceholderItem;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
@@ -19,10 +21,12 @@ import java.util.ArrayList;
  */
 public class AdminImageRecyclerViewAdapter extends RecyclerView.Adapter<AdminImageRecyclerViewAdapter.ViewHolder> {
 
-    private  ArrayList<Event> allevents;
+    private  ArrayList<Event> allImages;
 
-    public AdminImageRecyclerViewAdapter(ArrayList<Event> alleventsinput) {
-        allevents = alleventsinput;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    public AdminImageRecyclerViewAdapter(ArrayList<Event> allImageInput) {
+        allImages = allImageInput;
 
     }
 
@@ -35,11 +39,39 @@ public class AdminImageRecyclerViewAdapter extends RecyclerView.Adapter<AdminIma
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        //setting events text
-//        int postini = position;
-//
-//        System.out.println("testtttttttttt " + allevents.get(postini));
-//        holder.userName.setText(allevents.get(postini));
+        holder.imageForView = allImages.get(position);
+        String imageURL = holder.imageForView.getEventPoster();
+
+        Glide.with(holder.itemView.getContext())
+                .load(imageURL)
+                .into(holder.image);
+
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int imagePosition = holder.getAbsoluteAdapterPosition();
+
+                if (imagePosition != RecyclerView.NO_POSITION){
+                    Event deleteImage = allImages.get(imagePosition);
+
+                    // Firebase updating set images to empty string in ExploreEvents and Users
+                    if(Objects.equals(deleteImage.getEventid(),"")){
+                        db.collection("users")
+                                .document(deleteImage.getOwner())
+                                .update("userProfileImage","");
+                    }
+
+                    if((Objects.equals(deleteImage.getOwner(),"")) || Objects.equals(deleteImage.getEventPoster(),null)){
+                        db.collection("ExploreEvents")
+                                .document(deleteImage.getEventid())
+                                .update("eventPoster","");
+                    }
+
+                    allImages.remove(deleteImage);
+                    notifyItemRemoved(imagePosition);
+                }
+            }
+        });
 
 
     }
@@ -47,23 +79,20 @@ public class AdminImageRecyclerViewAdapter extends RecyclerView.Adapter<AdminIma
 
     @Override
     public int getItemCount() {
-        return allevents.size();
+        return allImages.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-        public final ImageView Imageing;
-        public final ImageView deletebut;
-        public Event EventForView;
+        public final ImageView image;
+        public final ImageView deleteButton;
+        public Event imageForView;
 
 
 
         public ViewHolder(AdminImageFragmentBinding binding) {
             super(binding.getRoot());
-
-            Imageing = binding.AdminImageView;
-            deletebut = binding.ImageDeleteButton;
-
+            image = binding.AdminImageView;
+            deleteButton = binding.ImageDeleteButton;
         }
 
 

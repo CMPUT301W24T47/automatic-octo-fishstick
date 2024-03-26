@@ -92,6 +92,29 @@ public class Event {
         this.owner = "0";
     }
 
+    // Admin view all events
+    public Event(String eventDate, String eventDescription, String eventLimit, String eventLocation, String eventName, String eventPoster, String eventID, String eventOwner) {
+        this.eventDate = eventDate;
+        this.EventDesription = eventDescription;
+        this.eventLimit = eventLimit;
+        this.eventLocation = eventLocation;
+        this.eventName = eventName;
+        this.eventPoster = eventPoster;
+        this.Eventid = eventID;
+        this.owner = eventOwner;
+    }
+
+    // New constructor that for view all images
+    // Constructor is for images only (Admin)
+    //
+    public Event(String eventPoster, String ownerID, String eventId) {
+
+        this.eventPoster = eventPoster;
+        this.owner = ownerID; // User
+        this.Eventid = eventId; // us
+
+    }
+
     public String getTracking() {
         return tracking;
     }

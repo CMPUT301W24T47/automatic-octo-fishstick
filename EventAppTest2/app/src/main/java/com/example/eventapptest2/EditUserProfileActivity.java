@@ -69,24 +69,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
         }
 
-        // Get each specific user information from the previous screen
-        // - getStringExtra(key)
-        //  - Takes the unique key information from the previous page to allow to show on the new screen
-//        String userName = getIntent().getStringExtra("userName");
-//        editName.setText(userName);
-//        String userHomepage = getIntent().getStringExtra("homepage");
-//        editHomePage.setText(userHomepage);
-
-//        String userEmail = getIntent().getStringExtra("email");
-//        editEmail.setText(userEmail);
-//        String userPhoneNum = getIntent().getStringExtra("phoneNum");
-//        editPhoneNum.setText(userPhoneNum);
-
-//        editName.setText(user.getUserName());
-//        editHomePage.setText(user.getUserHomepage());
-
-        // Implement Verify button
-        // - Updates the changed user information
         verifyButton = findViewById(R.id.button_verify);
         verifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,11 +86,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
         String updatedEmail = editEmail.getText().toString();
         String updatedPhoneNum = editPhoneNum.getText().toString();
 
-//        user.setUserName(updatedName);
-//        user.setUserHomepage(updatedHomePage);
-//        user.setUserEmail(updatedEmail);
-//        user.getUserPhoneNumber(updatedPhoneNum);
-
         // Pass back updated user object to UserProfileFragment
         Intent updateIntent = new Intent();
         updateIntent.putExtra("updatedUserName", updatedName);
@@ -119,25 +96,4 @@ public class EditUserProfileActivity extends AppCompatActivity {
         finish();
     }
 
-
-    // Update the users profile with the updated inputted information
-//    private void updateUserProfile(){
-    // Get the in
-//        String updatedName = editName.setText().toString();
-
-//        String updatedHomePage = editHomePage.getText().toString();
-//        String updatedEmail = editEmail.getText().toString();
-//        String updatedPhoneNum = editPhoneNum.getText().toString();
-//
-//        user.setUserName(editName.toString());
-////        user.setUserHomepage(updatedHomePage);
-////        user.setUserEmail(updatedEmail);
-////        user.getUserPhoneNumber(updatedPhoneNum);
-//
-//        // Pass updated information back to the UserProfileFragment
-//        Intent intent = new Intent();
-//        intent.putExtra("updatedUser", user);
-//        setResult(Activity.RESULT_OK, intent);
-//
-//        finish();
 }
