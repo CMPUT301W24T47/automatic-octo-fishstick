@@ -64,6 +64,17 @@ public class User implements Serializable {
 
     }
 
+    // Constructor for Admin user profile
+    public User(String deviceId,String userName, String userImage, String userHomepage, String userEmail, String userPhoneNumber) {
+        this.DeviceId = deviceId;
+        this.userName = userName;
+        this.userProfileImage = userImage;
+        this.userHomepage = userHomepage;
+        this.userEmail = userEmail;
+        this.userPhoneNumber = userPhoneNumber;
+
+    }
+
 
     public String getTracking() {
         return tracking;

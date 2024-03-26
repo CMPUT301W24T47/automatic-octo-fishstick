@@ -265,24 +265,30 @@
             android:id="@+id/admin_open_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="64dp"
             android:backgroundTint="#f96161"
             android:text="Admin Open"
             android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@+id/QRbutton"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/QRbutton"
+            app:layout_constraintHorizontal_bias="0.474"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/UsergeolocationSwitch"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/QRbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="44dp"
             android:layout_marginBottom="64dp"
             android:text="Scan Detials"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/UsergeolocationSwitch"
+            app:layout_constraintVertical_bias="0.597" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
