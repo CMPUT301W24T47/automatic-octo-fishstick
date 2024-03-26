@@ -74,11 +74,38 @@ public class Event {
         this.attendeList = attendelist;
         this.checkedinList = checkedinlist;
         this.QrUrl = qrUrl;
-        this.signINQR =ss;
+        this.signINQR = ss;
         this.owner = id;
         this.tracking = track;
 
     }
+
+    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventPoster,String EventDesription) {
+        //remove the two users list from this and make this constructer "attendee event" this is meant for sign-up, so it will not a notfication list but has no care for other attendees
+        this.Eventid = eventid;
+        this.eventName = eventName;
+        this.eventLocation = eventLocation;
+        this.eventDate = eventDate;
+        this.eventPoster = eventPoster;
+        this.EventDesription = EventDesription;
+
+    }
+
+
+    /*
+    array imageList... similar code for event
+    eventid is empty when a user otherwise its a user
+    not touching stoarge updating poster ""
+    when you get a user imagelist.adduser
+    when you get a eveent add event ....
+     */
+    public Event(String eventPoster, String ownerID, String eventId){
+        this.eventPoster = eventPoster;
+        this.owner = ownerID;
+        this.Eventid = eventId;
+
+    }
+
 
     public Event() {
         this.eventName = "eventName";

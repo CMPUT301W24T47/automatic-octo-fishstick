@@ -97,7 +97,7 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
             userName = binding.attendeeNameList;
             Status = binding.CheckText;
             Imageing = binding.ProfilePicList;
-
+//if !username.equals('')
 
         }
 

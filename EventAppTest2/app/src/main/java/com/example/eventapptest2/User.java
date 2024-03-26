@@ -60,7 +60,24 @@ public class User implements Serializable {
         this.userProfileImage = AttendeeImage;
         this.CheckInCount = CheckInCount;
     }
+
+//    public User(String deviceId,String profileName,String profileImage) {
+//        this.DeviceId = deviceId;
+//        this.userName = profileName;
+//        this.userProfileImage = profileImage;
+//    }
+
     public User() {
+
+    }
+
+    public User(String deviceId, String userName, String userProfileImage, String userHomepage, String userPhoneNumber, String userEmail) {
+        this.DeviceId = deviceId;
+        this.userName = userName;
+        this.userProfileImage = userProfileImage;
+        this.userHomepage = userHomepage;
+        this.userPhoneNumber = userPhoneNumber;
+        this.userEmail =  userEmail;
 
     }
 

@@ -36,8 +36,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
-
+// if the name is an empty string set it to dveice id.
+// line 69
 public class MainActivity extends AppCompatActivity {//implements ExploreEventsRecyclerViewAdapter.OnExploreButtonClickListener {
 
     // Initialize the Explore ArrayList
@@ -315,7 +317,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new AdminImageFragment(createdEvents)); // the passed list is temporary
+                            fragmentTransaction.replace(R.id.framelayout, new AdminImageFragment(getImageEventList())); // the passed list is temporary
                             fragmentTransaction.commit();
                         }
 
@@ -327,24 +329,23 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new AdminEventsFragment(createdEvents)); //explore is temp
+                            fragmentTransaction.replace(R.id.framelayout, new AdminEventsFragment(getAdminEventList())); //explore is temp
                             fragmentTransaction.commit();
                         }
 
                         else if (itemId == R.id.AdminProfiles) { //the most easy casue we never delete a profile realisitcly just set everything to "" except the id
-                            ArrayList<User> sad = new ArrayList<>();
+                            getProfileList(new ProfileListCallback() {
+                                @Override
+                                public void onProfileList(ArrayList<User> profileList) {
+                                    // Create a new instance of AdminProfileFragment and pass the profileList to its constructor
+                                    AdminProfileFragment adminProfileFragment = new AdminProfileFragment(profileList);
 
-
-                            sad.add(testuser);
-
-
-
-
-                            FragmentManager fragmentManager = getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new AdminProfileFragment(sad)); //this is temporary takes an array of users
-                            fragmentTransaction.commit();
+                                    // Perform fragment transaction
+                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                    fragmentTransaction.replace(R.id.framelayout, adminProfileFragment);
+                                    fragmentTransaction.commit();
+                                }
+                            });
                         }
 
 
@@ -393,6 +394,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
             User user = new User(deviceId,"","","","","", savedEvents,  createdEvents,  oldQRList,""); // Create empty user with device ID
             if (doc.exists()) {
                 // Map Firestore data to User object
+
                 user.setUserName((String) doc.getData().get("userName"));
                 user.setUserHomepage((String) doc.getData().get("userHomepage"));
                 user.setUserEmail((String) doc.getData().get("userEmail"));
@@ -580,10 +582,6 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
                             // clear the attendee list
 
-
-
-
-
                         }
 
 
@@ -662,7 +660,46 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
             }
         });
     }
-    private ArrayList<User> getAttendeList(String id){ //takes event id
+//only admin cant delete their profile
+    public interface ProfileListCallback {
+        void onProfileList(ArrayList<User> profileList);
+    }
+    private void getProfileList(final ProfileListCallback callback) {
+        final ArrayList<User> profileList = new ArrayList<>();
+        CollectionReference profileListRef = db.collection("users");
+        profileListRef.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                if (doc.exists()) {
+                                    String myDeviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                                    String deviceId = (String) doc.getData().get("deviceId");
+                                    String userName = (String) doc.getData().get("userName");
+                                    String userProfileImage = (String) doc.getData().get("userProfileImage");
+                                    String userHomepage = (String) doc.getData().get("userHomepage");
+                                    String userPhoneNumber = (String) doc.getData().get("userPhoneNumber");
+                                    String userEmail = (String) doc.getData().get("userEmail");
+                                    //if(!userName.equals(" ") && !userProfileImage.equals(" ") && !userHomepage.equals(" ") && !userPhoneNumber.equals(" ")) {
+                                    if((!(myDeviceId.equals(deviceId) || ((Objects.equals(userName, "")) && (Objects.equals(userProfileImage, "")) && (Objects.equals(userPhoneNumber, ""))&& (Objects.equals(userHomepage, "") && (Objects.equals(userEmail, ""))))))){
+                                        profileList.add(new User(deviceId, userName, userProfileImage, userHomepage, userPhoneNumber, userEmail));
+                                    }
+                                }
+                            }
+                            callback.onProfileList(profileList);
+                        } else {
+                        }
+                    }
+                });
+    }
+
+
+
+
+
+
+        private ArrayList<User> getAttendeList(String id){ //takes event id
         /// this should instead fetch the user from the users collection so attendee updates if the user changes images or whatever
 
 
@@ -758,6 +795,84 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         });
         //return notifyList;
     }
+
+    //also delete from created events as well
+
+    private ArrayList<Event> getAdminEventList(){
+        final ArrayList<Event> eventAdminList = new ArrayList<>();
+        CollectionReference eventListRef = db.collection("ExploreEvents");
+        eventListRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    return;
+                }
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    if (doc.exists()) {
+                        String eventId = (String) doc.getData().get("eventid");
+                        String eventName = (String) doc.getData().get("eventName");
+                        String eventPoster = (String) doc.getData().get("eventPoster");
+                        String eventLocation = (String) doc.getData().get("eventLocation");
+                        String eventDate = (String) doc.getData().get("eventDate");
+                        String eventDescription = (String) doc.getData().get("eventDesription");
+                        if ((!Objects.equals(eventName, " ")) && (!Objects.equals(eventPoster, " ")) && (!Objects.equals(eventLocation, " "))&& (!Objects.equals(eventDate, " ")) && (!Objects.equals(eventDescription, " "))) {
+                            eventAdminList.add(new Event(eventId, eventName, eventLocation, eventDate, eventPoster, eventDescription));
+                        }
+
+                    }
+                }
+            }
+        });
+
+        return eventAdminList;
+    }
+
+    private ArrayList<Event> getImageEventList(){
+        final ArrayList<Event> imageAdminList = new ArrayList<>();
+        CollectionReference eventListRef = db.collection("ExploreEvents");
+        CollectionReference userListRef = db.collection("users");
+        eventListRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    return;
+                }
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    if (doc.exists()) {
+                        String eventId = (String) doc.getData().get("eventid");
+                        String eventPoster = (String) doc.getData().get("eventPoster");
+                        if (!Objects.equals(eventPoster, "")){
+                            imageAdminList.add(new Event(eventPoster, "", eventId));
+                        }
+
+                    }
+                }
+            }
+        });
+
+        userListRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    return;
+                }
+
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    if (doc.exists()) {
+                        String ownerId = (String) doc.getData().get("deviceId");
+                        String eventPoster = (String) doc.getData().get("userProfileImage");
+                        if ((!Objects.equals(eventPoster, ""))) {
+                            imageAdminList.add(new Event(eventPoster, ownerId, ""));
+                        }
+
+                    }
+                }
+            }
+        });
+
+            return imageAdminList;
+    }
+
 
 
 
