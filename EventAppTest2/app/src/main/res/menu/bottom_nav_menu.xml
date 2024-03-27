@@ -2,6 +2,9 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:title="Explore Events"
+        android:id="@+id/ExploreEventNav"
+        android:icon="@drawable/ic_explore_events"/>
     <item android:title="Organize Events"
         android:id="@+id/OrganizeEventNav"
         android:icon="@drawable/ic_organize_events"/>
@@ -11,7 +14,4 @@
     <item android:title="Profile"
         android:id="@+id/UserProfileNav"
         android:icon="@drawable/ic_userprofile"/>
-    <item android:title="Explore Events"
-        android:id="@+id/ExploreEventNav"
-        android:icon="@drawable/ic_explore_events"/>
 </menu>
