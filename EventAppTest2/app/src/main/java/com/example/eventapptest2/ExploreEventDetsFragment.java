@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
 
@@ -47,8 +48,10 @@ public class ExploreEventDetsFragment extends Fragment {
         detdate.setText(event.getEventDate());
         detloc.setText(event.getEventLocation());
         detdesc.setText(event.getEventDesription());
-        Picasso.get().load(event.getEventPoster()).into(detimage);
-
+        //Picasso.get().load(event.getEventPoster()).into(detimage);
+        Glide.with(v.getContext())
+                .load(event.getEventPoster())
+                .into(detimage);
         //set the share button make it functional
         but.setOnClickListener(new View.OnClickListener() {
             @Override

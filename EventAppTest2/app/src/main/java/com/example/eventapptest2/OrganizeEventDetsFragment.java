@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
@@ -44,7 +45,13 @@ public class OrganizeEventDetsFragment extends Fragment {
         detdate.setText(event.getEventDate());
         detloc.setText(event.getEventLocation());
         detdesc.setText(event.getEventDesription());
-        Picasso.get().load(event.getEventPoster()).into(detimage);
+        //Picasso.get().load(event.getEventPoster()).into(detimage);
+
+
+
+        Glide.with(v.getContext())
+                .load(event.getEventPoster())
+                .into(detimage);
         //set the share button make it functional
         ImageView checkinsharebut = v.findViewById(R.id.ShareQRIconOrgdet);
 

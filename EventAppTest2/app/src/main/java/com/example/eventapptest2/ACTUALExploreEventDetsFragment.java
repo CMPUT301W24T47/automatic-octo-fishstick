@@ -1,4 +1,5 @@
 package com.example.eventapptest2;
+import com.bumptech.glide.Glide;
 import com.example.eventapptest2.Event;
 
 import android.content.Intent;
@@ -62,7 +63,13 @@ public class ACTUALExploreEventDetsFragment extends Fragment {
         detdate.setText(event.getEventDate());
         detloc.setText(event.getEventLocation());
         detdesc.setText(event.getEventDesription());
-        Picasso.get().load(event.getEventPoster()).into(detimage);
+        //Picasso.get().load(event.getEventPoster()).into(detimage);
+
+
+        Glide.with(v.getContext())
+                .load(event.getEventPoster())
+                .into(detimage);
+
 
         //set the share button make it functional
 
