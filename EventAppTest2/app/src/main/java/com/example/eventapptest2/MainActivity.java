@@ -93,6 +93,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 BottomNavigationView bottomnav = findViewById(R.id.bottomNavView);
                 bottomnav.setSelectedItemId(R.id.UserProfileNav);
 
+
+                getDataUser(testuser);
+
+
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav,Explore));
@@ -108,6 +112,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
                         int itemId = item.getItemId();
                         if (itemId == R.id.OrganizeEventNav) {
+                            getDataCreate(deviceId);
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
@@ -117,6 +122,8 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             bottomnav.inflateMenu(R.menu.organizer_nav_menu);
                             bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.OrginzersEventsnav), 100);
                         } else if (itemId == R.id.UserProfileNav) {
+
+                            getDataUser(testuser);
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav,Explore));
@@ -134,6 +141,8 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             fragmentTransaction.replace(R.id.framelayout, new SavedEventsFragment(savedEvents,fragmentManager,bottomnav,testuser)); // prolly will need not get userid of attendee when they sign in for the attendee list maybe explore event if we wanna care abt it ltr
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.OldQrNav) {
+                            getOldQrList(deviceId);
+
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.replace(R.id.framelayout, new OldQrsFragments(oldQRList,deviceId,fragmentManager));
@@ -150,6 +159,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.GoBacknav) {
+                            getDataUser(testuser);
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav,Explore));
@@ -228,6 +238,8 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
 
                             final CollectionReference NotifyListRef = db.collection("Notify" + savedEvents.get(testuser.getLastsaved()).getEventid());
+
+                            
                             notifyList.clear();
                             NotifyListRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
@@ -273,6 +285,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
 
                         else if (itemId == R.id.AttendeeProfile) {
+                            getDataUser(testuser);
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav,Explore));
@@ -290,6 +303,8 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
 
                         else if (itemId == R.id.AttendeeGoBack) {
+                            getDataSave(deviceId);
+
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
@@ -402,7 +417,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
                 getDataSave(deviceId);
                 //maybe redunant but im scared
-               // savedEvents = user.getSavedEvents();
+                // savedEvents = user.getSavedEvents();
 
                 getDataCreate(deviceId);
                 //maybe redunant but im to scared
@@ -424,6 +439,42 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 docRef.set(user).addOnSuccessListener(aVoid -> Log.d(TAG, "User document created"));
             }
             return user;
+        });
+    }
+
+
+    private void getDataUser(User currentuser){
+        DocumentReference docRef = usersRef.document(currentuser.getDeviceId());
+
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot doc, @Nullable FirebaseFirestoreException error) {
+                //User user = new User(currentuser.getDeviceId(),"","","","","", savedEvents,  createdEvents,  oldQRList,"on"); // Create empty user with device ID
+
+                currentuser.setUserName((String) doc.get("userName"));
+                currentuser.setUserHomepage((String) doc.get("userHomepage"));
+                currentuser.setUserEmail((String) doc.get("userEmail"));
+                currentuser.setUserPhoneNumber((String) doc.get("userPhoneNumber"));
+                currentuser.setUserProfileImage((String) doc.get("userProfileImage"));
+                currentuser.setTracking((String) doc.get("tracking"));
+
+//                getDataSave(currentuser.getDeviceId());
+//                //maybe redunant but im scared
+//                // savedEvents = user.getSavedEvents();
+//
+//                getDataCreate(currentuser.getDeviceId());
+//                //maybe redunant but im to scared
+//                //user.setCreatedEvents(createdEvents);
+//                //createdEvents = user.getCreatedEvents();
+//
+//                getDataExplore(currentuser.getDeviceId()); // underneath created and saved b/c we should remove all saved and created from the users viewble explore list
+//                // this means adding to saved events code and add event fragment may need fixes // we can just delete all old by date events from explore in the list and db (cleans up db) b/c we will we can delete by .documen(eventid).delete()
+//                // filter all old dates from created and put them into oldQRList
+//                // we dont even need a databse collection for oldQR then
+//                // remove all events from the list that have reached there limit
+//                getOldQrList(currentuser.getDeviceId());
+
+            }
         });
     }
 
