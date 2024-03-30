@@ -153,29 +153,17 @@
             app:layout_constraintStart_toEndOf="@+id/ShareQRIconOrgdet"
             app:layout_constraintTop_toBottomOf="@+id/ShareQRTextOrgdet" />
 
-        <ImageView
-            android:id="@+id/AttendeeLimitIconOrgdet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ShareQRIconOrgdet"
-            app:srcCompat="@drawable/attendeelimit" />
-
         <TextView
             android:id="@+id/AttendeeLimitTextOrgdet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="20dp"
             android:paddingLeft="10dp"
             android:text="Attendee Limit"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/AttendeeLimitIconOrgdet"
+            app:layout_constraintHorizontal_bias="0.032"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/CheckInTextOrgdet" />
 
         <TextView
@@ -185,9 +173,10 @@
             android:layout_marginTop="8dp"
             android:paddingLeft="10dp"
             android:text="Number"
+            android:hint="None"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/AttendeeLimitIconOrgdet"
+            app:layout_constraintHorizontal_bias="0.028"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/AttendeeLimitTextOrgdet" />
 
         <TextView
@@ -195,14 +184,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="13dp"
             android:text="Geo-Location Tracking"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/AttendeeLimitIconOrgdet" />
+            app:layout_constraintTop_toBottomOf="@+id/AttendeeLimitNumOrgdet" />
 
         <Switch
             android:id="@+id/GeoLocationButtonOrgdet"

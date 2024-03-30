@@ -339,7 +339,7 @@ public class AddEventFragment extends DialogFragment {
                 desc.setText("");
                 //addEventImage.setImageResource();
                 Glide.with(addEventImage.getContext())
-                        .load("https://firebasestorage.googleapis.com/v0/b/charlie-kim-fans.appspot.com/o/event_images%2Fjujutsu-kaisen-4k-geto-suguru-6i4yc80acocfj7go.jpg?alt=media&token=d5390dbc-f352-47ac-aade-950b1cee5466")
+                        .load("https://firebasestorage.googleapis.com/v0/b/charlie-kim-fans.appspot.com/o/event_images%2Fimage_placeholder.png?alt=media&token=a354681d-7f13-4be8-943f-5b99460661c3")
                         .into(addEventImage);
 
 
