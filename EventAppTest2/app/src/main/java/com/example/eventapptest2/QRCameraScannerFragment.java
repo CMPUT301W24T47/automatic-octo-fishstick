@@ -1,15 +1,20 @@
 package com.example.eventapptest2;
 
+import static android.content.Context.LOCALE_SERVICE;
+import static android.content.Context.LOCATION_SERVICE;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -48,23 +53,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 /**
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class QRCameraScannerFragment extends Fragment implements LocationListener{
+public class QRCameraScannerFragment extends Fragment {
     SurfaceView surfaceView;
     LocationManager locationManager;
     Location location;
     TextView QRcodevalue;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
+
     double latitude;
     double longitude;
+    private static final int REQUEST_ACCESS_FINE_LOCATION = 202;
+    private static final int REQUEST_ACCESS_COARSE_LOCATION = 203;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
     Button open_camera_button;
     String intentData;
+    String provider;
     MainActivity mActivityCallback;
     Button generate_qr_button;
     // TODO: Rename parameter arguments, choose names that match
@@ -131,19 +141,40 @@ public class QRCameraScannerFragment extends Fragment implements LocationListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_q_r_camera_scanner, container, false);
-        mActivityCallback = (MainActivity) getActivity();
-        if (ContextCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION)
-        != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(getActivity(),new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            },100);
+        surfaceView = rootView.findViewById(R.id.surfaceView);
+        /**
+        locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return rootView;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            locationManager.getCurrentLocation(
+                    LocationManager.GPS_PROVIDER,
+                    null,
+                    ContextCompat.getMainExecutor(getActivity()),
+                    new Consumer<Location>() {
+                        @Override
+                        public void accept(Location location) {
+                            Log.d("zzzLatitude", Double.toString(latitude));
+                            Log.d("zzzLongitude", Double.toString(longitude));
+                        }
+                    });
         }
 
 
-
+        Log.d("zzzzLatitude", Double.toString(latitude));
+        Log.d("zzzzLongitude", Double.toString(longitude));
+         **/
         initialiseDetectorsandSources();
-        // Inflate the layout for this fragment
         return rootView;
     }
 
@@ -198,81 +229,90 @@ public class QRCameraScannerFragment extends Fragment implements LocationListene
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0) {
                     surfaceView.post(new Runnable() {
+
                         @Override
                         public void run() {
 
                             if (!getdet) {
-                                getLocation();
+                                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ACCESS_FINE_LOCATION);
+                                }
+                                locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+                                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
+                                Log.d("ZseanLatitude",Double.toString(latitude));
+                                Log.d("ZseanLongitude",Double.toString(longitude));
+                                //getLocation();
+                                //latitude = location.getLatitude();
+                                //longitude = location.getLongitude();
                                 //get longitude and latitude
                                 //mActivityCallback = (MainActivity) getActivity();
-                            //this is what happens after qr code scanned so like we can switch fragments here
-                            final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                //this is what happens after qr code scanned so like we can switch fragments here
+                                final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                            DocumentReference docRef = db.collection("AttendeeList" + event.getEventid()).document(user.getDeviceId());
+                                DocumentReference docRef = db.collection("AttendeeList" + event.getEventid()).document(user.getDeviceId());
 
-                            // Get the document snapshot
-
-
-                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()) {
-                                            // Perform the count increment and update
-                                            // ...
-
-                                            // Cleanup after successful update
-                                            String intValueStr = document.getString("CheckInCount");
-                                            int intValue = Integer.parseInt(intValueStr);
-
-                                            // Increment the integer value by 1
-                                            intValue+= 1;
-                                            docRef.update("CheckInCount", String.valueOf(intValue));
-                                            docRef.update("userLatitude", String.valueOf(latitude));
-                                            docRef.update("userLongitude", String.valueOf(longitude));
-
-                                            //event.getAttendeList().clear();
+                                // Get the document snapshot
 
 
+                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                // Perform the count increment and update
+                                                // ...
 
-                                            cameraSource.stop();
-                                            cameraSource.release();
-                                            barcodeDetector.release();
-                                            //event.getAttendeList().notify();
+                                                // Cleanup after successful update
+                                                String intValueStr = document.getString("CheckInCount");
+                                                int intValue = Integer.parseInt(intValueStr);
 
-                                            FragmentTransaction fragmentTransaction = frag.beginTransaction();
-                                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                                            
-                                            //this isnt the actual exploreeventsdets its actualy savedeventdets
-                                            fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(event,frag,user,bottomnav)); 
-                                            fragmentTransaction.commit();
+                                                // Increment the integer value by 1
+                                                intValue += 1;
+                                                docRef.update("CheckInCount", String.valueOf(intValue));
+                                                docRef.update("userLatitude", String.valueOf(latitude));
+                                                docRef.update("userLongitude", String.valueOf(longitude));
+
+                                                //event.getAttendeList().clear();
 
 
-                                            // Switch fragments
-                                            // ...
+                                                cameraSource.stop();
+                                                cameraSource.release();
+                                                barcodeDetector.release();
+                                                //event.getAttendeList().notify();
+
+                                                FragmentTransaction fragmentTransaction = frag.beginTransaction();
+                                                //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+
+                                                //this isnt the actual exploreeventsdets its actualy savedeventdets
+                                                fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(event, frag, user, bottomnav));
+                                                fragmentTransaction.commit();
+
+
+                                                // Switch fragments
+                                                // ...
+                                            } else {
+                                                // Handle the case where the document doesn't exist
+                                            }
                                         } else {
-                                            // Handle the case where the document doesn't exist
+                                            // Handle errors
                                         }
-                                    } else {
-                                        // Handle errors
                                     }
-                                }
 
-                            });}
-                            else{// open
+                                });
+                            } else {// open
 
                                 ArrayList<Event> saveevent = new ArrayList<>();
                                 intentData = barcodes.valueAt(0).displayValue; // this should store event id
-                                for(Event event: explore){
-                                    if (event.getEventid().equals(intentData)){
+                                for (Event event : explore) {
+                                    if (event.getEventid().equals(intentData)) {
                                         saveevent.add(event);
                                     }
 
                                 }
-                                if(saveevent.isEmpty()){
+                                if (saveevent.isEmpty()) {
                                     cameraSource.stop();
                                     cameraSource.release();
                                     barcodeDetector.release();
@@ -280,30 +320,25 @@ public class QRCameraScannerFragment extends Fragment implements LocationListene
                                     //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
 
                                     //this isnt the actual exploreeventsdets its actualy savedeventdets
-                                    fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(user,frag,bottomnav,explore));
+                                    fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(user, frag, bottomnav, explore));
                                     fragmentTransaction.commit();
-
 
 
                                     Toast.makeText(getActivity().getApplicationContext(), "Event is Full, Expired,you already signed-Up, or You own the event", Toast.LENGTH_LONG).show();
 
                                     //print message
-                                }
-                                else{
+                                } else {
                                     cameraSource.stop();
                                     cameraSource.release();
                                     barcodeDetector.release();
                                     //event.getAttendeList().notify();
 
 
-
-
-
                                     FragmentTransaction fragmentTransaction = frag.beginTransaction();
                                     //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
 
                                     //this isnt the actual exploreeventsdets its actualy savedeventdets
-                                    fragmentTransaction.replace(R.id.framelayout, new ACTUALExploreEventDetsFragment(saveevent.get(0),frag,user.getDeviceId(),user,bottomnav,explore));
+                                    fragmentTransaction.replace(R.id.framelayout, new ACTUALExploreEventDetsFragment(saveevent.get(0), frag, user.getDeviceId(), user, bottomnav, explore));
                                     fragmentTransaction.commit();
 
 
@@ -313,12 +348,8 @@ public class QRCameraScannerFragment extends Fragment implements LocationListene
                             }
 
 
-
 //                            cameraSource.stop();
 //                            cameraSource.release();
-
-
-
 
 
                         }
@@ -329,50 +360,16 @@ public class QRCameraScannerFragment extends Fragment implements LocationListene
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         cameraSource.release();
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         initialiseDetectorsandSources();
     }
-    @SuppressLint("MissingPermission")
-    private void getLocation(){
-        try{
-            locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,5,QRCameraScannerFragment.this);
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-    }
-
-    @Override
-    public void onLocationChanged(@NonNull List<Location> locations) {
-        LocationListener.super.onLocationChanged(locations);
-    }
-
-    @Override
-    public void onFlushComplete(int requestCode) {
-        LocationListener.super.onFlushComplete(requestCode);
-    }
-
-    @Override
-    public void onProviderEnabled(@NonNull String provider) {
-        LocationListener.super.onProviderEnabled(provider);
-    }
-
-    @Override
-    public void onProviderDisabled(@NonNull String provider) {
-        LocationListener.super.onProviderDisabled(provider);
-    }
 }
 

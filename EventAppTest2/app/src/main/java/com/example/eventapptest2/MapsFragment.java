@@ -90,26 +90,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.gMap = googleMap;
-        //UofA = new LatLng(53.5268067,-113.5284546);
-        UofA = new com.google.android.gms.maps.model.LatLng(53.5268067,-113.5284546);
-        ;
-
-        //mapBuilder = LatLng.newBuilder();
-        //mapBuilder.setLatitude(53.5268067);
-        //mapBuilder.setLongitude(-113.5284546);
-        //UofA = mapBuilder.build();
-        //UofA = mapBuilder.buildPartial();
-        //this.gMap.moveCamera(0,0,3);
-        //LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        //Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        //double longitude = location.getLongitude();
-        //double latitude = location.getLatitude();
+        float zoomLevel = 15.0f;
+        com.google.android.gms.maps.model.LatLng attendeelatlng = new com.google.android.gms.maps.model.LatLng(0.0,0.0);
         for(User Attendee: attendeeList){
             com.google.android.gms.maps.model.LatLng userLatLng = new com.google.android.gms.maps.model.LatLng(Double.parseDouble(Attendee.getUserLatitude()),Double.parseDouble(Attendee.getUserLongitude()));
             this.gMap.addMarker(new MarkerOptions().position(userLatLng)).setTitle(Attendee.getUserName());
+            attendeelatlng = userLatLng;
         }
-        //this.gMap.addMarker(new MarkerOptions().position(seansHouse)).setTitle("Sean Zorzut");
-        this.gMap.addMarker(new MarkerOptions().position(UofA)).setTitle("Computer Science Centre");
-        this.gMap.moveCamera(CameraUpdateFactory.newLatLng(UofA));
+        this.gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(attendeelatlng,zoomLevel));
     }
 }
