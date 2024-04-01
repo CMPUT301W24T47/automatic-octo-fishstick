@@ -80,12 +80,16 @@ public class ACTUALExploreEventDetsFragment extends Fragment {
 
                     ArrayList<Event> newlist = user.getSavedEvents();
 
+
+
                     saveevent.document(event.getEventid()).set(event);
 
                     Map<String, Object> newuser = new HashMap<>();
                     newuser.put("userName", user.getUserName());
                     newuser.put("userProfileImage", user.getUserProfileImage());
                     newuser.put("CheckInCount", "0");
+                    newuser.put("userLongitude", "a");
+                    newuser.put("userLatitude", "a");
 
                     attendelistfb.document(user.getDeviceId()).set(newuser);
 

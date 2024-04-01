@@ -10,6 +10,11 @@ public class User implements Serializable {
     String userEmail;
     String userPhoneNumber;
     String userProfileImage;
+
+
+
+    String userLongitude;
+    String userLatitude;
     ArrayList<Event> savedEvents;
     ArrayList<Event> createdEvents;
     ArrayList<Event> oldQRList;
@@ -55,10 +60,12 @@ public class User implements Serializable {
         this.tracking = track;
 
     }
-    public User(String AttendeeName,String AttendeeImage, String CheckInCount) {
+    public User(String AttendeeName,String AttendeeImage, String CheckInCount, String userLongitude, String userLatitude) {
         this.userName = AttendeeName;
         this.userProfileImage = AttendeeImage;
         this.CheckInCount = CheckInCount;
+        this.userLongitude = userLongitude;
+        this.userLatitude = userLatitude;
     }
     public User() {
 
@@ -74,8 +81,21 @@ public class User implements Serializable {
         this.userPhoneNumber = userPhoneNumber;
 
     }
+    public String getUserLongitude() {
+        return userLongitude;
+    }
 
+    public void setUserLongitude(String userLongitude) {
+        this.userLongitude = userLongitude;
+    }
 
+    public String getUserLatitude() {
+        return userLatitude;
+    }
+
+    public void setUserLatitude(String userLatitude) {
+        this.userLatitude = userLatitude;
+    }
     public String getTracking() {
         return tracking;
     }

@@ -28,6 +28,12 @@ Helped with passing values through intent in userprofile fragment
 https://stackoverflow.com/questions/61455381/how-to-replace-startactivityforresult-with-activity-result-apis
 https://stackoverflow.com/questions/68520524/how-to-return-a-result-in-activityresultlauncher
 
+Guide on making a QR code scanner using Google's Mobile Vision API
+https://www.digitalocean.com/community/tutorials/qr-code-barcode-scanner-android
+
+For Google Maps API
+https://console.cloud.google.com/
+
 ChatGPT
 A conversational AI system that listens, learns, and challenges
 Image
