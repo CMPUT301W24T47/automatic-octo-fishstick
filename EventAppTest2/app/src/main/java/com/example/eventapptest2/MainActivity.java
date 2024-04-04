@@ -975,7 +975,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         String userImage = (String) doc.getData().get("userProfileImage");
                         Event event = new Event(userImage,userId,"");
 
-                        if(!Objects.equals(userImage,"")) {
+                        if( (!(Objects.equals(userImage,"") || Objects.equals(userImage,null)))) {
                             imageAdminList.add(event);
                         }
                     }
