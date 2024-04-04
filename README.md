@@ -34,6 +34,12 @@ https://www.digitalocean.com/community/tutorials/qr-code-barcode-scanner-android
 For Google Maps API
 https://console.cloud.google.com/
 
+Get current latitude and longitude in fragment
+https://stackoverflow.com/questions/51334813/get-current-latitude-and-longitude-in-fragment
+
+Request Permissions (such as location services)
+https://www.geeksforgeeks.org/android-how-to-request-permissions-in-android-application/
+
 ChatGPT
 A conversational AI system that listens, learns, and challenges
 Image

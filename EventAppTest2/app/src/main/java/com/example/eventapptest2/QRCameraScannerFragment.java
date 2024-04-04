@@ -141,39 +141,8 @@ public class QRCameraScannerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_q_r_camera_scanner, container, false);
         surfaceView = rootView.findViewById(R.id.surfaceView);
-        /**
-        locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return rootView;
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            locationManager.getCurrentLocation(
-                    LocationManager.GPS_PROVIDER,
-                    null,
-                    ContextCompat.getMainExecutor(getActivity()),
-                    new Consumer<Location>() {
-                        @Override
-                        public void accept(Location location) {
-                            Log.d("zzzLatitude", Double.toString(latitude));
-                            Log.d("zzzLongitude", Double.toString(longitude));
-                        }
-                    });
-        }
-
-
-        Log.d("zzzzLatitude", Double.toString(latitude));
-        Log.d("zzzzLongitude", Double.toString(longitude));
-         **/
         initialiseDetectorsandSources();
         return rootView;
     }
@@ -234,20 +203,18 @@ public class QRCameraScannerFragment extends Fragment {
                         public void run() {
 
                             if (!getdet) {
+                                //request permission from user to get location
                                 if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ACCESS_FINE_LOCATION);
                                 }
+                                //initialize locationManager
                                 locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+                                //get last known location via GPS. This way, it does not need to constantly update location.
                                 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                //fetch latitude and longitude
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
-                                Log.d("ZseanLatitude",Double.toString(latitude));
-                                Log.d("ZseanLongitude",Double.toString(longitude));
-                                //getLocation();
-                                //latitude = location.getLatitude();
-                                //longitude = location.getLongitude();
-                                //get longitude and latitude
-                                //mActivityCallback = (MainActivity) getActivity();
+
                                 //this is what happens after qr code scanned so like we can switch fragments here
                                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
 

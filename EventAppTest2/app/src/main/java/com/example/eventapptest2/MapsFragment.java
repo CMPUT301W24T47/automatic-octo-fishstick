@@ -87,6 +87,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         return rootView;
     }
 
+    /**
+     * Creates a marker for every user in attendee list, and zooms in the map automatically.
+     * @param googleMap
+     */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.gMap = googleMap;
