@@ -1,9 +1,11 @@
 package com.example.eventapptest2;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
@@ -45,6 +48,13 @@ public class AdminImageRecyclerViewAdapter extends RecyclerView.Adapter<AdminIma
         Glide.with(holder.itemView.getContext())
                 .load(imageURL)
                 .into(holder.image);
+
+        if ((!Objects.equals(holder.imageForView.getOwner(),"")&&(!Objects.equals(holder.imageForView.getOwner(),"")&&((Objects.equals(imageURL, ""))||(Objects.equals(imageURL, null)))))){
+            holder.name.setText(holder.imageForView.getOwner());
+            Random rnd = new Random();
+            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            holder.name.setBackgroundColor(color);
+        }
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +95,7 @@ public class AdminImageRecyclerViewAdapter extends RecyclerView.Adapter<AdminIma
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final ImageView image;
         public final ImageView deleteButton;
+        public final TextView name;
         public Event imageForView;
 
 
@@ -93,6 +104,7 @@ public class AdminImageRecyclerViewAdapter extends RecyclerView.Adapter<AdminIma
             super(binding.getRoot());
             image = binding.AdminImageView;
             deleteButton = binding.ImageDeleteButton;
+            name = binding.nameOnImageView;
         }
 
 

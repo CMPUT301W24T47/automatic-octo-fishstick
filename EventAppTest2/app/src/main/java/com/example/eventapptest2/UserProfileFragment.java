@@ -86,9 +86,12 @@ import static android.app.Activity.RESULT_OK;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -124,6 +127,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 
@@ -455,6 +459,30 @@ public class UserProfileFragment extends Fragment{
         }
         if((user.getUserName() == null) && (user.getUserProfileImage()==null) || (user.getUserProfileImage() == "")){
             profilePic.setImageDrawable(originalPic);
+        }
+
+        if ((user.getUserName() != null) && (user.getUserProfileImage() == null || user.getUserProfileImage().isEmpty())) {
+            textOnProfilePic.setText(user.getUserName());
+
+            profilePic.setVisibility(View.VISIBLE);
+
+            // Get the context from the fragment
+            Context context = getContext();
+            if (context != null) {
+                SharedPreferences sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                int color;
+                if (sharedPreferences.contains("backgroundColor")) {
+                    // Retrieve the color from shared preferences if it has been set before
+                    color = sharedPreferences.getInt("backgroundColor", 0);
+                } else {
+                    // Generate a new color if it has not been set before
+                    Random rnd = new Random();
+                    color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                    // Save the color to shared preferences
+                    sharedPreferences.edit().putInt("backgroundColor", color).apply();
+                }
+                profilePic.setBackgroundColor(color);
+            }
         }
 
     }

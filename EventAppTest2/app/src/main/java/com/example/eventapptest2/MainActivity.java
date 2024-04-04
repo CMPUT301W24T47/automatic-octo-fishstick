@@ -953,7 +953,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         String eventID = (String) doc.getData().get("eventid");
                         Event event = new Event(eventPoster, "",eventID);
 
-                        if( (!Objects.equals(eventPoster,"")) || (!Objects.equals(eventPoster,null)) || (!Objects.equals(eventPoster, " "))){
+                        if( (!(Objects.equals(eventPoster,"") || Objects.equals(eventPoster,null)))){
                             imageAdminList.add(event);
                         }
                     }

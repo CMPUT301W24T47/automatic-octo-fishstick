@@ -10,16 +10,31 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/AdminImageView"
-            android:layout_width="192dp"
-            android:layout_height="43dp"
-            android:layout_marginStart="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.01"
-            app:srcCompat="@drawable/karansbackground" />
+        <RelativeLayout
+            android:id="@+id/relAdminImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/AdminImageView"
+                android:layout_width="192dp"
+                android:layout_height="43dp"
+                android:layout_marginStart="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.01"
+                app:srcCompat="@drawable/karansbackground" />
+
+            <TextView
+                android:id="@+id/nameOnImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:maxLength="4"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/ImageDeleteButton"

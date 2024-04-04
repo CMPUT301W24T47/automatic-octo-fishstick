@@ -1,5 +1,6 @@
 package com.example.eventapptest2;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Random;
 
 /**
  * Display user profiles in a RecyclerView
@@ -63,6 +66,14 @@ public class AdminProfileRecyclerViewAdapter extends RecyclerView.Adapter<AdminP
             holder.userName.setText(holder.EventForView.getUserName());
         }
 
+        // when there is name is not empty and image is empty
+        if (!Objects.equals(holder.EventForView.getUserName(), "") &&(Objects.equals(holder.profileImage.getBackground(),null))&& ((Objects.equals(imageURL, ""))||(Objects.equals(imageURL, null)))){
+            holder.nameOnImage.setText(holder.EventForView.getUserName());
+            Random rnd = new Random();
+            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            holder.profileImage.setBackgroundColor(color);
+        }
+
         Glide.with(holder.itemView.getContext())
                 .load(imageURL)
                 .into(holder.profileImage);
@@ -84,6 +95,8 @@ public class AdminProfileRecyclerViewAdapter extends RecyclerView.Adapter<AdminP
                                     "userProfileImage","");
 
                     userList.remove(deleteProfile);
+                    holder.nameOnImage.setText("");
+                    holder.nameOnImage.setBackgroundColor(255);
                     notifyItemRemoved(userPosition);
 
                 }
@@ -103,6 +116,7 @@ public class AdminProfileRecyclerViewAdapter extends RecyclerView.Adapter<AdminP
         // Fields of the holders we want to view
         public final ImageView profileImage;
         public final ImageButton deleteButton;
+        public final TextView nameOnImage;
 
         public final TextView userName;
         public User EventForView;
@@ -114,6 +128,7 @@ public class AdminProfileRecyclerViewAdapter extends RecyclerView.Adapter<AdminP
             profileImage = binding.adminProfileIcon;
             deleteButton = binding.adminDeletebtnProfiles;
             userName = binding.adminProfiles;
+            nameOnImage = binding.nameOnImage;
         }
 
     }
