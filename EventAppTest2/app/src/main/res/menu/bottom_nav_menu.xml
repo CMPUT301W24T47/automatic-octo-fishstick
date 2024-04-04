@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_explore_events"/>
     <item android:title="Organize Events"
         android:id="@+id/OrganizeEventNav"
-        android:icon="@drawable/ic_organize_events"/>
+        android:icon="@drawable/outline_category_24"/>
     <item android:title="Saved Events"
         android:id="@+id/SavedEventNav"
         android:icon="@drawable/ic_saved_events"/>
