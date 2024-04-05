@@ -73,16 +73,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     ArrayList<String> notifyList = new ArrayList<>();
     public int inte = 0;
 
-    private final ActivityResultLauncher<String> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
-        @Override
-        public void onActivityResult(Boolean o) {
-            if (o) {
-                Toast.makeText(MainActivity.this, "Post notification permission granted", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(MainActivity.this, "Post notification permission not granted", Toast.LENGTH_SHORT).show();
-            }
-        }
-    });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,12 +83,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
 
 
-        if(!(ContextCompat.checkSelfPermission(this,Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)){
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-                activityResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
-            }
 
-        }
 
         // Improved user retrieval with error handling
         getUser(deviceId).addOnCompleteListener(task -> {
@@ -134,9 +120,9 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 fragmentTransaction.commit();
 
 
-                for(Event event: savedEvents){
-                    HeadsUpNotify(event.getEventid());
-                }
+//                for(Event event: savedEvents){
+//                    HeadsUpNotify(event.getEventid());
+//                }
 
                 bottomnav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
                     @Override
@@ -408,9 +394,9 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 getDataSave(deviceId);
                 //maybe redunant but im scared
                 // savedEvents = user.getSavedEvents();
-                for(Event event: savedEvents){
-                    HeadsUpNotify(event.getEventid());
-                }
+//                for(Event event: savedEvents){
+//                    HeadsUpNotify(event.getEventid());
+//                }
                 getDataCreate(deviceId);
                 //maybe redunant but im to scared
                 //user.setCreatedEvents(createdEvents);
@@ -520,7 +506,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
        // HeadsUpNotify(id);
         final CollectionReference SavedeventsRef = db.collection("SavedEvents" + id);
-        HeadsUpNotify(id);
+        //HeadsUpNotify(id);
         SavedeventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
@@ -720,6 +706,8 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         String attendeeid = doc.getId();
                         final CollectionReference userref = db.collection("users");
                         //get user from user collection if any changes happened to user
+                        Log.e(TAG, attendeeid);Log.e(TAG, id);
+
                         userref.document(attendeeid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -978,67 +966,67 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         return imageAdminList;
     }
 
-    private void HeadsUpNotify(String id) {
-        final CollectionReference NotifyListRef = db.collection("Notify" + id);
-
-        NotifyListRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    return;
-                }
-
-                for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                    if(dc.getType() == DocumentChange.Type.ADDED) {
-
-                            Toast.makeText(MainActivity.this, dc.getDocument().getString("note"), Toast.LENGTH_SHORT).show();
-
-
-                            Uri new_defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                            NotificationCompat.Builder new_builder = new NotificationCompat.Builder(MainActivity.this, "My Notification");
-                            new_builder.setContentTitle("New Report added!");
-                            new_builder.setContentText(dc.getDocument().getString("note"));
-                            new_builder.setSmallIcon(R.drawable.charliekimimage);
-                            new_builder.setSound(new_defaultSoundUri);
-                            new_builder.setAutoCancel(true);
-
-
-                            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-                            if(!(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)){
-                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-                                    activityResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
-                                }
-
-                            } else {
-                                    CharSequence name = getString(R.string.app_name);
-                                    String description = "Example Notification";
-                                    int importance = NotificationManager.IMPORTANCE_DEFAULT;
-                                NotificationChannel channel = null;
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    channel = new NotificationChannel("test", name, importance);
-                                }
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    channel.setDescription(description);
-                                }
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    notificationManager.createNotificationChannel(channel);
-                                }
-
-                                notificationManager.notify(10, new_builder.build());
-
-                            }
-                        }
-                    }
-                }
-
-
-
-
-        });
-
-
-
-    }
+//    private void HeadsUpNotify(String id) {
+//        final CollectionReference NotifyListRef = db.collection("Notify" + id);
+//
+//        NotifyListRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+//                if (e != null) {
+//                    return;
+//                }
+//
+//                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+//                    if(dc.getType() == DocumentChange.Type.ADDED) {
+//
+//                            Toast.makeText(MainActivity.this, dc.getDocument().getString("note"), Toast.LENGTH_SHORT).show();
+//
+//
+//                            Uri new_defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//                            NotificationCompat.Builder new_builder = new NotificationCompat.Builder(MainActivity.this, "My Notification");
+//                            new_builder.setContentTitle("New Report added!");
+//                            new_builder.setContentText(dc.getDocument().getString("note"));
+//                            new_builder.setSmallIcon(R.drawable.charliekimimage);
+//                            new_builder.setSound(new_defaultSoundUri);
+//                            new_builder.setAutoCancel(true);
+//
+//
+//                            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+//                            if(!(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)){
+//                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+//                                    activityResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+//                                }
+//
+//                            } else {
+//                                    CharSequence name = getString(R.string.app_name);
+//                                    String description = "Example Notification";
+//                                    int importance = NotificationManager.IMPORTANCE_DEFAULT;
+//                                NotificationChannel channel = null;
+//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                                    channel = new NotificationChannel("test", name, importance);
+//                                }
+//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                                    channel.setDescription(description);
+//                                }
+//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                                    notificationManager.createNotificationChannel(channel);
+//                                }
+//
+//                                notificationManager.notify(10, new_builder.build());
+//
+//                            }
+//                        }
+//                    }
+//                }
+//
+//
+//
+//
+//        });
+//
+//
+//
+//    }
 
 
 

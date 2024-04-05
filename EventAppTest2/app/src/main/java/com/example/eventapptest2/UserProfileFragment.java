@@ -355,12 +355,12 @@ public class UserProfileFragment extends Fragment{
 
         // display image url
         //System.out.println("Image URL: " + imageUrl);
-        Glide.with(profilePic.getContext())
-                .load(imageUrl)
-                .into(profilePic);
+
         if(user.getUserProfileImage() == "" || user.getUserProfileImage() == null){
 
-            generateImage(originalPic);}
+            generateImage(originalPic);}else{ Glide.with(profilePic.getContext())
+                .load(imageUrl)
+                .into(profilePic);}
 //        usersRef.document(user.getUserName()).set(user);
 //
 
