@@ -3,15 +3,22 @@ package com.example.eventapptest2;
 import static android.content.ContentValues.TAG;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.pm.PackageManager;
 import android.media.Image;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,13 +73,31 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     ArrayList<String> notifyList = new ArrayList<>();
     public int inte = 0;
 
-
+    private final ActivityResultLauncher<String> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+        @Override
+        public void onActivityResult(Boolean o) {
+            if (o) {
+                Toast.makeText(MainActivity.this, "Post notification permission granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivity.this, "Post notification permission not granted", Toast.LENGTH_SHORT).show();
+            }
+        }
+    });
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
+
+
+        if(!(ContextCompat.checkSelfPermission(this,Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)){
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                activityResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+
+        }
 
         // Improved user retrieval with error handling
         getUser(deviceId).addOnCompleteListener(task -> {
@@ -111,7 +136,6 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
                 for(Event event: savedEvents){
                     HeadsUpNotify(event.getEventid());
-
                 }
 
                 bottomnav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -384,7 +408,9 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 getDataSave(deviceId);
                 //maybe redunant but im scared
                 // savedEvents = user.getSavedEvents();
-
+                for(Event event: savedEvents){
+                    HeadsUpNotify(event.getEventid());
+                }
                 getDataCreate(deviceId);
                 //maybe redunant but im to scared
                 //user.setCreatedEvents(createdEvents);
@@ -492,9 +518,9 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         // create event notfications are only made there so no list needed b/c they will only update notfication list of event like attendeelist
         // this means saved data stores a notfication list
 
-
+        HeadsUpNotify(id);
         final CollectionReference SavedeventsRef = db.collection("SavedEvents" + id);
-
+        HeadsUpNotify(id);
         SavedeventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
@@ -546,6 +572,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
             }
         });
+
     }
 
     private void getDataCreate(String id) {
@@ -962,36 +989,48 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 }
 
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                    switch (dc.getType()) {
-                        case ADDED:
+                    if(dc.getType() == DocumentChange.Type.ADDED) {
+                            Toast.makeText(MainActivity.this, dc.getDocument().getString("note"), Toast.LENGTH_SHORT).show();
                             Uri new_defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                            NotificationCompat.Builder new_builder = new NotificationCompat.Builder(getBaseContext(), "My Notification");
+                            NotificationCompat.Builder new_builder = new NotificationCompat.Builder(MainActivity.this, "My Notification");
                             new_builder.setContentTitle("New Report added!");
                             new_builder.setContentText(dc.getDocument().getString("note"));
                             new_builder.setSmallIcon(R.drawable.charliekimimage);
                             new_builder.setSound(new_defaultSoundUri);
                             new_builder.setAutoCancel(true);
 
-                            NotificationManagerCompat new_managerCompat = NotificationManagerCompat.from(getBaseContext());
-                            if (ActivityCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                                // TODO: Consider calling
-                                //    ActivityCompat#requestPermissions
-                                // here to request the missing permissions, and then overriding
-                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                //                                          int[] grantResults)
-                                // to handle the case where the user grants the permission. See the documentation
-                                // for ActivityCompat#requestPermissions for more details.
-                                return;
-                            }
-                            new_managerCompat.notify(1, new_builder.build());
-                            break;
 
+                            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                            if(!(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)){
+                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                                    activityResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+                                }
+
+                            } else {
+                                    CharSequence name = getString(R.string.app_name);
+                                    String description = "Example Notification";
+                                    int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                                NotificationChannel channel = null;
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    channel = new NotificationChannel("test", name, importance);
+                                }
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    channel.setDescription(description);
+                                }
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    notificationManager.createNotificationChannel(channel);
+                                }
+
+                                notificationManager.notify(10, new_builder.build());
+
+                            }
+                        }
                     }
                 }
 
 
 
-            }
+
         });
 
 

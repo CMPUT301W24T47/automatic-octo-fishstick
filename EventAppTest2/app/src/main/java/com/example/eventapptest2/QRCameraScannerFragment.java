@@ -250,8 +250,9 @@ public class QRCameraScannerFragment extends Fragment {
                                                 // Increment the integer value by 1
                                                 intValue += 1;
                                                 docRef.update("CheckInCount", String.valueOf(intValue));
+                                                if (event.getTracking().equals("on")){
                                                 docRef.update("userLatitude", String.valueOf(latitude));
-                                                docRef.update("userLongitude", String.valueOf(longitude));
+                                                docRef.update("userLongitude", String.valueOf(longitude));}
 
                                                 //event.getAttendeList().clear();
 
