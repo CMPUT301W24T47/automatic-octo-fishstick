@@ -20,7 +20,8 @@ public class User implements Serializable {
 
     String DeviceId; // wont have a setter b/c should only every be init at start of code
 
-
+    String userLongitude;
+    String userLatitude;
 
     String tracking;
 
@@ -55,15 +56,24 @@ public class User implements Serializable {
         this.tracking = track;
 
     }
-    public User(String AttendeeName,String AttendeeImage, String CheckInCount) {
+    public User(String AttendeeName,String AttendeeImage, String CheckInCount, String userLongitude, String userLatitude) {
         this.userName = AttendeeName;
         this.userProfileImage = AttendeeImage;
         this.CheckInCount = CheckInCount;
+        this.userLongitude = userLongitude;
+        this.userLatitude = userLatitude;
     }
     public User() {
 
     }
 
+    public String getUserLongitude() {
+        return userLongitude;
+    }
+
+    public String getUserLatitude() {
+        return userLatitude;
+    }
     // Constructor for Admin user profile
     public User(String deviceId,String userName, String userImage, String userHomepage, String userEmail, String userPhoneNumber) {
         this.DeviceId = deviceId;

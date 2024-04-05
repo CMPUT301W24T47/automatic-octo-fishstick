@@ -93,6 +93,9 @@ public class ACTUALExploreEventDetsFragment extends Fragment {
                     newuser.put("userName", user.getUserName());
                     newuser.put("userProfileImage", user.getUserProfileImage());
                     newuser.put("CheckInCount", "0");
+                    newuser.put("userLongitude", "a");
+                    newuser.put("userLatitude", "a");
+
 
                     attendelistfb.document(user.getDeviceId()).set(newuser);
 
@@ -115,6 +118,8 @@ public class ACTUALExploreEventDetsFragment extends Fragment {
                         newuser.put("userName", user.getUserName());
                         newuser.put("userProfileImage", user.getUserProfileImage());
                         newuser.put("CheckInCount", "0");
+                        newuser.put("userLongitude", "a");
+                        newuser.put("userLatitude", "a");
 
                         attendelistfb.document(user.getDeviceId()).set(newuser);
 

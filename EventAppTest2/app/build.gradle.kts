@@ -49,7 +49,7 @@ secrets{
 
 dependencies {
     implementation("com.google.zxing:core:3.4.1")
-
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
@@ -57,7 +57,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-vision:20.1.3")
 
 
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.appcompat:appcompat:1.6.1") // if u wanna add this " implementation ("androidx.core:core:2.2.0") get rid of this line
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.android.material:material:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

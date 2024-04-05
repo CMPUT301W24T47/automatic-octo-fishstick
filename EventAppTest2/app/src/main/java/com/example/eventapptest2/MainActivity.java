@@ -2,14 +2,23 @@ package com.example.eventapptest2;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.media.Image;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -20,6 +29,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.api.Distribution;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -42,22 +52,19 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {//implements ExploreEventsRecyclerViewAdapter.OnExploreButtonClickListener {
 
     // Initialize the Explore ArrayList
-   // Event addEventFragmentstore = new Event();
+    // Event addEventFragmentstore = new Event();
     //firebase
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference usersRef = db.collection("users");
 
 
-
-    ArrayList<Event> savedEvents= new ArrayList<>();
-    ArrayList<Event> createdEvents= new ArrayList<>();
-    ArrayList<Event> oldQRList= new ArrayList<>();
+    ArrayList<Event> savedEvents = new ArrayList<>();
+    ArrayList<Event> createdEvents = new ArrayList<>();
+    ArrayList<Event> oldQRList = new ArrayList<>();
 
     ArrayList<Event> Explore = new ArrayList<>();
     ArrayList<String> notifyList = new ArrayList<>();
     public int inte = 0;
-
-
 
 
     @Override
@@ -73,7 +80,6 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 User testuser = task.getResult();
                 //will be ugly but gonna have to nest again for global events
                 /////////
-
 
 
                 //////////
@@ -99,16 +105,18 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav,Explore));
+                fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser, fragmentManager, bottomnav, Explore));
                 fragmentTransaction.commit();
 
 
+                for(Event event: savedEvents){
+                    HeadsUpNotify(event.getEventid());
+
+                }
 
                 bottomnav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-
 
                         int itemId = item.getItemId();
                         if (itemId == R.id.OrganizeEventNav) {
@@ -116,7 +124,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents, fragmentManager, bottomnav, testuser)); //explore is temp
                             fragmentTransaction.commit();
                             bottomnav.getMenu().clear();
                             bottomnav.inflateMenu(R.menu.organizer_nav_menu);
@@ -126,43 +134,43 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             getDataUser(testuser);
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav,Explore));
+                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser, fragmentManager, bottomnav, Explore));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.ExploreEventNav) {
                             getDataExplore(deviceId); //dk why but pervents glitch when the user of deviceid can see there created events in explore
 
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore,savedEvents,deviceId,fragmentManager,bottomnav,testuser));
+                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore, savedEvents, deviceId, fragmentManager, bottomnav, testuser));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.SavedEventNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new SavedEventsFragment(savedEvents,fragmentManager,bottomnav,testuser)); // prolly will need not get userid of attendee when they sign in for the attendee list maybe explore event if we wanna care abt it ltr
+                            fragmentTransaction.replace(R.id.framelayout, new SavedEventsFragment(savedEvents, fragmentManager, bottomnav, testuser)); // prolly will need not get userid of attendee when they sign in for the attendee list maybe explore event if we wanna care abt it ltr
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.OldQrNav) {
                             getOldQrList(deviceId);
 
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new OldQrsFragments(oldQRList,deviceId,fragmentManager));
+                            fragmentTransaction.replace(R.id.framelayout, new OldQrsFragments(oldQRList, deviceId, fragmentManager));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.AddEventnav) {
                             //FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new AddEventFragment(Explore,testuser,deviceId,createdEvents));
+                            fragmentTransaction.replace(R.id.framelayout, new AddEventFragment(Explore, testuser, deviceId, createdEvents));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.OrginzersEventsnav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser));
+                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents, fragmentManager, bottomnav, testuser));
                             fragmentTransaction.commit();
                         } else if (itemId == R.id.GoBacknav) {
                             getDataUser(testuser);
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav,Explore));
+                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser, fragmentManager, bottomnav, Explore));
                             fragmentTransaction.commit();
                             bottomnav.getMenu().clear();
                             bottomnav.inflateMenu(R.menu.bottom_nav_menu);
@@ -170,14 +178,12 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         } else if (itemId == R.id.GoBacknavDets) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore,savedEvents,deviceId,fragmentManager,bottomnav,testuser));
+                            fragmentTransaction.replace(R.id.framelayout, new ExploreFragment(Explore, savedEvents, deviceId, fragmentManager, bottomnav, testuser));
                             fragmentTransaction.commit();
                             bottomnav.getMenu().clear();
                             bottomnav.inflateMenu(R.menu.bottom_nav_menu);
                             bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.ExploreEventNav), 100);
                         }
-
-
 
 
                         //test so change
@@ -190,14 +196,12 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 //                            bottomnav.getMenu().clear();
 //                            bottomnav.inflateMenu(R.menu.organizer_nav_menu);
 //                            bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.OrginzersEventsnav), 100);
-                        }
-                        else if (itemId == R.id.EventMapNav) {
+                        } else if (itemId == R.id.EventMapNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new MapsFragment());
+                            fragmentTransaction.replace(R.id.framelayout, new MapsFragment((createdEvents.get(testuser.getLastsaved())).getAttendeList()));
                             fragmentTransaction.commit();
-                        }
-                        else if (itemId == R.id.EventAttendeesNav) {
+                        } else if (itemId == R.id.EventAttendeesNav) {
                             /// may wanna add a hidden textview in Main xml so we can add the checkin count
                             // do attendees need a sign-out option??
 
@@ -211,45 +215,39 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 //                            bottomnav.getMenu().clear();
 //                            bottomnav.inflateMenu(R.menu.organizer_nav_menu);
 //                            bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.OrginzersEventsnav), 100);
-                        }
-                        else if (itemId == R.id.EventNavGoback) {
+                        } else if (itemId == R.id.EventNavGoback) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.replace(R.id.framelayout, new OrgainzersEventFragment(createdEvents, fragmentManager, bottomnav, testuser)); //explore is temp
                             fragmentTransaction.commit();
                             bottomnav.getMenu().clear();
                             bottomnav.inflateMenu(R.menu.organizer_nav_menu);
                             bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.OrginzersEventsnav), 100);
-                        }
-                        else if (itemId == R.id.EventDetailsNav) {
+                        } else if (itemId == R.id.EventDetailsNav) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new OrganizeEventDetsFragment(createdEvents.get(testuser.getLastsaved()),testuser)); //explore is temp
+                            fragmentTransaction.replace(R.id.framelayout, new OrganizeEventDetsFragment(createdEvents.get(testuser.getLastsaved()), testuser)); //explore is temp
                             fragmentTransaction.commit();
-                        }
-
-
-
-                        else if (itemId == R.id.AttendeeNotifications) {
-                          // getNotifyList(savedEvents.get(testuser.getLastsaved()).getEventid());//takes eventid
-
+                        } else if (itemId == R.id.AttendeeNotifications) {
+                            // getNotifyList(savedEvents.get(testuser.getLastsaved()).getEventid());//takes eventid
 
 
                             final CollectionReference NotifyListRef = db.collection("Notify" + savedEvents.get(testuser.getLastsaved()).getEventid());
 
-                            
-                            notifyList.clear();
+
+
                             NotifyListRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
                                     if (error != null) {
-                                        return ;
+                                        return;
                                     }
+                                    notifyList.clear();
 
                                     // savedEvents.clear(); // Clear the old list
-                                    for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
 //                    String eventId = doc.getId();
                                         if (doc.exists()) {
                                             String UserName = (String) doc.getData().get("note");
@@ -261,82 +259,56 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                                     }
 
 
-
-
-
-
-
-
-
-                            FragmentManager fragmentManager = getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new AttendeeNotifyFragment(notifyList,savedEvents.get(testuser.getLastsaved()).getEventPoster())); //explore is temp
-                            fragmentTransaction.commit();
-
+                                    FragmentManager fragmentManager = getSupportFragmentManager();
+                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                    //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+                                    fragmentTransaction.replace(R.id.framelayout, new AttendeeNotifyFragment(notifyList, savedEvents.get(testuser.getLastsaved()).getEventPoster())); //explore is temp
+                                    fragmentTransaction.commit();
 
 
                                 }
                             });
 
 
-                        }
-
-
-
-                        else if (itemId == R.id.AttendeeProfile) {
+                        } else if (itemId == R.id.AttendeeProfile) {
                             getDataUser(testuser);
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser,fragmentManager,bottomnav,Explore));
+                            fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(testuser, fragmentManager, bottomnav, Explore));
                             fragmentTransaction.commit();
-                        }
-
-
-                        else if (itemId == R.id.AttendeeDetails) {
+                        } else if (itemId == R.id.AttendeeDetails) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(savedEvents.get(testuser.getLastsaved()),fragmentManager,testuser,bottomnav)); //explore is temp
+                            fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(savedEvents.get(testuser.getLastsaved()), fragmentManager, testuser, bottomnav)); //explore is temp
                             fragmentTransaction.commit();
-                        }
-
-
-                        else if (itemId == R.id.AttendeeGoBack) {
+                        } else if (itemId == R.id.AttendeeGoBack) {
                             getDataSave(deviceId);
 
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new SavedEventsFragment(savedEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.replace(R.id.framelayout, new SavedEventsFragment(savedEvents, fragmentManager, bottomnav, testuser)); //explore is temp
                             fragmentTransaction.commit();
                             bottomnav.getMenu().clear();
                             bottomnav.inflateMenu(R.menu.bottom_nav_menu);
                             bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.SavedEventNav), 100);
-                        }
-
-                        else if (itemId == R.id.AdminGoBack) {
+                        } else if (itemId == R.id.AdminGoBack) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                            fragmentTransaction.replace(R.id.framelayout, new SavedEventsFragment(savedEvents,fragmentManager,bottomnav,testuser)); //explore is temp
+                            fragmentTransaction.replace(R.id.framelayout, new SavedEventsFragment(savedEvents, fragmentManager, bottomnav, testuser)); //explore is temp
                             fragmentTransaction.commit();
                             bottomnav.getMenu().clear();
                             bottomnav.inflateMenu(R.menu.bottom_nav_menu);
                             bottomnav.postDelayed(() -> bottomnav.setSelectedItemId(R.id.SavedEventNav), 100);
-                        }
-
-
-                        else if (itemId == R.id.AdminImages) { ///easyish
+                        } else if (itemId == R.id.AdminImages) { ///easyish
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
                             fragmentTransaction.replace(R.id.framelayout, new AdminImageFragment(adminGetAllImages())); // the passed list is temporary
                             fragmentTransaction.commit();
-                        }
-
-
-                        else if (itemId == R.id.AdminEvents) { //  hard              // should take in a list of event and user
+                        } else if (itemId == R.id.AdminEvents) { //  hard              // should take in a list of event and user
                             //delte the events creators event easy // delete all users saved events if event in their saved event hard// delete event attendee list easy
                             //delete event notfications as well easy
                             // will also need to check if event is old then delete the event from the event owners old qr list
@@ -345,10 +317,8 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
                             fragmentTransaction.replace(R.id.framelayout, new AdminEventsFragment(adminGetAllEvents())); //explore is temp
                             fragmentTransaction.commit();
-                        }
-
-                        else if (itemId == R.id.AdminProfiles) { //the most easy casue we never delete a profile realisitcly just set everything to "" except the id
-                           getProfileList(new ProfileListCallback() {
+                        } else if (itemId == R.id.AdminProfiles) { //the most easy casue we never delete a profile realisitcly just set everything to "" except the id
+                            getProfileList(new ProfileListCallback() {
                                 @Override
                                 public void onProfileList(ArrayList<User> profileList) {
                                     // Create a new instance of AdminProfileFragment and pass the profileList to its constructor
@@ -361,10 +331,6 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                                 }
                             });
                         }
-
-
-
-
 
 
                         //implement elif fragment change for new menus made from elsewhere
@@ -392,10 +358,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         });
 
 
-
         // Add an event to the Explore ArrayList //add a user profile array list for user sign-up/check-in
 
     }
+
     //database messy but makes sense
     //we have multiple collections
     //one for user created saved and old events
@@ -405,7 +371,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         DocumentReference docRef = usersRef.document(deviceId);
         return docRef.get().continueWith(task -> {
             DocumentSnapshot doc = task.getResult();
-            User user = new User(deviceId,"","","","","", savedEvents,  createdEvents,  oldQRList,"on"); // Create empty user with device ID
+            User user = new User(deviceId, "", "", "", "", "", savedEvents, createdEvents, oldQRList, "on"); // Create empty user with device ID
             if (doc.exists()) {
                 // Map Firestore data to User object
                 user.setUserName((String) doc.getData().get("userName"));
@@ -430,7 +396,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 // we dont even need a databse collection for oldQR then
                 // remove all events from the list that have reached there limit
                 getOldQrList(deviceId);
-                 //below create events get data b/c creategetdata will add to the database
+                //below create events get data b/c creategetdata will add to the database
                 //oldQRList = user.getOldQRList();
                 //user.setOldQRList(oldQRList);
 
@@ -443,7 +409,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     }
 
 
-    private void getDataUser(User currentuser){
+    private void getDataUser(User currentuser) {
         DocumentReference docRef = usersRef.document(currentuser.getDeviceId());
 
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -478,7 +444,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         });
     }
 
-    private void getOldQrList(String id){
+    private void getOldQrList(String id) {
         final CollectionReference SavedeventsRef = db.collection("OldQrsList" + id);
 
         SavedeventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -489,7 +455,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 }
 
                 oldQRList.clear(); // Clear the old list
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
 //                    String eventId = doc.getId();
                     if (doc.exists()) {
                         String eventName = (String) doc.getData().get("eventName");
@@ -512,9 +478,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         // ... (add other event properties based on your Event class)
 
 
-
-
-                        oldQRList.add(new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist,qrlur,qrelur,owner,track));
+                        oldQRList.add(new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist, qrlur, qrelur, owner, track));
                     }// Assuming "karan" is a placeholder for organizer
                 }
 
@@ -524,10 +488,9 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     }
 
 
-    private void getDataSave(String id){
+    private void getDataSave(String id) {
         // create event notfications are only made there so no list needed b/c they will only update notfication list of event like attendeelist
         // this means saved data stores a notfication list
-
 
 
         final CollectionReference SavedeventsRef = db.collection("SavedEvents" + id);
@@ -540,7 +503,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 }
 
                 savedEvents.clear(); // Clear the old list
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
 //                    String eventId = doc.getId();
                     if (doc.exists()) {
                         String ExEid = (String) doc.getId();
@@ -577,7 +540,6 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         });
 
 
-
                     }// Assuming "karan" is a placeholder for organizer
                 }
 
@@ -585,8 +547,9 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
             }
         });
     }
-    private void getDataCreate(String id){
-         final CollectionReference createeventsRef = db.collection("CreateEvents" + id);
+
+    private void getDataCreate(String id) {
+        final CollectionReference createeventsRef = db.collection("CreateEvents" + id);
         final CollectionReference OldQreventsRef = db.collection("OldQrsList" + id);
 
         createeventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -598,7 +561,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
 
                 createdEvents.clear(); // Clear the old list
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
 //                    String eventId = doc.getId();
                     if (doc.exists()) {
                         String eventName = (String) doc.getData().get("eventName");
@@ -616,21 +579,18 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         //System.out.println("Image URL: " + eventImage);
                         // ... (add other event properties based on your Event class)
                         String qrelur = (String) doc.getData().get("signINQR");
-                        if(!isDateBeforeCurrentDate(eventDate)){
-                        createdEvents.add(new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist,qrlur,qrelur,owner,track));}
-                        else{//remove event from explore events fb do the same with saved events fb remove from created fb and add to oldqrfb
+                        if (!isDateBeforeCurrentDate(eventDate)) {
+                            createdEvents.add(new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist, qrlur, qrelur, owner, track));
+                        } else {//remove event from explore events fb do the same with saved events fb remove from created fb and add to oldqrfb
                             final CollectionReference AttendeListRef = db.collection("AttendeeList" + EventId);
                             createeventsRef.document(EventId).delete();
-                            for (User attende : attendelist){
+                            for (User attende : attendelist) {
                                 AttendeListRef.document(attende.getDeviceId()).delete();
                             }
                             attendelist = new ArrayList<User>();
-                            OldQreventsRef.document(EventId).set(new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist,qrlur,qrelur,owner,track));
+                            OldQreventsRef.document(EventId).set(new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist, qrlur, qrelur, owner, track));
 
                             // clear the attendee list
-
-
-
 
 
                         }
@@ -644,12 +604,11 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         });
     }
 
-    private void getDataExplore(String id){
+    private void getDataExplore(String id) {
         // when a event is old we save the attendees for next time so ateendes already signed up
 
 
-
-         final CollectionReference eventsRef = db.collection("ExploreEvents");
+        final CollectionReference eventsRef = db.collection("ExploreEvents");
 
         eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -659,7 +618,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 }
 
                 Explore.clear(); // Clear the old list
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
 //                   String eventId = doc.getId(); //I belive this is a has
 
                     String eventName = (String) doc.getData().get("eventName");
@@ -677,7 +636,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                     String track = (String) doc.getData().get("tracking");
                     //System.out.println("Image URL: " + eventImage);
                     // ... (add other event properties based on your Event class)
-                    Event test = new Event(EventId,eventName, eventLocation, eventDate,eventLimit, eventImage, Eventdes,attendelist,checkinlist,qrlur,qrelur,owner,track);
+                    Event test = new Event(EventId, eventName, eventLocation, eventDate, eventLimit, eventImage, Eventdes, attendelist, checkinlist, qrlur, qrelur, owner, track);
                     ArrayList<User> attendeliste = getAttendeList(EventId);
                     //if (EventId != test.getEventid()){
                     int lists = attendeliste.size();
@@ -689,8 +648,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             if (lists < limit) { //checks if event limit was reached
                                 if (!eventIdExists(savedEvents, createdEvents, EventId)) { // this checks if in saved or created
                                     Explore.add(test);
-                                }else{}
-                            }else{}
+                                } else {
+                                }
+                            } else {
+                            }
                         } else {
                             //remove event from explore events fb do the same with saved events fb remove from created fb and add to oldqrfb
                             eventsRef.document(EventId).delete();
@@ -711,10 +672,9 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
             }
         });
     }
-    private ArrayList<User> getAttendeList(String id){ //takes event id
+
+    private ArrayList<User> getAttendeList(String id) { //takes event id
         /// this should instead fetch the user from the users collection so attendee updates if the user changes images or whatever
-
-
 
 
         final CollectionReference AttendeListRef = db.collection("AttendeeList" + id); // maybe this still need we could get all device id from the collections documents
@@ -723,11 +683,11 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
-                    return ;
+                    return;
                 }
                 attendeeList.clear();
-               // savedEvents.clear(); // Clear the old list
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                // savedEvents.clear(); // Clear the old list
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
 //                    String eventId = doc.getId();
                     if (doc.exists()) {
                         String attendeeid = doc.getId();
@@ -740,7 +700,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                                 String UserName = (String) value.get("userName");
                                 String UserImage = (String) value.getData().get("userProfileImage");
                                 String checkin = (String) doc.getData().get("CheckInCount"); // the doc contains the count
-                                attendeeList.add(new User(UserName,UserImage,checkin));
+                                String userLongitude = (String) doc.getData().get("userLongitude");
+                                String userLatitude = (String) doc.getData().get("userLatitude");
+                                attendeeList.add(new User(UserName, UserImage, checkin, userLongitude, userLatitude));
+
 
                             }
                         });
@@ -751,6 +714,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         });
         return attendeeList;
     }
+
     public static boolean eventIdExists(ArrayList<Event> list1, ArrayList<Event> list2, String eventId) {
         // code is literally O(n+m) n & m are size of lists
         for (Event event : list1) {
@@ -767,6 +731,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
         return false;
     }
+
     public static boolean isDateBeforeCurrentDate(String dateString) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Calendar calendar = Calendar.getInstance();
@@ -776,23 +741,24 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
             Date date = simpleDateFormat.parse(dateString);
             return date.before(currentDate);
         } catch (ParseException e) {
-           // e.printStackTrace(); // Handle parsing exception appropriately
+            // e.printStackTrace(); // Handle parsing exception appropriately
             // You might want to return false here since parsing failed
             return false;
         }
     }
-    private void getNotifyList(String id){ //takes event id
+
+    private void getNotifyList(String id) { //takes event id
         final CollectionReference NotifyListRef = db.collection("Notify" + id);
 
         NotifyListRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
-                    return ;
+                    return;
                 }
 
                 // savedEvents.clear(); // Clear the old list
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
 //                    String eventId = doc.getId();
                     if (doc.exists()) {
                         String UserName = (String) doc.getData().get("note");
@@ -864,6 +830,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     public interface ProfileListCallback {
         void onProfileList(ArrayList<User> profileList);
     }
+
     private void getProfileList(final ProfileListCallback callback) {
         final ArrayList<User> profileList = new ArrayList<>();
         CollectionReference profileListRef = db.collection("users");
@@ -882,7 +849,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                                     String userPhoneNumber = (String) doc.getData().get("userPhoneNumber");
                                     String userEmail = (String) doc.getData().get("userEmail");
                                     //if(!userName.equals(" ") && !userProfileImage.equals(" ") && !userHomepage.equals(" ") && !userPhoneNumber.equals(" ")) {
-                                    if((!(myDeviceId.equals(deviceId) || ((Objects.equals(userName, "")) && (Objects.equals(userProfileImage, "")) && (Objects.equals(userPhoneNumber, ""))&& (Objects.equals(userHomepage, "") && (Objects.equals(userEmail, ""))))))){
+                                    if ((!(myDeviceId.equals(deviceId) || ((Objects.equals(userName, "")) && (Objects.equals(userProfileImage, "")) && (Objects.equals(userPhoneNumber, "")) && (Objects.equals(userHomepage, "") && (Objects.equals(userEmail, ""))))))) {
                                         profileList.add(new User(deviceId, userName, userProfileImage, userHomepage, userPhoneNumber, userEmail));
                                     }
                                 }
@@ -895,21 +862,19 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     }
 
 
-
-
     // Browse events
-    private ArrayList<Event> adminGetAllEvents(){
+    private ArrayList<Event> adminGetAllEvents() {
         ArrayList<Event> eventList = new ArrayList<>();
         final CollectionReference exploreEventRef = db.collection("ExploreEvents");
 
         exploreEventRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                if (error != null){
+                if (error != null) {
                     return;
                 }
-                for (QueryDocumentSnapshot doc :queryDocumentSnapshots){
-                    if(doc.exists()){
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    if (doc.exists()) {
                         String eventDate = (String) doc.getData().get("eventDate");
                         String eventDescription = (String) doc.getData().get("eventDesription");
                         String eventLimit = (String) doc.getData().get("eventLimit");
@@ -918,7 +883,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         String eventPoster = (String) doc.getData().get("eventPoster");
                         String eventID = (String) doc.getData().get("eventid");
                         String eventOwner = (String) doc.getData().get("owner");
-                        Event event = new Event(eventDate, eventDescription, eventLimit, eventLocation, eventName, eventPoster,eventID, eventOwner);
+                        Event event = new Event(eventDate, eventDescription, eventLimit, eventLocation, eventName, eventPoster, eventID, eventOwner);
                         eventList.add(event);
                     }
                 }
@@ -933,7 +898,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     // Constructor same for user and event image
     // Array<Event>
     // arraylist = allimagelist
-    private ArrayList<Event> adminGetAllImages(){
+    private ArrayList<Event> adminGetAllImages() {
         ArrayList<Event> imageAdminList = new ArrayList<>();
         // Get collection of ExploreEvents and Users
         final CollectionReference exploreEventRef = db.collection("ExploreEvents");
@@ -943,17 +908,17 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         exploreEventRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                if (error != null){
+                if (error != null) {
                     return;
                 }
 
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
-                    if(doc.exists()){
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    if (doc.exists()) {
                         String eventPoster = (String) doc.getData().get("eventPoster");
                         String eventID = (String) doc.getData().get("eventid");
-                        Event event = new Event(eventPoster, "",eventID);
+                        Event event = new Event(eventPoster, "", eventID);
 
-                        if( (!(Objects.equals(eventPoster,"") || Objects.equals(eventPoster,null)))){
+                        if ((!(Objects.equals(eventPoster, "") || Objects.equals(eventPoster, null)))) {
                             imageAdminList.add(event);
                         }
                     }
@@ -965,17 +930,17 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         usersRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                if(error != null){
+                if (error != null) {
                     return;
                 }
 
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
-                    if(doc.exists()){
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    if (doc.exists()) {
                         String userId = (String) doc.getData().get("deviceId");
                         String userImage = (String) doc.getData().get("userProfileImage");
-                        Event event = new Event(userImage,userId,"");
+                        Event event = new Event(userImage, userId, "");
 
-                        if( (!(Objects.equals(userImage,"") || Objects.equals(userImage,null)))) {
+                        if ((!(Objects.equals(userImage, "") || Objects.equals(userImage, null)))) {
                             imageAdminList.add(event);
                         }
                     }
@@ -983,9 +948,55 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
             }
         });
-        return  imageAdminList;
+        return imageAdminList;
     }
 
+    private void HeadsUpNotify(String id) {
+        final CollectionReference NotifyListRef = db.collection("Notify" + id);
+
+        NotifyListRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    return;
+                }
+
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case ADDED:
+                            Uri new_defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                            NotificationCompat.Builder new_builder = new NotificationCompat.Builder(getBaseContext(), "My Notification");
+                            new_builder.setContentTitle("New Report added!");
+                            new_builder.setContentText(dc.getDocument().getString("note"));
+                            new_builder.setSmallIcon(R.drawable.charliekimimage);
+                            new_builder.setSound(new_defaultSoundUri);
+                            new_builder.setAutoCancel(true);
+
+                            NotificationManagerCompat new_managerCompat = NotificationManagerCompat.from(getBaseContext());
+                            if (ActivityCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                return;
+                            }
+                            new_managerCompat.notify(1, new_builder.build());
+                            break;
+
+                    }
+                }
+
+
+
+            }
+        });
+
+
+
+    }
 
 
 

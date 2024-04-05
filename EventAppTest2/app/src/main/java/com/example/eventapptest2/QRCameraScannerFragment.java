@@ -1,8 +1,20 @@
 package com.example.eventapptest2;
 
+import static android.content.Context.LOCALE_SERVICE;
+import static android.content.Context.LOCATION_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -16,6 +28,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.location.LocationListenerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -36,7 +50,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,12 +61,20 @@ import java.util.concurrent.ExecutionException;
  */
 public class QRCameraScannerFragment extends Fragment {
     SurfaceView surfaceView;
+    LocationManager locationManager;
+    Location location;
     TextView QRcodevalue;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
+
+    double latitude;
+    double longitude;
+    private static final int REQUEST_ACCESS_FINE_LOCATION = 202;
+    private static final int REQUEST_ACCESS_COARSE_LOCATION = 203;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
     Button open_camera_button;
     String intentData;
+    String provider;
     MainActivity mActivityCallback;
     Button generate_qr_button;
     // TODO: Rename parameter arguments, choose names that match
@@ -65,19 +90,20 @@ public class QRCameraScannerFragment extends Fragment {
     boolean getdet;
     ArrayList<Event> explore;
 
-    public QRCameraScannerFragment(Event evnte, User param, FragmentManager fragi, BottomNavigationView bottomnavi,boolean getdete) {
+    public QRCameraScannerFragment(Event evnte, User param, FragmentManager fragi, BottomNavigationView bottomnavi, boolean getdete) {
         //needs user to add user to list
         user = param;
-        event =evnte;
-         frag = fragi;
-         bottomnav = bottomnavi;
-         getdet = getdete;
+        event = evnte;
+        frag = fragi;
+        bottomnav = bottomnavi;
+        getdet = getdete;
         // Required empty public constructor
     }
+
     public QRCameraScannerFragment(Event evnte, User param, FragmentManager fragi, BottomNavigationView bottomnavi, boolean getdete, ArrayList<Event> Explore) {
         //needs user to add user to list
         user = param;
-        event =evnte;
+        event = evnte;
         frag = fragi;
         bottomnav = bottomnavi;
         getdet = getdete;
@@ -111,34 +137,23 @@ public class QRCameraScannerFragment extends Fragment {
 
 
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_q_r_camera_scanner, container, false);
-        //open_camera_button = (Button) rootView.findViewById(R.id.open_camera_button);
-        surfaceView = (SurfaceView) rootView.findViewById(R.id.surfaceView);
-        mActivityCallback = (MainActivity)getActivity();
-        //generate_qr_button = (Button) rootView.findViewById(R.id.generate_qr_button);
-//        generate_qr_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                cameraSource.release();
-//                mActivityCallback.switchToGenerateQRFragment();
-//            }
-//        });
-
-
+        surfaceView = rootView.findViewById(R.id.surfaceView);
         initialiseDetectorsandSources();
-        // Inflate the layout for this fragment
         return rootView;
     }
-    private void initialiseDetectorsandSources(){
+
+    private void initialiseDetectorsandSources() {
         Toast.makeText(getActivity().getApplicationContext(), "Please scan your QR code", Toast.LENGTH_SHORT).show();
         barcodeDetector = new BarcodeDetector.Builder(getActivity().getApplicationContext())
                 .setBarcodeFormats(Barcode.ALL_FORMATS)
                 .build();
         cameraSource = new CameraSource.Builder(getActivity().getApplicationContext(), barcodeDetector)
-                .setRequestedPreviewSize(1920,1080)
+                .setRequestedPreviewSize(1920, 1080)
                 .setAutoFocusEnabled(true)
                 .build();
 
@@ -147,17 +162,16 @@ public class QRCameraScannerFragment extends Fragment {
             @Override
             public void surfaceCreated(@NonNull SurfaceHolder holder) {
 
-                try{
-                    if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+                try {
+                    if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                         cameraSource.start(surfaceView.getHolder());
 
-                    }
-                    else{
-                        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+                    } else {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
 
                     }
                 } catch (IOException e) {
-                    
+
                     throw new RuntimeException(e);
                 }
             }
@@ -182,78 +196,101 @@ public class QRCameraScannerFragment extends Fragment {
 
             public void receiveDetections(@NonNull Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
-                if (barcodes.size() != 0){
+                if (barcodes.size() != 0) {
                     surfaceView.post(new Runnable() {
+
                         @Override
                         public void run() {
 
-
-
-
-
-                            if(!getdet){
-                            //this is what happens after qr code scanned so like we can switch fragments here
-                            final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-                            DocumentReference docRef = db.collection("AttendeeList" + event.getEventid()).document(user.getDeviceId());
-
-                            // Get the document snapshot
-
-
-                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()) {
-                                            // Perform the count increment and update
-                                            // ...
-
-                                            // Cleanup after successful update
-                                            String intValueStr = document.getString("CheckInCount");
-                                            int intValue = Integer.parseInt(intValueStr);
-
-                                            // Increment the integer value by 1
-                                            intValue+= 1;
-                                            docRef.update("CheckInCount", String.valueOf(intValue));
-                                            //event.getAttendeList().clear();
-
-
-
-                                            cameraSource.stop();
-                                            cameraSource.release();
-                                            barcodeDetector.release();
-                                            //event.getAttendeList().notify();
-
-                                            FragmentTransaction fragmentTransaction = frag.beginTransaction();
-                                            //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
-                                            
-                                            //this isnt the actual exploreeventsdets its actualy savedeventdets
-                                            fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(event,frag,user,bottomnav)); 
-                                            fragmentTransaction.commit();
-
-
-                                            // Switch fragments
-                                            // ...
-                                        } else {
-                                            // Handle the case where the document doesn't exist
-                                        }
-                                    } else {
-                                        // Handle errors
+                            if (!getdet) {
+                                //request permission from user to get location
+                                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ACCESS_FINE_LOCATION);
+                                }
+                                //initialize locationManager
+                                locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+                                //get last known location via GPS. This way, it does not need to constantly update location.
+                                List<String> providers = locationManager.getProviders(true);
+                                Location bestLocation = null;
+                                for (String provider : providers) {
+                                    location = locationManager.getLastKnownLocation(provider);
+                                    if (location == null) {
+                                        continue;
+                                    }
+                                    if (bestLocation == null
+                                            || location.getAccuracy() < bestLocation.getAccuracy()) {
+                                        bestLocation = location;
                                     }
                                 }
+                                //fetch latitude and longitude
+                                latitude = bestLocation.getLatitude();
+                                longitude = bestLocation.getLongitude();
 
-                            });}
-                            else{// open
+                                //this is what happens after qr code scanned so like we can switch fragments here
+                                final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                                DocumentReference docRef = db.collection("AttendeeList" + event.getEventid()).document(user.getDeviceId());
+
+                                // Get the document snapshot
+
+
+                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                // Perform the count increment and update
+                                                // ...
+
+                                                // Cleanup after successful update
+                                                String intValueStr = document.getString("CheckInCount");
+                                                int intValue = Integer.parseInt(intValueStr);
+
+                                                // Increment the integer value by 1
+                                                intValue += 1;
+                                                docRef.update("CheckInCount", String.valueOf(intValue));
+                                                docRef.update("userLatitude", String.valueOf(latitude));
+                                                docRef.update("userLongitude", String.valueOf(longitude));
+
+                                                //event.getAttendeList().clear();
+
+
+                                                cameraSource.stop();
+                                                cameraSource.release();
+                                                barcodeDetector.release();
+                                                //event.getAttendeList().notify();
+
+                                                FragmentTransaction fragmentTransaction = frag.beginTransaction();
+                                                //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
+
+                                                //this isnt the actual exploreeventsdets its actualy savedeventdets
+                                                fragmentTransaction.replace(R.id.framelayout, new ExploreEventDetsFragment(event, frag, user, bottomnav));
+                                                fragmentTransaction.commit();
+
+
+                                                // Switch fragments
+                                                // ...
+                                            } else {
+                                                // Handle the case where the document doesn't exist
+                                            }
+                                        } else {
+                                            // Handle errors
+                                        }
+                                    }
+
+                                });
+                            } else {// open
+
                                 ArrayList<Event> saveevent = new ArrayList<>();
                                 intentData = barcodes.valueAt(0).displayValue; // this should store event id
-                                for(Event event: explore){
-                                    if (event.getEventid().equals(intentData)){
+                                for (Event event : explore) {
+                                    if (event.getEventid().equals(intentData)) {
                                         saveevent.add(event);
                                     }
 
                                 }
-                                if(saveevent.isEmpty()){
+                                if (saveevent.isEmpty()) {
                                     cameraSource.stop();
                                     cameraSource.release();
                                     barcodeDetector.release();
@@ -261,30 +298,25 @@ public class QRCameraScannerFragment extends Fragment {
                                     //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
 
                                     //this isnt the actual exploreeventsdets its actualy savedeventdets
-                                    fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(user,frag,bottomnav,explore));
+                                    fragmentTransaction.replace(R.id.framelayout, new UserProfileFragment(user, frag, bottomnav, explore));
                                     fragmentTransaction.commit();
-
 
 
                                     Toast.makeText(getActivity().getApplicationContext(), "Event is Full, Expired,you already signed-Up, or You own the event", Toast.LENGTH_LONG).show();
 
                                     //print message
-                                }
-                                else{
+                                } else {
                                     cameraSource.stop();
                                     cameraSource.release();
                                     barcodeDetector.release();
                                     //event.getAttendeList().notify();
 
 
-
-
-
                                     FragmentTransaction fragmentTransaction = frag.beginTransaction();
                                     //System.out.println("testtttttttttt " + testuser.getCreatedEvents());
 
                                     //this isnt the actual exploreeventsdets its actualy savedeventdets
-                                    fragmentTransaction.replace(R.id.framelayout, new ACTUALExploreEventDetsFragment(saveevent.get(0),frag,user.getDeviceId(),user,bottomnav,explore));
+                                    fragmentTransaction.replace(R.id.framelayout, new ACTUALExploreEventDetsFragment(saveevent.get(0), frag, user.getDeviceId(), user, bottomnav, explore));
                                     fragmentTransaction.commit();
 
 
@@ -294,12 +326,8 @@ public class QRCameraScannerFragment extends Fragment {
                             }
 
 
-
 //                            cameraSource.stop();
 //                            cameraSource.release();
-
-
-
 
 
                         }
@@ -310,13 +338,16 @@ public class QRCameraScannerFragment extends Fragment {
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         cameraSource.release();
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         initialiseDetectorsandSources();
     }
+
 }
+
