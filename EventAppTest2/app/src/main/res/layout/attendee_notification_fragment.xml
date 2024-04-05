@@ -31,16 +31,5 @@
             app:layout_constraintStart_toEndOf="@+id/attendee_event_icon"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/attendee_notification_time"
-            android:layout_width="84dp"
-            android:layout_height="62dp"
-            android:gravity="center_vertical"
-            android:text="Time"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/attendee_event_notify"
-            app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

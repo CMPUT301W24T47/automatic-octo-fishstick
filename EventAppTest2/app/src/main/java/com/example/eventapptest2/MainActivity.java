@@ -518,7 +518,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         // create event notfications are only made there so no list needed b/c they will only update notfication list of event like attendeelist
         // this means saved data stores a notfication list
 
-        HeadsUpNotify(id);
+       // HeadsUpNotify(id);
         final CollectionReference SavedeventsRef = db.collection("SavedEvents" + id);
         HeadsUpNotify(id);
         SavedeventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -990,7 +990,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
                     if(dc.getType() == DocumentChange.Type.ADDED) {
+
                             Toast.makeText(MainActivity.this, dc.getDocument().getString("note"), Toast.LENGTH_SHORT).show();
+
+
                             Uri new_defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                             NotificationCompat.Builder new_builder = new NotificationCompat.Builder(MainActivity.this, "My Notification");
                             new_builder.setContentTitle("New Report added!");

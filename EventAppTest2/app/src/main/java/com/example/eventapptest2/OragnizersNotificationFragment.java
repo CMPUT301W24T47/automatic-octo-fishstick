@@ -50,7 +50,10 @@ public class OragnizersNotificationFragment extends Fragment {
                 Map<String, Object> note = new HashMap<>();
                 note.put("note", detname.getText().toString());
 
+
+
                 notifys.add(note);
+
                 detname.setText("");
 
             }
