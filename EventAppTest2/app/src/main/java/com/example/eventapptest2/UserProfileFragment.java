@@ -223,6 +223,13 @@ public class UserProfileFragment extends Fragment{
 
                     usersRef.document(user.getDeviceId()).set(user);
 
+
+
+                    Drawable originalPic = profilePic.getDrawable();
+                    if(user.getUserProfileImage() == "" || user.getUserProfileImage() == null){
+
+                        generateImage(originalPic);}
+
                 }
             }
     );
