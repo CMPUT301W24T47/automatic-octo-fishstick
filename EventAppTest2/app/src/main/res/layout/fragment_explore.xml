@@ -91,7 +91,7 @@
                 android:drawableEnd="@drawable/ic_buttonarrow"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
-                android:text="Detials"
+                android:text="Details"
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
