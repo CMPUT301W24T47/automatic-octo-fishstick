@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,8 +14,7 @@
             android:layout_width="194dp"
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="152dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/roundedbuttonstyle"
             android:backgroundTint="@color/purple"
             android:drawableEnd="@drawable/ic_buttonarrow"
@@ -23,12 +22,10 @@
             android:text="Sign up"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ProfilePic_EventQR"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@+id/ShareIconQR" />
 
         <ImageView
             android:id="@+id/EventImageQR"
@@ -78,7 +75,7 @@
             android:id="@+id/CalenderDateQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:paddingLeft="10dp"
             android:text="Day/Month/Year"
             android:textStyle="bold"
@@ -86,18 +83,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/EventDateIconQR"
             app:layout_constraintTop_toBottomOf="@+id/EventDetailSubNameQR" />
-
-        <TextView
-            android:id="@+id/DayTimeDateQR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:paddingLeft="10dp"
-            android:text="Day, Time"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/EventDateIconQR"
-            app:layout_constraintTop_toBottomOf="@+id/CalenderDateQR" />
 
         <ImageView
             android:id="@+id/EventLocationIconQR"
@@ -115,30 +100,19 @@
             android:id="@+id/LocationNameQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="36dp"
             android:paddingLeft="10dp"
             android:text="Location Name"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/EventDateIconQR"
-            app:layout_constraintTop_toBottomOf="@+id/DayTimeDateQR" />
-
-        <TextView
-            android:id="@+id/EventAddressQR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:paddingLeft="10dp"
-            android:text="Address"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/EventLocationIconQR"
-            app:layout_constraintTop_toBottomOf="@+id/LocationNameQR" />
+            app:layout_constraintTop_toBottomOf="@+id/CalenderDateQR" />
 
         <ImageView
             android:id="@+id/ShareIconQR"
             android:layout_width="wrap_content"
+            android:layout_marginHorizontal="5dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
@@ -152,14 +126,16 @@
             android:id="@+id/EventShareQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="35dp"
             android:paddingLeft="10dp"
             android:text="Share Event"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/QRSignUpQR"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/ShareIconQR"
-            app:layout_constraintTop_toBottomOf="@+id/EventAddressQR" />
+            app:layout_constraintTop_toBottomOf="@+id/LocationNameQR" />
 
         <TextView
             android:id="@+id/AboutEventQR"
@@ -173,57 +149,22 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/QRSignUpQR" />
-
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginRight="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/AboutEventQR"
+            >
         <TextView
             android:id="@+id/EventDescriptionQR"
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_height="27dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="5dp"
             android:text="Description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.029"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/AboutEventQR" />
-
-        <ImageView
-            android:id="@+id/ProfilePic_EventQR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ShareIconQR"
-            app:srcCompat="@drawable/circleprofilepic" />
-
-        <TextView
-            android:id="@+id/UsernameTextQR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="44dp"
-            android:text="Charlie Kim"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/ProfilePic_EventQR"
-            app:layout_constraintTop_toBottomOf="@+id/EventShareQR" />
-
-        <TextView
-            android:id="@+id/UserTypeQR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="10dp"
-            android:text="Attendee"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/ProfilePic_EventQR"
-            app:layout_constraintTop_toBottomOf="@+id/UsernameTextQR" />
-
+             />
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

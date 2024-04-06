@@ -62,11 +62,10 @@
                         android:id="@+id/textOnImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20dp"
+                        android:layout_centerInParent="true"
                         android:maxLength="4"
                         android:textColor="@color/black"
-                        android:layout_centerInParent="true"
-                        />
+                        android:textSize="20dp" />
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
@@ -156,35 +155,35 @@
 
         <!-- Edit buttons for each field -->
 
-        <EditText
+        <TextView
             android:id="@+id/homepageEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:hint="Type YourHomepage"
+            android:textSize="64px"
             app:layout_constraintBottom_toTopOf="@+id/emailEditText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
+        <TextView
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:hint="Type Your Email"
+            android:textSize="64px"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.251" />
 
-        <EditText
+        <TextView
             android:id="@+id/phoneEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:hint="Type Your Phone Number"
+            android:textSize="64px"
             android:inputType="number"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -195,8 +194,8 @@
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/UsergeolocationSwitch"
-            android:layout_width="380dp"
-            android:layout_height="45dp"
+            android:layout_width="364dp"
+            android:layout_height="38dp"
             android:layout_margin="16dp"
             android:layout_marginTop="16dp"
             android:text="Enable Geolocation Tracking"
@@ -261,6 +260,35 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/UsergeolocationSwitch" />
+
+        <Button
+            android:id="@+id/admin_open_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="64dp"
+            android:backgroundTint="#f96161"
+            android:text="Admin Open"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/QRbutton"
+            app:layout_constraintHorizontal_bias="0.474"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/UsergeolocationSwitch"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/QRbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="56dp"
+            android:layout_marginBottom="64dp"
+            android:text="Scan Details"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/UsergeolocationSwitch"
+            app:layout_constraintVertical_bias="0.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

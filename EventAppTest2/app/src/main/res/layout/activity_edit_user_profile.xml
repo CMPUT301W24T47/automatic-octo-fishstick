@@ -20,8 +20,8 @@
         android:layout_height="671dp">
 
         <LinearLayout
-            android:layout_width="413dp"
-            android:layout_height="597dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -126,25 +126,27 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/back_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Back" />
+                android:layout_height="131dp"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="20dp">
 
                 <Button
                     android:id="@+id/button_verify"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:backgroundTint="#63C5DA"
                     android:text="Verify" />
+
+                <Button
+                    android:id="@+id/back_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#B90E0A"
+                    android:text="Back" />
             </LinearLayout>
 
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

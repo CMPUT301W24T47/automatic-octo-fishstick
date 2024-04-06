@@ -66,7 +66,7 @@
                 android:id="@+id/ExploreEventlocatione"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="ssssssssssssssss"
+
                 android:textSize="9sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/ExploreEventDatee"
@@ -78,11 +78,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="76dp"
-                android:hint="ssssssssssssssss"
                 android:textSize="9sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+
+            <EditText
+                android:id="@+id/newdate"
+                android:hint="Day/Month/Year"
+                android:inputType="date"
+                android:layout_width="192dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="9dp"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/ExploreEventDetialsButtone" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/ExploreEventDetialsButtone"
@@ -93,7 +106,7 @@
                 android:drawableEnd="@drawable/ic_buttonarrow"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
-                android:text="Detials"
+                android:text="ReNew"
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

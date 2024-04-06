@@ -54,7 +54,7 @@ public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEven
         holder.Eventdate.setText(events.get(position).getEventDate());
         holder.Eventlocation.setText(events.get(position).getEventLocation());
         //String imageUrl = "https://firebasestorage.googleapis.com/v0/b/charlie-kim-fans.appspot.com/o/event_images%2F7aa31d9e-1539-49f9-bc21-4ec823cdbfdb?alt=media&token=7afc1c14-11f4-48c7-8ab1-99ee1e96eaa4";
-        Picasso.get().load(events.get(position).getEventPoster()).into(holder.Imageing);
+        //Picasso.get().load(events.get(position).getEventPoster()).into(holder.Imageing);
         String imageUrl = events.get(position).getEventPoster();
         System.out.println("Image URL: " + imageUrl);
         Glide.with(holder.itemView.getContext())
@@ -71,7 +71,7 @@ public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEven
 
                 //inte = position;
                 inte.setLastsaved(position);
-                fragmentTransaction.replace(R.id.framelayout, new OrganizeEventDetsFragment(events.get(position))); //explore is temp -----------------------------change
+                fragmentTransaction.replace(R.id.framelayout, new OrganizeEventDetsFragment(events.get(position),inte)); //explore is temp -----------------------------change
 
 
                 fragmentTransaction.commit();

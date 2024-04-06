@@ -1,6 +1,8 @@
 package com.example.eventapptest2;
 
+import android.content.Intent;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
 
@@ -44,16 +48,87 @@ public class ExploreEventDetsFragment extends Fragment {
         detdate.setText(event.getEventDate());
         detloc.setText(event.getEventLocation());
         detdesc.setText(event.getEventDesription());
-        Picasso.get().load(event.getEventPoster()).into(detimage);
-
+        //Picasso.get().load(event.getEventPoster()).into(detimage);
+        Glide.with(v.getContext())
+                .load(event.getEventPoster())
+                .into(detimage);
         //set the share button make it functional
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(event.getTracking() instanceof String) {
+                    if (user.getTracking() instanceof String) {
 
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.framelayout,new QRCameraScannerFragment(event,user,fragmentManager,bottomnavi));
-                fragmentTransaction.commit();
+                        if (event.getTracking().equals("on")) {
+                            if (user.getTracking().equals("on")) {
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.framelayout, new QRCameraScannerFragment(event, user, fragmentManager, bottomnavi,false));
+                                fragmentTransaction.commit();
+
+
+
+                            }
+                            else{
+                                //toast
+                                Toast.makeText(getActivity().getApplicationContext(), "Event Requires Geolocation ON", Toast.LENGTH_SHORT).show();
+
+                            }
+
+
+                        }else{
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.framelayout, new QRCameraScannerFragment(event, user, fragmentManager, bottomnavi,false));
+                            fragmentTransaction.commit();
+
+                        }
+
+
+                    }else{
+                        Toast.makeText(getActivity().getApplicationContext(), "Event Requires Geolocation ON", Toast.LENGTH_SHORT).show();
+
+
+                    }
+
+
+                }else{
+                    Toast.makeText(getActivity().getApplicationContext(), "Event Requires Geolocation ON", Toast.LENGTH_SHORT).show();
+                    
+                }
+
+            }
+        });
+
+
+
+
+        ImageView postersharebut = v.findViewById(R.id.ShareIconUp);
+
+        postersharebut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent shareIntent = new Intent();
+//                shareIntent.setAction(Intent.ACTION_SEND);
+//// Example: content://com.google.android.apps.photos.contentprovider/...
+//                shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(event.getSignINQR()));
+//                shareIntent.setType("image/jpeg");
+//                startActivity(Intent.createChooser(shareIntent, null));
+
+
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, event.getQrUrl());
+
+// (Optional) Here you're setting the title of the content
+                sendIntent.putExtra(Intent.EXTRA_TITLE, "Introducing content previews");
+
+// (Optional) Here you're passing a content URI to an image to be displayed
+                sendIntent.setData(Uri.parse(event.getQrUrl()));
+                sendIntent.setType("image/jpeg");
+                sendIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+// Show the Sharesheet
+                startActivity(Intent.createChooser(sendIntent, null));
+
+
 
             }
         });

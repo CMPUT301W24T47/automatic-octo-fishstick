@@ -86,9 +86,12 @@ import static android.app.Activity.RESULT_OK;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -110,15 +113,21 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 
@@ -135,20 +144,27 @@ public class UserProfileFragment extends Fragment{
     private User user;
     private Button editProfileButton;
     private TextView userNameTextView;
-    private EditText userHomePageTextView;
-    private EditText userEmailTextView;
-    private EditText userPhoneNumTextView;
+    private TextView userHomePageTextView;
+    private TextView userEmailTextView;
+    private TextView userPhoneNumTextView;
     // Geolocation switch
-    private Switch geolocation;
+    private SwitchCompat geolocation;
+
+    private static FragmentManager frag;
+    private BottomNavigationView bottomnav;
+    private ArrayList<Event> explore;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     // CollectionReference will store the collection of Users
     //  - Which then each user will store different information
     private final CollectionReference usersRef = db.collection("users");
 //    private User user;
-    public UserProfileFragment(User useri) {
+    public UserProfileFragment(User useri,FragmentManager freg,BottomNavigationView bottomNavigationview,ArrayList<Event> exploree) {
         // Required empty public constructor
         user = useri;
+        frag = freg;
+        bottomnav = bottomNavigationview;
+        explore =exploree;
 
     }
 
@@ -207,6 +223,13 @@ public class UserProfileFragment extends Fragment{
 
                     usersRef.document(user.getDeviceId()).set(user);
 
+
+
+                    Drawable originalPic = profilePic.getDrawable();
+                    if(user.getUserProfileImage() == "" || user.getUserProfileImage() == null){
+
+                        generateImage(originalPic);}
+
                 }
             }
     );
@@ -225,7 +248,96 @@ public class UserProfileFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+
+
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        Button scanbut = v.findViewById(R.id.QRbutton);
+
+        scanbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = frag.beginTransaction();   //explore.get(0)     //will never be used from this side of code but is here for constructer
+                fragmentTransaction.replace(R.id.framelayout, new QRCameraScannerFragment(explore.get(0), user, frag, bottomnav,true,explore));
+                fragmentTransaction.commit();
+
+
+            }
+        });
+
+
+
+        geolocation = v.findViewById(R.id.UsergeolocationSwitch);
+
+
+        if (user.getTracking() instanceof String){
+        if (user.getTracking().equals("on")){
+            geolocation.setChecked(true);
+        }
+        }
+
+
+
+        geolocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (geolocation.isChecked()){
+                    user.setTracking("on");
+                    usersRef.document(user.getDeviceId()).set(user);
+                }
+                else {user.setTracking("off");
+                    usersRef.document(user.getDeviceId()).set(user);}
+            }
+        });
+
+
+        ArrayList<String> admin_ids = new ArrayList<>();
+        admin_ids.add("fae6f715c0a59b56"); //karans at home phone
+        admin_ids.add("8243d40d7a24172b");
+        admin_ids.add("f329161d009f1ec4");
+        admin_ids.add("a612c205fded3836");
+
+
+
+        if( admin_ids.contains(user.getDeviceId()) ){
+            Button adminbut = v.findViewById(R.id.admin_open_button);
+
+            adminbut.setVisibility(View.VISIBLE);
+            adminbut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (bottomnav != null) {
+                        bottomnav.getMenu().clear();
+                        bottomnav.inflateMenu(R.menu.admin_nav_menu);
+                        v.postDelayed(() -> bottomnav.setSelectedItemId(R.id.AdminProfiles), 100);
+                    }
+
+
+
+                }
+            });
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -244,18 +356,18 @@ public class UserProfileFragment extends Fragment{
 
         Drawable originalPic = profilePic.getDrawable();
 
-        Picasso.get().load(user.getUserProfileImage()).into(profilePic);
+        //Picasso.get().load(user.getUserProfileImage()).into(profilePic);
         String imageUrl = user.getUserProfileImage();
         /////////might wanna delete picasso or glide casue it redundant to display twice
 
         // display image url
-        System.out.println("Image URL: " + imageUrl);
-        Glide.with(profilePic.getContext())
-                .load(imageUrl)
-                .into(profilePic);
-        if(user.getUserProfileImage() != ""){
+        //System.out.println("Image URL: " + imageUrl);
 
-            generateImage(originalPic);}
+        if(user.getUserProfileImage() == "" || user.getUserProfileImage() == null){
+
+            generateImage(originalPic);}else{ Glide.with(profilePic.getContext())
+                .load(imageUrl)
+                .into(profilePic);}
 //        usersRef.document(user.getUserName()).set(user);
 //
 
@@ -266,7 +378,7 @@ public class UserProfileFragment extends Fragment{
             builder.setCancelable(false);
 
             builder.setPositiveButton("Yes", (dialog, which)-> {
-                    user.setUserProfileImage(null);
+                    user.setUserProfileImage("");
 //                  user.setUserProfileImage(originalPic.toString());
 //                    profilePic.setImageDrawable(originalPic);
                 //needed to delete image
@@ -335,10 +447,10 @@ public class UserProfileFragment extends Fragment{
 //            String userPhoneNum = userPhoneNumTextView.getText().toString();
             // Carry the current information of the user and show it on the EdutUserProfile Activity
             Intent intent = new Intent(getActivity(), EditUserProfileActivity.class);
-            intent.putExtra("userName", userName);
-            intent.putExtra("homepage", userHomepage);
-            intent.putExtra("email", userEmail);
-            intent.putExtra("phoneNum", userPhoneNum);
+            intent.putExtra("userName", user.getUserName());
+            intent.putExtra("homepage", user.getUserHomepage());
+            intent.putExtra("email", user.getUserEmail());
+            intent.putExtra("phoneNum", user.getUserPhoneNumber());
 
 
             editProfileLauncher.launch(intent);
@@ -348,21 +460,56 @@ public class UserProfileFragment extends Fragment{
     }
 
     public void generateImage(Drawable originalPic){
-        if((user.getUserName() != null) && (user.getUserProfileImage()==null) || (user.getUserProfileImage() != "")){
+        if((user.getUserName() != null) && (user.getUserProfileImage()==null) || (user.getUserProfileImage() == "")){
             textOnProfilePic.setText(user.getUserName());
             profilePic.setVisibility(View.INVISIBLE);
         }
-        if((user.getUserName() == null) && (user.getUserProfileImage()==null)){
+        if((user.getUserName() == null) && (user.getUserProfileImage()==null) || (user.getUserProfileImage() == "")){
             profilePic.setImageDrawable(originalPic);
+        }
+
+        if ((user.getUserName() != null) && (user.getUserProfileImage() == null || user.getUserProfileImage().isEmpty())) {
+            textOnProfilePic.setText(user.getUserName());
+
+            profilePic.setVisibility(View.VISIBLE);
+
+            // Get the context from the fragment
+            Context context = getContext();
+            if (context != null) {
+                SharedPreferences sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                int color;
+                if (sharedPreferences.contains("backgroundColor")) {
+                    // Retrieve the color from shared preferences if it has been set before
+                    color = sharedPreferences.getInt("backgroundColor", 0);
+                } else {
+                    // Generate a new color if it has not been set before
+                    Random rnd = new Random();
+                    color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                    // Save the color to shared preferences
+                    sharedPreferences.edit().putInt("backgroundColor", color).apply();
+                }
+                profilePic.setBackgroundColor(color);
+            }
         }
 
     }
 
 
     public void setImageDel(Drawable originalPic){
+        //either delete the image on firestore so everything in app "updates" with the image deleted
+        // on text edits and profile image edits we need to update these db collections:
+        // for eventid in savedevents of current user:
+        // attendeelist = firbase collection AttendeeList + eventid
+        //attendeelist.document(userid).set(current user)
+        // we can just move the generate image code to the attendeeList so we aint gotta figure out how to make it a URL
+        //also to make life easier since we have a "attendee" User from the class lets add a field for checkin count str ofc
+        //check in count updated on a sucsseful scan
+
         profilePic.setVisibility(View.INVISIBLE);
         textOnProfilePic.setText(user.getUserName());
         profilePic.setImageDrawable(originalPic);
+        user.setUserProfileImage(null); // alway make it null when deleting images its just easir that way
+        usersRef.document(user.getDeviceId()).set(user);
 
     }
 

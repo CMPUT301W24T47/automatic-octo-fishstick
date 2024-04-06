@@ -9,45 +9,90 @@ public class User implements Serializable {
     String userHomepage;
     String userEmail;
     String userPhoneNumber;
-    String userProfileString;
+    String userProfileImage;
     ArrayList<Event> savedEvents;
     ArrayList<Event> createdEvents;
     ArrayList<Event> oldQRList;
 
 
 
+    String CheckInCount;
+
     String DeviceId; // wont have a setter b/c should only every be init at start of code
+
+    String userLongitude;
+    String userLatitude;
+
+    String tracking;
 
 
 
     int lastsaved; // goes in databse but should never be accesed through db //it will always be set first in code b4 we get it
 
-    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, String userProfileString, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList) {
+    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, String userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList,String track) {
         this.DeviceId = deviceId;
         this.userName = userName;
         this.userHomepage = userHomepage;
         this.userEmail = userEmail;
         this.userPhoneNumber = userPhoneNumber;
-        this.userProfileString = userProfileString;
+        this.userProfileImage = userProfileImage;
         this.savedEvents = savedEvents;
         this.createdEvents = createdEvents;
         this.oldQRList = oldQRList;
         this.lastsaved = 0;
+        this.tracking = track;
     }
-    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, String userProfileString, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList,int pos) {
+    public User(String deviceId,String userName, String userHomepage, String userEmail, String userPhoneNumber, String userProfileImage, ArrayList<Event> savedEvents, ArrayList<Event> createdEvents, ArrayList<Event> oldQRList,int pos,String track) {
         this.DeviceId = deviceId;
         this.userName = userName;
         this.userHomepage = userHomepage;
         this.userEmail = userEmail;
         this.userPhoneNumber = userPhoneNumber;
-        this.userProfileString = userProfileString;
+        this.userProfileImage = userProfileImage;
         this.savedEvents = savedEvents;
         this.createdEvents = createdEvents;
         this.oldQRList = oldQRList;
         this.lastsaved = pos;
+        this.tracking = track;
+
+    }
+    public User(String deviceId,String deviceIds,String AttendeeName,String AttendeeImage, String CheckInCount, String userLongitude, String userLatitude) {
+        this.DeviceId = deviceId;
+        this.userName = AttendeeName;
+        this.userProfileImage = AttendeeImage;
+        this.CheckInCount = CheckInCount;
+        this.userLongitude = userLongitude;
+        this.userLatitude = userLatitude;
     }
     public User() {
 
+    }
+
+    public String getUserLongitude() {
+        return userLongitude;
+    }
+
+    public String getUserLatitude() {
+        return userLatitude;
+    }
+    // Constructor for Admin user profile
+    public User(String deviceId,String userName, String userImage, String userHomepage, String userEmail, String userPhoneNumber) {
+        this.DeviceId = deviceId;
+        this.userName = userName;
+        this.userProfileImage = userImage;
+        this.userHomepage = userHomepage;
+        this.userEmail = userEmail;
+        this.userPhoneNumber = userPhoneNumber;
+
+    }
+
+
+    public String getTracking() {
+        return tracking;
+    }
+
+    public void setTracking(String tracking) {
+        this.tracking = tracking;
     }
     public void setUserName(String userName) {
         this.userName = userName;
@@ -81,11 +126,11 @@ public class User implements Serializable {
     }
 
 
-    public void setUserProfileImage(String userProfileString) {
-        this.userProfileString = userProfileString;
+    public void setUserProfileImage(String userProfileImage) {
+        this.userProfileImage = userProfileImage;
     }
     public String getUserProfileImage() {
-        return userProfileString;
+        return userProfileImage;
     }
 
 
@@ -117,5 +162,12 @@ public class User implements Serializable {
 
     public void setLastsaved(int lastsaved) {
         this.lastsaved = lastsaved;
+    }
+    public String getCheckInCount() {
+        return CheckInCount;
+    }
+
+    public void setCheckInCount(String checkInCount) {
+        CheckInCount = checkInCount;
     }
 }

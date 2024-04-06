@@ -34,10 +34,20 @@ public class Event {
     ArrayList<User> attendeList;
     ArrayList<User> checkedinList;
 
+
+    String owner;
+
+
+
+    String tracking;
+
     // QR signIn;
     // QR posterQR;
 
-    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventLimit, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss ) {
+    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventLimit, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss,String id,String track ) {
+        //will need to add a notfications list
+        //each event hashed by event id
+        // id+attendee id+checkin id id+notfic
         this.Eventid = eventid;
         this.eventName = eventName;
         this.eventLocation = eventLocation;
@@ -49,8 +59,11 @@ public class Event {
         this.checkedinList = checkedinlist;
         this.QrUrl = qrUrl;
         this.signINQR =ss;
+        this.owner = id;
+        this.tracking = track;
     }
-    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss ) {
+    public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss,String id,String track) {
+        //remove the two users list from this and make this constructer "attendee event" this is meant for sign-up, so it will not a notfication list but has no care for other attendees
         this.Eventid = eventid;
         this.eventName = eventName;
         this.eventLocation = eventLocation;
@@ -62,6 +75,8 @@ public class Event {
         this.checkedinList = checkedinlist;
         this.QrUrl = qrUrl;
         this.signINQR =ss;
+        this.owner = id;
+        this.tracking = track;
 
     }
 
@@ -74,6 +89,37 @@ public class Event {
         this.EventDesription = "EventDesription";
         this.QrUrl = "qrUrl";
         this.signINQR ="ss";
+        this.owner = "0";
+    }
+
+    // Constructor for admin view all events
+    public Event(String eventDate, String eventDescription, String eventLimit, String eventLocation, String eventName, String eventPoster, String eventID, String eventOwner) {
+        this.eventDate = eventDate;
+        this.EventDesription = eventDescription;
+        this.eventLimit = eventLimit;
+        this.eventLocation = eventLocation;
+        this.eventName = eventName;
+        this.eventPoster = eventPoster;
+        this.Eventid = eventID;
+        this.owner = eventOwner;
+    }
+
+    // New constructor that for view all images
+    // Constructor is for images only (Admin)
+    public Event(String eventPoster, String ownerID, String eventId) {
+
+        this.eventPoster = eventPoster;
+        this.owner = ownerID; // User
+        this.Eventid = eventId; // us
+
+    }
+
+    public String getTracking() {
+        return tracking;
+    }
+
+    public void setTracking(String tracking) {
+        this.tracking = tracking;
     }
     public String getEventName() {
         return eventName;
@@ -158,19 +204,14 @@ public class Event {
     public void setSignINQR(String signINQR) {
         this.signINQR = signINQR;
     }
-
-    public Map<String, Object> toMap() {
-        Map<String, Object> eventData = new HashMap<>();
-        eventData.put("eventId", Eventid);
-        eventData.put("eventName", eventName);
-        eventData.put("eventLocation", eventLocation);
-        eventData.put("eventDate", eventDate);
-        eventData.put("eventLimit", eventLimit);
-        eventData.put("eventDescription", EventDesription);
-        eventData.put("eventStringURL",eventPoster);
-        eventData.put("attendeeList",attendeList);
-        eventData.put("Checkin-list",checkedinList);
-        return eventData;
+    public String getOwner() {
+        return owner;
     }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+
 }
 
