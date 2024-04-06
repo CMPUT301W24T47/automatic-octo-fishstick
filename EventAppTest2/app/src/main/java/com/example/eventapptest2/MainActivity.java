@@ -675,7 +675,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         // Handle the case where eventLimit is not a valid integer
                         // For now, you might just want to skip the if-else block
                         // You can add logging or any other action as needed
-                        if (!eventIdExists(savedEvents, createdEvents, EventId)) { // this checks if in saved or created
+                        if ((!eventIdExists(savedEvents, createdEvents, EventId))&&(!isDateBeforeCurrentDate(eventDate))) { // this checks if in saved or created
                             Explore.add(test);
                         }
                     }
