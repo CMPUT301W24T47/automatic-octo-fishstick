@@ -583,7 +583,9 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         String eventDate = (String) doc.getData().get("eventDate");
                         String EventId = (String) doc.getData().get("eventid");
                         String Eventdes = (String) doc.getData().get("eventDesription");
-                        ArrayList<User> attendelist = getAttendeList(EventId);
+                        ArrayList<User> attendelist = new ArrayList<>();
+                        attendelist.clear();
+                        attendelist = getAttendeList(EventId);
                         ArrayList<User> checkinlist = (ArrayList<User>) doc.getData().get("Checkin-list"); //not needed anymore
                         String eventImage = (String) doc.getData().get("eventPoster");
                         String qrlur = (String) doc.getData().get("qrUrl");
@@ -712,12 +714,26 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
+
+                                String attendeeDID = (String) value.get("deviceId");
+
                                 String UserName = (String) value.get("userName");
                                 String UserImage = (String) value.getData().get("userProfileImage");
                                 String checkin = (String) doc.getData().get("CheckInCount"); // the doc contains the count
                                 String userLongitude = (String) doc.getData().get("userLongitude");
                                 String userLatitude = (String) doc.getData().get("userLatitude");
-                                attendeeList.add(new User(UserName, UserImage, checkin, userLongitude, userLatitude));
+                                for(User attend: attendeeList){
+                                    if(attend.getDeviceId().equals(attendeeDID)){
+                                        attendeeList.remove(attend);
+
+                                    }
+
+
+                                }
+
+
+
+                                attendeeList.add(new User(attendeeDID,attendeeDID,UserName, UserImage, checkin, userLongitude, userLatitude));
 
 
                             }
@@ -899,6 +915,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         String eventID = (String) doc.getData().get("eventid");
                         String eventOwner = (String) doc.getData().get("owner");
                         Event event = new Event(eventDate, eventDescription, eventLimit, eventLocation, eventName, eventPoster, eventID, eventOwner);
+
                         eventList.add(event);
                     }
                 }

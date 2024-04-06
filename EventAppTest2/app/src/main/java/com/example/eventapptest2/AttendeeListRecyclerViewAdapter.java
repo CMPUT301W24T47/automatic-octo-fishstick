@@ -1,5 +1,6 @@
 package com.example.eventapptest2;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
@@ -52,7 +55,25 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
         //String imageUrl = "https://firebasestorage.googleapis.com/v0/b/charlie-kim-fans.appspot.com/o/event_images%2F7aa31d9e-1539-49f9-bc21-4ec823cdbfdb?alt=media&token=7afc1c14-11f4-48c7-8ab1-99ee1e96eaa4";
 //        Picasso.get().load(holder.EventForView.getUserProfileImage()).into(holder.Imageing);
         String imageUrl = holder.EventForView.getUserProfileImage();
-         /////////might wanna delete picasso or glide casue it redundant to display twice
+        /////////might wanna delete picasso or glide casue it redundant to display twice
+
+        holder.EventForView = AttendeeList.get(position);
+        if(holder.EventForView.getUserName().equals("") || holder.EventForView.getUserName().equals(" ")) {
+            holder.userName.setText(holder.EventForView.getDeviceId());
+        }
+        else {
+            holder.userName.setText(holder.EventForView.getUserName());
+        }
+
+        //uncomment for color
+
+        // when there is name is not empty and image is empty
+        if (!Objects.equals(holder.EventForView.getUserName(), "") &&(Objects.equals(holder.Imageing.getBackground(),null))&& ((Objects.equals(imageUrl, ""))||(Objects.equals(imageUrl, null)))){
+            holder.adminNameOnImage.setText(holder.EventForView.getUserName());
+            Random rnd = new Random();
+            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            holder.Imageing.setBackgroundColor(color);
+        }
 
         // display image url
         //System.out.println("Image URL: " + imageUrl);
@@ -94,6 +115,9 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
         public final ImageView Imageing;
         public User EventForView;
 
+        public final TextView adminNameOnImage;
+
+
 
 
         public ViewHolder(AttendeeListFragmentBinding binding) {
@@ -102,6 +126,8 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
             Status = binding.CheckText;
             Imageing = binding.ProfilePicList;
             count = binding.CheckInCountList;
+            adminNameOnImage = binding.nameOnImageAttendee;
+
 
 
         }

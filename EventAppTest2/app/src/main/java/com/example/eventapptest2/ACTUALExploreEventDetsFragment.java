@@ -115,6 +115,7 @@ public class ACTUALExploreEventDetsFragment extends Fragment {
                         saveevent.document(event.getEventid()).set(event);
 
                         Map<String, Object> newuser = new HashMap<>();
+                        newuser.put("deviceId",user.getDeviceId());
                         newuser.put("userName", user.getUserName());
                         newuser.put("userProfileImage", user.getUserProfileImage());
                         newuser.put("CheckInCount", "0");

@@ -56,7 +56,8 @@ public class User implements Serializable {
         this.tracking = track;
 
     }
-    public User(String AttendeeName,String AttendeeImage, String CheckInCount, String userLongitude, String userLatitude) {
+    public User(String deviceId,String deviceIds,String AttendeeName,String AttendeeImage, String CheckInCount, String userLongitude, String userLatitude) {
+        this.DeviceId = deviceId;
         this.userName = AttendeeName;
         this.userProfileImage = AttendeeImage;
         this.CheckInCount = CheckInCount;

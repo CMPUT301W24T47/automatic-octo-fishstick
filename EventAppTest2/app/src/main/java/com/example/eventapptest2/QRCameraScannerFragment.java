@@ -203,6 +203,7 @@ public class QRCameraScannerFragment extends Fragment {
                         public void run() {
 
                             if (!getdet) {
+                                if(event.getTracking().equals("on")){
                                 //request permission from user to get location
                                 if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ACCESS_FINE_LOCATION);
@@ -225,7 +226,7 @@ public class QRCameraScannerFragment extends Fragment {
                                 //fetch latitude and longitude
                                 latitude = bestLocation.getLatitude();
                                 longitude = bestLocation.getLongitude();
-
+                            }
                                 //this is what happens after qr code scanned so like we can switch fragments here
                                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
