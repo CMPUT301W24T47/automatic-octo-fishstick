@@ -138,7 +138,7 @@ public class OldEventsRecyclerViewAdapter extends RecyclerView.Adapter<OldEvents
             public void onClick(View v) {
                 //we need a way to get a new date... rn our code in main will just not care abt this so we need change the date
 
-
+                        events.remove(position);
 
 
 
@@ -160,11 +160,13 @@ public class OldEventsRecyclerViewAdapter extends RecyclerView.Adapter<OldEvents
                         holder.EventForView.setEventDate( holder.date.getText().toString());
 
 
-
+                        final CollectionReference exploreEventsRef = db.collection("ExploreEvents");
                         final CollectionReference createeventsRef = db.collection("CreateEvents" + id);
                         final CollectionReference OldQreventsRef = db.collection("OldQrsList" + id);
                         // well need to do something like we did in main to get data for the attende list and check if length is < the length of limit
                         createeventsRef.document(holder.EventForView.getEventid()).set(holder.EventForView);
+                        exploreEventsRef.document(holder.EventForView.getEventid()).set(holder.EventForView);
+
                         OldQreventsRef.document(holder.EventForView.getEventid()).delete();
                         }
 

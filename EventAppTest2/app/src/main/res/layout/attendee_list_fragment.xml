@@ -37,24 +37,21 @@
             android:id="@+id/attendeeNameList"
             android:layout_width="198dp"
             android:layout_height="29dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginBottom="25dp"
             android:text="Attendees Name"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/reladminlist" />
+            app:layout_constraintBottom_toTopOf="@+id/CheckText"
+            app:layout_constraintStart_toEndOf="@+id/reladminlist"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/CheckText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
             android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/reladminlist"
-            app:layout_constraintTop_toBottomOf="@+id/attendeeNameList" />
+            app:layout_constraintStart_toEndOf="@+id/reladminlist" />
 
         <TextView
             android:id="@+id/CheckInCountList"
@@ -62,6 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/attendeeNameList"
