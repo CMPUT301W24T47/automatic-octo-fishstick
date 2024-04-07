@@ -17,8 +17,8 @@
 
             <ImageView
                 android:id="@+id/AdminImageView"
-                android:layout_width="192dp"
-                android:layout_height="43dp"
+                android:layout_width="230dp"
+                android:layout_height="100dp"
                 android:layout_marginStart="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -39,13 +39,13 @@
         <ImageView
             android:id="@+id/ImageDeleteButton"
             android:layout_width="81dp"
-            android:layout_height="24dp"
+            android:layout_height="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.365"
             app:layout_constraintStart_toEndOf="@+id/AdminImageView"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.022"
+            app:layout_constraintVertical_bias="0.030"
             app:srcCompat="@drawable/delete_button" />
     </LinearLayout>
 
