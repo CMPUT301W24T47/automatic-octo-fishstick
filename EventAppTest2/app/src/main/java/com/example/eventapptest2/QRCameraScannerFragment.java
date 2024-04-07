@@ -210,7 +210,11 @@ public class QRCameraScannerFragment extends Fragment {
                                 //initialize locationManager
                                 locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
                                 //get last known location via GPS. This way, it does not need to constantly update location.
-                                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                List<String> providers = locationManager.getProviders(true);
+                                for (String provider : providers) {
+                                    location = locationManager.getLastKnownLocation(provider);
+                                }
+                                //location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 //fetch latitude and longitude
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();

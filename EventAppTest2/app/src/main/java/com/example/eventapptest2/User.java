@@ -12,9 +12,9 @@ public class User implements Serializable {
     String userProfileImage;
 
 
-
     String userLongitude;
     String userLatitude;
+
     ArrayList<Event> savedEvents;
     ArrayList<Event> createdEvents;
     ArrayList<Event> oldQRList;

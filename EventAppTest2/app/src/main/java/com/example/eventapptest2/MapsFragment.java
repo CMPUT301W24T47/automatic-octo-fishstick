@@ -94,7 +94,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.gMap = googleMap;
-        float zoomLevel = 15.0f;
+        gMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        float zoomLevel = 5.0f;
         com.google.android.gms.maps.model.LatLng attendeelatlng = new com.google.android.gms.maps.model.LatLng(0.0,0.0);
         for(User Attendee: attendeeList){
             com.google.android.gms.maps.model.LatLng userLatLng = new com.google.android.gms.maps.model.LatLng(Double.parseDouble(Attendee.getUserLatitude()),Double.parseDouble(Attendee.getUserLongitude()));
