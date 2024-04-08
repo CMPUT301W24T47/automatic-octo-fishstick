@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     ArrayList<String> notifyList = new ArrayList<>();
     public int inte = 0;
 
-
+//comment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
