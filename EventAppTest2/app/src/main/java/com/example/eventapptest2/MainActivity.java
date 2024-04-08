@@ -708,7 +708,7 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                         String attendeeid = doc.getId();
                         final CollectionReference userref = db.collection("users");
                         //get user from user collection if any changes happened to user
-                        Log.e(TAG, attendeeid);Log.e(TAG, id);
+//                        Log.e(TAG, attendeeid);Log.e(TAG, id);
 
                         userref.document(attendeeid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
