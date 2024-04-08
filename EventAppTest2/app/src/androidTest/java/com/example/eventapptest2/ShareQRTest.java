@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-
+// handles US01.04.01, US 01.06.01, US 01.07.01
 @RunWith(JUnit4.class)
 @LargeTest
 public class ShareQRTest {
