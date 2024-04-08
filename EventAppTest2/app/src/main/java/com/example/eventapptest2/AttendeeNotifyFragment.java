@@ -14,15 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of notifications to notify attendees in the event.
+ * Fragment displays notifications to attendees using a RecyclerView
  */
 public class AttendeeNotifyFragment extends Fragment {
-
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
-    private static ArrayList<String> AttendeeList;
+    private static ArrayList<String> AttendeeList; // List of attendees
     private static String EventImage;
 
 
@@ -36,8 +34,12 @@ public class AttendeeNotifyFragment extends Fragment {
 
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
+    /**
+     * Creates new instance of AttendeeNotifyFragment.
+     *
+     * @param columnCount Number of columns in the RecyclerView grid.
+     * @return A new instance of AttendeeNotifyFragment.
+     */
     public static AttendeeNotifyFragment newInstance(int columnCount) {
         AttendeeNotifyFragment fragment = new AttendeeNotifyFragment(AttendeeList,EventImage);
         Bundle args = new Bundle();
@@ -46,6 +48,12 @@ public class AttendeeNotifyFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Called when fragment is created.
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,12 +63,23 @@ public class AttendeeNotifyFragment extends Fragment {
         }
     }
 
+    /**
+     * Creates and returns the view structure of the AttendeeNotifyFragment.
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return The view of the fragment layout.
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.attendee_notifications, container, false);
-        //RecyclerView recyclerView =  view.findViewById(R.id.NotificationRecyclerView);
-        // Set the adapter
+        // Set the adapter for the RecyclerView
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
@@ -69,11 +88,7 @@ public class AttendeeNotifyFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-
-
-            //give the list of explore events to the recyler view
             recyclerView.setAdapter(new AttendeeNotifyRecyclerViewAdapter(AttendeeList,EventImage));
-
         }
         return view;
     }

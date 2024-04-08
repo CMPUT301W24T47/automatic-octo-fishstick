@@ -1,49 +1,46 @@
 package com.example.eventapptest2;
 
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class represents a event in the app.
+ * Each event has a event name, location, date, capacity of attendees, event ID, event poster, etc.
+ */
 public class Event {
-
-
+    // Attributes of the event
     String eventName;
     String eventLocation;
     String eventDate;
     String eventLimit;
-    // we should have a the organizers diveiceid so we can update their event in their eventlist from firebase specifially
-
-
-
-
     String Eventid;
     String EventDesription;
     String eventPoster;
-
-
-
     String QrUrl;
-
-
-
     String signINQR;
-
-
     ArrayList<User> attendeList;
     ArrayList<User> checkedinList;
-
-
     String owner;
-
-
-
     String tracking;
 
-    // QR signIn;
-    // QR posterQR;
-
+    /**
+     * Constructor of a new event when created.
+     *
+     * @param eventid The ID of the event.
+     * @param eventName The name of the event.
+     * @param eventLocation The location of the event.
+     * @param eventDate The date when the event occurs.
+     * @param eventLimit The capacity of the event, limits the amount of attendees that can join.
+     * @param eventPoster The event poster, which is a image.
+     * @param EventDesription The description of the event.
+     * @param attendelist The list of attendees in the event.
+     * @param checkedinlist The list of attendees who have checed in to the event.
+     * @param qrUrl The QR code URL for the event.
+     * @param ss The QR code URL for attendee sign in.
+     * @param id The event owners device ID.
+     * @param track The tracking status of the event
+     */
     public Event(String eventid, String eventName, String eventLocation, String eventDate, String eventLimit, String eventPoster,String EventDesription,ArrayList<User> attendelist, ArrayList<User> checkedinlist,String qrUrl,String ss,String id,String track ) {
         //will need to add a notfications list
         //each event hashed by event id
@@ -107,7 +104,6 @@ public class Event {
     // New constructor that for view all images
     // Constructor is for images only (Admin)
     public Event(String eventPoster, String ownerID, String eventId) {
-
         this.eventPoster = eventPoster;
         this.owner = ownerID; // User
         this.Eventid = eventId; // us
@@ -211,7 +207,5 @@ public class Event {
     public void setOwner(String owner) {
         this.owner = owner;
     }
-
-
 }
 

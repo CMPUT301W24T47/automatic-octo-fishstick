@@ -27,18 +27,29 @@ import java.util.Objects;
 import java.util.Random;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
- * TODO: Replace the implementation with code for your data type.
+ * RecyclerView Adapter for displaying a list of users attending the event.
+ * Adapter binds attendee information to the ViewHolder.
  */
 public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<AttendeeListRecyclerViewAdapter.ViewHolder> {
+    private  ArrayList<User> AttendeeList; // List of the attendees
 
-    private  ArrayList<User> AttendeeList;
-
+    /**
+     * Constructor for the AttendeeListRecyclerViewAdapter.
+     *
+     * @param Attendees List of attendees in the event to be displayed.
+     */
     public AttendeeListRecyclerViewAdapter(ArrayList<User> Attendees) {
         AttendeeList = Attendees;
-
     }
 
+    /**
+     * Called when RecyclerView needs a ViewHolder from the given type to represent the item.
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a AttendeeListFragmentBinding.
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -46,16 +57,19 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
 
     }
 
+    /**
+     * Called by RecyclerView to display the data of the attendee at the specified position.
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        //setting events text
         int postini = position;
         holder.EventForView = AttendeeList.get(position);
-        holder.userName.setText(holder.EventForView.getUserName());
-        //String imageUrl = "https://firebasestorage.googleapis.com/v0/b/charlie-kim-fans.appspot.com/o/event_images%2F7aa31d9e-1539-49f9-bc21-4ec823cdbfdb?alt=media&token=7afc1c14-11f4-48c7-8ab1-99ee1e96eaa4";
-//        Picasso.get().load(holder.EventForView.getUserProfileImage()).into(holder.Imageing);
+        holder.userName.setText(holder.EventForView.getUserName()); // Set attendee name
         String imageUrl = holder.EventForView.getUserProfileImage();
-        /////////might wanna delete picasso or glide casue it redundant to display twice
 
         holder.EventForView = AttendeeList.get(position);
         if(holder.EventForView.getUserName().equals("") || holder.EventForView.getUserName().equals(" ")) {
@@ -65,8 +79,6 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
             holder.userName.setText(holder.EventForView.getUserName());
         }
 
-        //uncomment for color
-
         // when there is name is not empty and image is empty
         if (!Objects.equals(holder.EventForView.getUserName(), "") &&(Objects.equals(holder.Imageing.getBackground(),null))&& ((Objects.equals(imageUrl, ""))||(Objects.equals(imageUrl, null)))){
             holder.adminNameOnImage.setText(holder.EventForView.getUserName());
@@ -75,13 +87,10 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
             holder.Imageing.setBackgroundColor(color);
         }
 
-        // display image url
-        //System.out.println("Image URL: " + imageUrl);
+        // Display attendee profile image with Glide
         Glide.with(holder.itemView.getContext())
                 .load(imageUrl)
                 .into(holder.Imageing);
-
-        //System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+holder.EventForView.getCheckInCount());
 
         if (Integer.parseInt( holder.EventForView.getCheckInCount()) == 0){
             holder.Status.setText("Not Signed-in");
@@ -91,35 +100,32 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
 
 
     }
-//    public interface OnExploreButtonClickListener {
-//        void onExploreButtonClick();
-//    }
-//
-//
-//
-//    public void setOnExploreButtonClickListener(OnExploreButtonClickListener listener) {
-//        mListener = listener;
-//    }
 
+    /**
+     *
+     * @return The total number of attendees in the event.
+     */
     @Override
     public int getItemCount() {
         return AttendeeList.size();
     }
 
+    /**
+     * ViewHolder class for holding the views of the attendee list.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         public final TextView userName;
         public final TextView Status;
-
         public final TextView count;
         public final ImageView Imageing;
         public User EventForView;
-
         public final TextView adminNameOnImage;
 
-
-
-
+        /**
+         * Constructor for the ViewHolder.
+         *
+         * @param binding The AttendeeListFragmentBinding instance for the ViewHolder's layout.
+         */
         public ViewHolder(AttendeeListFragmentBinding binding) {
             super(binding.getRoot());
             userName = binding.attendeeNameList;
@@ -127,11 +133,7 @@ public class AttendeeListRecyclerViewAdapter extends RecyclerView.Adapter<Attend
             Imageing = binding.ProfilePicList;
             count = binding.CheckInCountList;
             adminNameOnImage = binding.nameOnImageAttendee;
-
-
-
         }
-
 
         @Override
         public String toString() {

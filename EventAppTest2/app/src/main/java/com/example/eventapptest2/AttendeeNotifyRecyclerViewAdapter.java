@@ -16,15 +16,20 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
- * TODO: Replace the implementation with code for your data type.
+ * RecyclerView Adapter for displaying notifications to attendees.
+ * This adapter binds data to ViewHolder, which displays the attendee notifications.
+ *
  */
 public class AttendeeNotifyRecyclerViewAdapter extends RecyclerView.Adapter<AttendeeNotifyRecyclerViewAdapter.ViewHolder> {
-
-    private  ArrayList<String> NotficationList;
+    private  ArrayList<String> NotficationList; // List of notifications
     private String EventImage;
 
-
+    /**
+     * Constructor for AttendeeNotifyRecyclerViewAdapter.
+     *
+     * @param Attendees List of attendees to display notifications too.
+     * @param ei The image associated with the event.
+     */
     public AttendeeNotifyRecyclerViewAdapter(ArrayList<String> Attendees,String ei) {
         NotficationList = Attendees;
         EventImage = ei;
@@ -32,58 +37,58 @@ public class AttendeeNotifyRecyclerViewAdapter extends RecyclerView.Adapter<Atte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         return new ViewHolder(AttendeeNotificationFragmentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-
     }
 
+    /**
+     * Called by RecyclerView to display the data at specified positions.
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        //setting events text
+        // Set notification text
         if(!NotficationList.isEmpty()){
-        int postini = position;
+            int postini = position;
 
-        Glide.with(holder.itemView.getContext())
-                .load(EventImage)
-                .into(holder.Imageing);
+            // Show the event image using Glide
+            Glide.with(holder.itemView.getContext())
+                    .load(EventImage)
+                    .into(holder.Imageing);
 
-        //System.out.println("testtttttttttt " + NotficationList.get(postini));
-        holder.userName.setText(NotficationList.get(postini));}
+            holder.userName.setText(NotficationList.get(postini));}
 
 
     }
-//    public interface OnExploreButtonClickListener {
-//        void onExploreButtonClick();
-//    }
-//
-//
-//
-//    public void setOnExploreButtonClickListener(OnExploreButtonClickListener listener) {
-//        mListener = listener;
-//    }
 
+    /**
+     *
+     * @return The number of notifications in the adapter.
+     */
     @Override
     public int getItemCount() {
         return NotficationList.size();
     }
 
+    /**
+     * ViewHolder class that holds references to views within each item of the RecyclerView.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         public final TextView userName;
         public final ImageView Imageing;
         public String EventForView;
-
-
 
         public ViewHolder(AttendeeNotificationFragmentBinding binding) {
             super(binding.getRoot());
             userName = binding.attendeeEventNotify;
             Imageing = binding.attendeeEventIcon;
-
-
         }
 
-
+        /**
+         * @return A string of the ViewHolder object.
+         */
         @Override
         public String toString() {
             return super.toString() + " '" + userName.getText() + "'";

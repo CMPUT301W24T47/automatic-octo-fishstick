@@ -14,13 +14,11 @@ import com.google.firebase.Firebase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-
 /**
- * This is a class that
+ * This is a class for editing user profile information.
+ * This class lets users edit their profile details such as name, homepage, email, and phone number.
  */
 public class EditUserProfileActivity extends AppCompatActivity {
-    // when u destroy the app on the phone the userimage disappers
-    //
     Button backButton;
     Button verifyButton;
     EditText editName;
@@ -28,11 +26,15 @@ public class EditUserProfileActivity extends AppCompatActivity {
     EditText editEmail;
     EditText editPhoneNum;
 
-
-
-//    FirebaseFirestore db = FirebaseFirestore.getInstance();
-//    CollectionReference usersRef = db.collection("users");
-
+    /**
+     * Starts when users enters edit profile activity.
+     * Method sets up the layout when editing profile information and retrieves the user profile
+     * information.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,22 +48,20 @@ public class EditUserProfileActivity extends AppCompatActivity {
             }
         });
 
-        // Get the User object information from the previous Activity (UserProfileFragment)
-
-
         editName = findViewById(R.id.userEditNameText);
         editHomePage = findViewById(R.id.userEditHomepageText);
         editEmail = findViewById(R.id.userEditEmailText);
         editPhoneNum = findViewById(R.id.userEditPhoneNumText);
 
-        Bundle bundle = getIntent().getExtras();
         // Get the User object information from the previous Activity (UserProfileFragment)
+        Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             String userName = bundle.getString("userName");
             String userHomepage = bundle.getString("homepage");
             String userEmail = bundle.getString("email");
             String userPhoneNum = bundle.getString("phoneNum");
 
+            // Set users information to corresponding edited text
             editName.setText(userName);
             editHomePage.setText(userHomepage);
             editEmail.setText(userEmail);
@@ -69,21 +69,6 @@ public class EditUserProfileActivity extends AppCompatActivity {
 
         }
 
-        // Get each specific user information from the previous screen
-        // - getStringExtra(key)
-        //  - Takes the unique key information from the previous page to allow to show on the new screen
-//        String userName = getIntent().getStringExtra("userName");
-//        editName.setText(userName);
-//        String userHomepage = getIntent().getStringExtra("homepage");
-//        editHomePage.setText(userHomepage);
-
-//        String userEmail = getIntent().getStringExtra("email");
-//        editEmail.setText(userEmail);
-//        String userPhoneNum = getIntent().getStringExtra("phoneNum");
-//        editPhoneNum.setText(userPhoneNum);
-
-//        editName.setText(user.getUserName());
-//        editHomePage.setText(user.getUserHomepage());
 
         // Implement Verify button
         // - Updates the changed user information
@@ -96,18 +81,16 @@ public class EditUserProfileActivity extends AppCompatActivity {
         });
     }
 
-
-    // Update user's profile with the edited information
+    /**
+     * Updates the user's profile with the edited information.
+     * Method retrieves the edited information from the EditText fields and passes it back
+     * to the previous activity.
+     */
     private void updateUserProfile() {
         String updatedName = editName.getText().toString();
         String updatedHomePage = editHomePage.getText().toString();
         String updatedEmail = editEmail.getText().toString();
         String updatedPhoneNum = editPhoneNum.getText().toString();
-
-//        user.setUserName(updatedName);
-//        user.setUserHomepage(updatedHomePage);
-//        user.setUserEmail(updatedEmail);
-//        user.getUserPhoneNumber(updatedPhoneNum);
 
         // Pass back updated user object to UserProfileFragment
         Intent updateIntent = new Intent();
@@ -115,29 +98,9 @@ public class EditUserProfileActivity extends AppCompatActivity {
         updateIntent.putExtra("updatedUserHomepage", updatedHomePage);
         updateIntent.putExtra("updatedUserEmail", updatedEmail);
         updateIntent.putExtra("updatedUserPhoneNum", updatedPhoneNum);
+
+        // Set the result of the activity and finish
         setResult(Activity.RESULT_OK, updateIntent);
         finish();
     }
-
-
-    // Update the users profile with the updated inputted information
-//    private void updateUserProfile(){
-    // Get the in
-//        String updatedName = editName.setText().toString();
-
-//        String updatedHomePage = editHomePage.getText().toString();
-//        String updatedEmail = editEmail.getText().toString();
-//        String updatedPhoneNum = editPhoneNum.getText().toString();
-//
-//        user.setUserName(editName.toString());
-////        user.setUserHomepage(updatedHomePage);
-////        user.setUserEmail(updatedEmail);
-////        user.getUserPhoneNumber(updatedPhoneNum);
-//
-//        // Pass updated information back to the UserProfileFragment
-//        Intent intent = new Intent();
-//        intent.putExtra("updatedUser", user);
-//        setResult(Activity.RESULT_OK, intent);
-//
-//        finish();
 }

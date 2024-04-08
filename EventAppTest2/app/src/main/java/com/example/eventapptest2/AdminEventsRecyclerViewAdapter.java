@@ -16,14 +16,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
- * TODO: Replace the implementation with code for your data type.
+ * A RecyclerView Adapter for displaying all current events the Admin can view.
+ * The Adapter binds the event information to the corresponding views in the RecyclerView.
  */
 public class AdminEventsRecyclerViewAdapter extends RecyclerView.Adapter<AdminEventsRecyclerViewAdapter.ViewHolder> {
-
-    private  ArrayList<Event> allevents;
+    private  ArrayList<Event> allevents; // List of all current events
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    /**
+     * Constructor for the AdminEventsRecyclerViewAdapter.
+     *
+     * @param alleventsinput List of all the current events to display
+     */
     public AdminEventsRecyclerViewAdapter(ArrayList<Event> alleventsinput) {
         allevents = alleventsinput;
 
@@ -38,15 +42,12 @@ public class AdminEventsRecyclerViewAdapter extends RecyclerView.Adapter<AdminEv
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        //setting events text
-//        int postini = position;
-//
-//        System.out.println("testtttttttttt " + allevents.get(postini));
-//        holder.userName.setText(allevents.get(postini));
+        // Bind the event details to the views in the ViewHolder
         holder.EventForView = allevents.get(position);
         holder.eventName.setText(holder.EventForView.getEventName());
         String imageURL = holder.EventForView.getEventPoster();
 
+        // Load event image using Glide
         Glide.with(holder.itemView.getContext())
                 .load(imageURL)
                 .into(holder.eventImage);
@@ -54,25 +55,26 @@ public class AdminEventsRecyclerViewAdapter extends RecyclerView.Adapter<AdminEv
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get the event position in the recycler view when clicking delete
+                // Get the event position in the Adapter
                 int eventPosition = holder.getAbsoluteAdapterPosition();
 
                 if(eventPosition != RecyclerView.NO_POSITION){
-                    // When we click delete it gets those event detatils
+                    // When we click delete it gets those event details
                     Event deleteEvent = allevents.get(eventPosition);
                     String createEvents = "CreateEvents";
                     String ownerEvent = deleteEvent.getOwner();
-//                    System.out.println(ownerEvent);
 
                     // Firebase deleting, delete from "ExploreEvents" and "CreateEvents
                     db.collection("ExploreEvents").document(deleteEvent.getEventid())
                             .delete();
                     db.collection(createEvents+ownerEvent).document(deleteEvent.getEventid())
                             .delete();
+
+                    // Remove the event from the list and notify the adapter
                     allevents.remove(deleteEvent);
                     notifyItemRemoved(eventPosition);
 
-                    // From data base remove from ExploreEvents and CreatedEvents"deviceId" getting the owner ID
+                    // In the database remove from ExploreEvents and CreatedEvents"deviceId" getting the owner ID
                 }
             }
         });
@@ -84,6 +86,9 @@ public class AdminEventsRecyclerViewAdapter extends RecyclerView.Adapter<AdminEv
         return allevents.size();
     }
 
+    /**
+     * ViewHolder class for holding the views associated with the event.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView eventName;
@@ -91,8 +96,11 @@ public class AdminEventsRecyclerViewAdapter extends RecyclerView.Adapter<AdminEv
         public final ImageView deleteButton;
         public Event EventForView;
 
-
-
+        /**
+         * Constructor for the ViewHolder class.
+         *
+         * @param binding Binding object contains the views for each item
+         */
         public ViewHolder(AdminEventsFragmentsBinding binding) {
             super(binding.getRoot());
             eventName = binding.adminEventsname;
@@ -100,7 +108,6 @@ public class AdminEventsRecyclerViewAdapter extends RecyclerView.Adapter<AdminEv
             deleteButton = binding.adminDeletebtnEvents;
 
         }
-
 
         @Override
         public String toString() {

@@ -14,28 +14,32 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of current events for the Admin view.
+ * This fragment displays all the current events in a RecyclerView.
  */
 public class AdminEventsFragment extends Fragment {
-
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
-    private static ArrayList<Event> allevents;
+    private int mColumnCount = 1; // Column count for the recycler view
 
+    private static ArrayList<Event> allevents; // List of all the current events
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
+     *
+     * @param alleventsinput List of current events to display
      */
     public AdminEventsFragment(ArrayList<Event> alleventsinput) {
         allevents = alleventsinput;
 
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
+    /**
+     * Create a new instance of AdminEventsFragment with the specified column count.
+     *
+     * @param columnCount Number of columnts in the RecyclerView layout
+     * @return New instance of fragment
+     */
     public static AdminEventsFragment newInstance(int columnCount) {
         AdminEventsFragment fragment = new AdminEventsFragment(allevents);
         Bundle args = new Bundle();
@@ -54,11 +58,10 @@ public class AdminEventsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.admin_events, container, false);
-        //RecyclerView recyclerView =  view.findViewById(R.id.NotificationRecyclerView);
-        // Set the adapter
+
+        // Set up the RecyclerView
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
@@ -68,8 +71,7 @@ public class AdminEventsFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-
-            //give the list of explore events to the recyler view
+            // Set adapter with the list of the current events
             recyclerView.setAdapter(new AdminEventsRecyclerViewAdapter(allevents));
 
         }

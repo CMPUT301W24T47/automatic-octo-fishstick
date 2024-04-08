@@ -18,28 +18,38 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
 
 /**
- * Display user profiles in a RecyclerView
- * Binds data of the users name and profile image
+ * RecyclerView Adapter for displaying user profiles the Admin can view.
+ * Adapter bind data of user names and user profile images.
  */
 public class AdminProfileRecyclerViewAdapter extends RecyclerView.Adapter<AdminProfileRecyclerViewAdapter.ViewHolder> {
-
-    private  ArrayList<User> userList;
+    private  ArrayList<User> userList; // List of all user profiles
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     // CollectionReference will store the collection of Users
     //  - Which then each user will store different information
     private final CollectionReference usersRef = db.collection("users");
 
-    // Constructor
-    // Receives array list of User objects and initializes the adapters data with this data
+    /**
+     * Constructs a new AdminProfileRecyclerViewAdapter with the provided inputed list of user profiles.
+     *
+     * @param allUsers Receives list of user profiles to be displayed
+     */
     public AdminProfileRecyclerViewAdapter(ArrayList<User> allUsers) {
         userList = allUsers;
-
     }
 
-
+    /**
+     * Called when RecyclerView needs a ViewHolder of the given type to represent an item.
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A ViewHolder that holds a a View of the given view type.
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -47,18 +57,23 @@ public class AdminProfileRecyclerViewAdapter extends RecyclerView.Adapter<AdminP
 
     }
 
-
-    // bind data to each item in the RecyclerView
-    // User name, profile image, and check in
+    /**
+     * Called by RecyclerView to display data at specified position
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        //setting events text
+        // Set user profile name
         holder.EventForView = userList.get(position);
         holder.userName.setText(holder.EventForView.getUserName());
+
         String imageURL = holder.EventForView.getUserProfileImage();
-
-
         holder.EventForView = userList.get(position);
+
+        // Set user name on image when user profile image is empty
         if(holder.EventForView.getUserName().equals("") || holder.EventForView.getUserName().equals(" ")) {
             holder.userName.setText(holder.EventForView.getDeviceId());
         }
@@ -74,11 +89,13 @@ public class AdminProfileRecyclerViewAdapter extends RecyclerView.Adapter<AdminP
             holder.profileImage.setBackgroundColor(color);
         }
 
+        // Set user profile image with Glide
         Glide.with(holder.itemView.getContext())
                 .load(imageURL)
                 .into(holder.profileImage);
 
         // As a admin, want to remove profiles
+        // Remove user profile when delete button is clicked
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +104,7 @@ public class AdminProfileRecyclerViewAdapter extends RecyclerView.Adapter<AdminP
 
                 if (userPosition != RecyclerView.NO_POSITION){
                     User deleteProfile = userList.get(userPosition);
+                    // Update user profile fields to empty in Firebase
                     db.collection("users").document(deleteProfile.getDeviceId())
                             .update("userEmail","",
                                     "userHomepage","",
@@ -98,31 +116,38 @@ public class AdminProfileRecyclerViewAdapter extends RecyclerView.Adapter<AdminP
                     holder.nameOnImage.setText("");
                     holder.nameOnImage.setBackgroundColor(255);
                     notifyItemRemoved(userPosition);
-
                 }
-//
             }
         });
     }
 
-
+    /**
+     * Returns the total number of items in each set held by the adapter.
+     *
+     * @return The total number of items in this adapter.
+     */
     @Override
     public int getItemCount() {
         return userList.size();
     }
 
-
+    /**
+     * This ViewHolder class holds the views for each item in the RecyclerView
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         // Fields of the holders we want to view
         public final ImageView profileImage;
         public final ImageButton deleteButton;
         public final TextView nameOnImage;
-
         public final TextView userName;
         public User EventForView;
 
 
-        // Objects are generated from the admin_profile xml
+        /**
+         * Constructs new ViewHolder.
+         *
+         * @param binding Binds all the views
+         */
         public ViewHolder(AdminProfilesFragmentBinding binding) {
             super(binding.getRoot());
             profileImage = binding.adminProfileIcon;
@@ -130,6 +155,5 @@ public class AdminProfileRecyclerViewAdapter extends RecyclerView.Adapter<AdminP
             userName = binding.adminProfiles;
             nameOnImage = binding.nameOnImage;
         }
-
     }
 }

@@ -14,16 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of all the images within the app for the Admin View.
+ * Fragment displays list of images associated with events and user profiles in a RecyclerView.
  */
 public class AdminImageFragment extends Fragment {
-
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private static ArrayList<Event> allevents;
-
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -34,8 +31,6 @@ public class AdminImageFragment extends Fragment {
 
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static AdminImageFragment newInstance(int columnCount) {
         AdminImageFragment fragment = new AdminImageFragment(allevents);
         Bundle args = new Bundle();
@@ -57,7 +52,6 @@ public class AdminImageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.admin_images, container, false);
-        //RecyclerView recyclerView =  view.findViewById(R.id.NotificationRecyclerView);
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -67,11 +61,8 @@ public class AdminImageFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-
-
-            //give the list of explore events to the recyler view
+            // Set up adapter for RecyclerView
             recyclerView.setAdapter(new AdminImageRecyclerViewAdapter(allevents));
-
         }
         return view;
     }

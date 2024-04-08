@@ -61,35 +61,61 @@ import java.text.SimpleDateFormat;
 import io.grpc.Context;
 import io.grpc.Internal;
 
-public class AddEventFragment extends DialogFragment {
+/**
+ * Dialog fragment for adding a new event.
+ * The user can input a image, event name, location, user limits for joining a event, event date,
+ * and the description of the event.
+ */
 
+public class AddEventFragment extends DialogFragment {
     private static final int PICK_IMAGE_REQUEST = 1;
     private ArrayList<Event> exploreEvents;
-    private Uri selectedImageUri;
-    private User EditUser;
+    private Uri selectedImageUri; // URI of the selected image
+    private User EditUser; // Current user
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference useresfb = db.collection("users");
-    private final CollectionReference eventfb = db.collection("ExploreEvents");
+    private final CollectionReference useresfb = db.collection("users"); // Collection reference to users
+    private final CollectionReference eventfb = db.collection("ExploreEvents"); // Collection reference to ExploreEvents
     private ArrayList<Event> CreateEvents;
-
     private CollectionReference eventcreated;
-    //public String urlqr;
-    public AddEventFragment(ArrayList<Event> exploreEvents, User user, String create,ArrayList<Event> createEvents){//CollectionReference eventref, CollectionReference usersref) {
+
+
+    /**
+     * Constructor for adding an event.
+     *
+     * @param exploreEvents List of events in the Explore Events page
+     * @param user Current user
+     * @param create ID of the created event
+     * @param createEvents List of created events
+     */
+    public AddEventFragment(ArrayList<Event> exploreEvents, User user, String create,ArrayList<Event> createEvents){
         this.exploreEvents = exploreEvents;
         this.EditUser = user;
         this.eventcreated = db.collection("CreateEvents" + create);
         this.CreateEvents = createEvents;
-//        this.useresfb = usersref;
-//        this.eventfb = eventref;
-
     }
 
+    /**
+     * Create the view structure associated with the dialog fragment.
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return The view of the inflated layout
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_event, container, false);
 
+        // Initialize the views
         ImageButton addEventImageButton = view.findViewById(R.id.addEventImageButton);
+
+        // When clicked, opens the gallery of images
         addEventImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +123,7 @@ public class AddEventFragment extends DialogFragment {
             }
         });
 
-
+        // Initialize the views
         Button confirmButton = view.findViewById(R.id.AddEventconfirmButton);
         EditText eventName = view.findViewById(R.id.DescriptionText);
         EditText location = view.findViewById(R.id.add_location);
@@ -106,6 +132,8 @@ public class AddEventFragment extends DialogFragment {
         EditText desc = view.findViewById(R.id.AddEventDescription);
         ImageView addEventImage = view.findViewById(R.id.AddEventImage);
 
+        // Enter Date format
+        // User inputs date in specified format
         date.addTextChangedListener(new TextWatcher() {
             private String current = "";
             private String ddmmyyyy = "DDMMYYYY";
@@ -114,7 +142,8 @@ public class AddEventFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //        https://techprogrammingideas.blogspot.com/2020/05/android-edit-text-to-show-dd-mm-yyyy.html
+                // Implemented methods and logic
+                // https://techprogrammingideas.blogspot.com/2020/05/android-edit-text-to-show-dd-mm-yyyy.html
                 if (!s.toString().equals(current)) {
                     String clean = s.toString().replaceAll("[^\\d.]", "");
                     String cleanC = current.replaceAll("[^\\d.]", "");
@@ -162,7 +191,6 @@ public class AddEventFragment extends DialogFragment {
                 }
             }
 
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -170,10 +198,12 @@ public class AddEventFragment extends DialogFragment {
             @Override
             public void afterTextChanged(Editable s) {
             }
+
         });
 
-
-
+        // Handles confirm button
+        // When button is clicked it saves the all the event details and creates the event and
+        // adds it to the specific collections (locations)
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -192,185 +222,140 @@ public class AddEventFragment extends DialogFragment {
 
                 if (date1 != null && date1.compareTo(currentDate) >= 0){
 
-                ArrayList<User> addatendeelist = new ArrayList<>();
-                ArrayList<User> checkedinlist = new ArrayList<>();
-                String name = eventName.getText().toString();
-                String eloc = location.getText().toString();
-                String lim = limit.getText().toString();
-                String datee = date.getText().toString();
-                String desce = desc.getText().toString();
-                //Image imagee = addEventImage.get
-                //Image
-//                final String randomkey = UUID.randomUUID().toString();
-//                final StorageReference imageref = FirebaseStorage.getInstance().getReference().child("images/" + randomkey);
-//
-//
-//                imageref.putFile(selectedImageUri)
-//                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                            @Override
-//                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//
-//                            }
-//                        });
-                // Inside AddEventFragment after selecting an image
-                StorageReference storageRefQR = FirebaseStorage.getInstance().getReference().child("QR/" + UUID.randomUUID().toString());
-                StorageReference storageRefQR2 = FirebaseStorage.getInstance().getReference().child("QR/" + UUID.randomUUID().toString());
+                    ArrayList<User> addatendeelist = new ArrayList<>();
+                    ArrayList<User> checkedinlist = new ArrayList<>();
+                    String name = eventName.getText().toString();
+                    String eloc = location.getText().toString();
+                    String lim = limit.getText().toString();
+                    String datee = date.getText().toString();
+                    String desce = desc.getText().toString();
+                    StorageReference storageRefQR = FirebaseStorage.getInstance().getReference().child("QR/" + UUID.randomUUID().toString());
+                    StorageReference storageRefQR2 = FirebaseStorage.getInstance().getReference().child("QR/" + UUID.randomUUID().toString());
 
-                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-                try {
+                    MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+                    try {
+                        // Sign up with QR code
+                        BitMatrix bitMatrixi = multiFormatWriter.encode("Karan", BarcodeFormat.QR_CODE, 300, 300);
+                        BarcodeEncoder barcodeEncoderi = new BarcodeEncoder();
+                        Bitmap bitmapi = barcodeEncoderi.createBitmap(bitMatrixi);
+                        ByteArrayOutputStream baosi = new ByteArrayOutputStream();
+                        bitmapi.compress(Bitmap.CompressFormat.JPEG, 100, baosi);
+                        byte[] datai = baosi.toByteArray();
 
+                        //String urlqr = storageRefQR.getName();
+                        storageRefQR.putBytes(datai).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshote) {
+                                storageRefQR.getDownloadUrl().addOnSuccessListener(uri -> {
+                                    String secondqr = uri.toString();
 
-                    //sign in qr
-                    BitMatrix bitMatrixi = multiFormatWriter.encode("Karan", BarcodeFormat.QR_CODE, 300, 300);
-                    BarcodeEncoder barcodeEncoderi = new BarcodeEncoder();
-                    Bitmap bitmapi = barcodeEncoderi.createBitmap(bitMatrixi);
-                    ByteArrayOutputStream baosi = new ByteArrayOutputStream();
-                    bitmapi.compress(Bitmap.CompressFormat.JPEG, 100, baosi);
-                    byte[] datai = baosi.toByteArray();
+                                    int hashe = taskSnapshote.hashCode();
+                                    String eventid = Integer.toString(hashe);
+                                    BitMatrix bitMatrix = null;
+                                    try { // storing the qr that takes u to event detials
+                                        bitMatrix = multiFormatWriter.encode(eventid, BarcodeFormat.QR_CODE, 300, 300);
+                                    } catch (WriterException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                                    Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                    byte[] data = baos.toByteArray();
 
+                                    storageRefQR2.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            storageRefQR2.getDownloadUrl().addOnSuccessListener(urit -> {
+                                                String urlqr = urit.toString();
 
-                    //String urlqr = storageRefQR.getName();
-                    storageRefQR.putBytes(datai).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshote) {
-                            storageRefQR.getDownloadUrl().addOnSuccessListener(uri -> {
-                                String secondqr = uri.toString();
-
-                                int hashe = taskSnapshote.hashCode();
-                                String eventid = Integer.toString(hashe);
-                                BitMatrix bitMatrix = null;
-                                try { // storing the qr that takes u to event detials 
-                                    bitMatrix = multiFormatWriter.encode(eventid, BarcodeFormat.QR_CODE, 300, 300);
-                                } catch (WriterException e) {
-                                    throw new RuntimeException(e);
-                                }
-                                BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                                Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                                byte[] data = baos.toByteArray();
-
-                                storageRefQR2.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        storageRefQR2.getDownloadUrl().addOnSuccessListener(urit -> {
-                                            String urlqr = urit.toString();
-                                            //Log.d(TAG, "aaaaaaaaaaaaaaaaaaaaa"+hashtest);
-
-                                            //String secondqr = testri.toString();
-
-
-                                            // = storageRefQR.getPath();
-
-
-                                            if (selectedImageUri != null) {
-
-                                                StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("event_images/" + UUID.randomUUID().toString());
-                                                storageRef.putFile(selectedImageUri)
-                                                        .addOnSuccessListener(taskSnapshoteeee -> {
-                                                            // Image uploaded successfully, get download URL
-                                                            storageRef.getDownloadUrl().addOnSuccessListener(uriy -> {
-                                                                // this is adding imageURL to the databse --------------------------
-                                                                String imageURL = uriy.toString();
-                                                                //////////////just a test
-//                                        Map<String, Event> eventData = new HashMap<>();
-                                                                Event newevent = new Event(eventid, name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist, urlqr, secondqr, EditUser.getDeviceId(),"off");
-//                                        eventData.put("event",newevent);
-                                                                //lists
-                                                                // exploreEvents.add(newevent);
-                                                                //CreateEvents.add(newevent);
-
+                                                if (selectedImageUri != null) {
+                                                    StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("event_images/" + UUID.randomUUID().toString());
+                                                    storageRef.putFile(selectedImageUri)
+                                                            .addOnSuccessListener(taskSnapshoteeee -> {
+                                                                // Image uploaded successfully, get download URL
+                                                                storageRef.getDownloadUrl().addOnSuccessListener(uriy -> {
+                                                                    // this is adding imageURL to the database
+                                                                    String imageURL = uriy.toString();
+                                                                    Event newevent = new Event(eventid, name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist, urlqr, secondqr, EditUser.getDeviceId(),"off");
 
 //                                        int how = eventfb.document().set(newevent).hashCode(); /////////firebase
 //                                        //^^get the hash of this and then make it the created events hash
 //                                        String howid = Integer.toString(how);
 //                                        Event newevente = new Event(howid, name, eloc, datee, lim, imageURL, desce, addatendeelist, checkedinlist,urlqr,secondqr, EditUser.getDeviceId());
-                                                                // the unique hash we will use for
-                                                                eventfb.document(eventid).set(newevent);
-                                                                eventcreated.document(eventid).set(newevent);
-                                                                exploreEvents.remove(newevent);
+                                                                    // the unique hash we will use for
+                                                                    eventfb.document(eventid).set(newevent);
+                                                                    eventcreated.document(eventid).set(newevent);
+                                                                    exploreEvents.remove(newevent);
 
 //                                    ArrayList<Event> userevent = EditUser.getCreatedEvents();
 //                                    userevent.add(newevent);
 //                                    EditUser.setCreatedEvents(userevent);
 //                                    useresfb.document(EditUser.getDeviceId()).set(EditUser);
 
-                                                                // Store imageURL along with other event details in Firestore
-                                                                // Example: firestore.collection("events").document(eventId).update("eventPoster", imageURL);
+                                                                    // Store imageURL along with other event details in Firestore
+                                                                    // Example: firestore.collection("events").document(eventId).update("eventPoster", imageURL);
+                                                                });
                                                             });
-                                                        });
-                                            } else {
-                                                Event newevent = new Event(eventid, name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist, urlqr, secondqr, EditUser.getDeviceId(),"off"); //easier to do null for images
-                                                //exploreEvents.add(newevent); --> just faster then db but db clears list so nw, we can add these things for faster UI
-                                                eventfb.document(eventid).set(newevent);
-                                                eventcreated.document(eventid).set(newevent);
-                                                exploreEvents.remove(newevent);
+                                                } else {
+                                                    Event newevent = new Event(eventid, name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist, urlqr, secondqr, EditUser.getDeviceId(),"off"); //easier to do null for images
+                                                    //exploreEvents.add(newevent); --> just faster then db but db clears list so nw, we can add these things for faster UI
+                                                    eventfb.document(eventid).set(newevent);
+                                                    eventcreated.document(eventid).set(newevent);
+                                                    exploreEvents.remove(newevent);
 
-//                        int how = eventfb.document().set(newevent).hashCode(); /////////firebase
-//                        //^^get the hash of this and then make it the created events hash
-//                        String howid = Integer.toString(how);
-//                        Event newevente = new Event(howid, name, eloc, datee, lim, null, desce, addatendeelist, checkedinlist,urlqr,secondqr, EditUser.getDeviceId());
-//                        // the unique hash we will use for
-//                        eventfb.document(eventid).set(newevente);
-//                        eventcreated.document(eventid).set(newevente);
-                                            }
-                                        });
-                                    }
+                                                }
+                                            });
+                                        }
+                                    });
                                 });
-                            });
-                        }
-                    });
+                            }
+                        });
 
+                        //   imageView.setImageBitmap(bitmap); //storing bitmap
+                    } catch (WriterException e) {
+                        throw new RuntimeException(e);
+                    }
+                    eventName.setText("");
+                    location.setText("");
+                    limit.setText("");
+                    date.setText("");
+                    desc.setText("");
+                    //addEventImage.setImageResource();
+                    Glide.with(addEventImage.getContext())
+                            .load("https://firebasestorage.googleapis.com/v0/b/charlie-kim-fans.appspot.com/o/event_images%2Fimage_placeholder.png?alt=media&token=a354681d-7f13-4be8-943f-5b99460661c3")
+                            .into(addEventImage);
 
-                    //   imageView.setImageBitmap(bitmap); //storing bitmap
-
-                } catch (WriterException e) {
-                    throw new RuntimeException(e);
-                }
-
-
-                ////qr^
-
-
-                eventName.setText("");
-                location.setText("");
-                limit.setText("");
-                date.setText("");
-                desc.setText("");
-                //addEventImage.setImageResource();
-                Glide.with(addEventImage.getContext())
-                        .load("https://firebasestorage.googleapis.com/v0/b/charlie-kim-fans.appspot.com/o/event_images%2Fimage_placeholder.png?alt=media&token=a354681d-7f13-4be8-943f-5b99460661c3")
-                        .into(addEventImage);
-
-
-//
-//
-//
-//
-//
-//
 //                // firebase and Eventlist update for user
-//
-//
-//
 //                //user.orginzedevents.add(event)
-//
 //                // sepereatly update explore event it is a global event make a firebase collection explore events
-//
 //                // add a list in Events called Array<(User,Boolean Chekin Status)> attendelist; -- just a side note not for code
 
-            }        }
+                }        }
         });
-
-
         return view;
     }
 
+    /**
+     * Method to open the gallery when selecting an event image.
+     */
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
+    /**
+     * Method to handle activity after selecting a event image.
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -386,6 +371,5 @@ public class AddEventFragment extends DialogFragment {
             }
         }
     }
-
 
 }
