@@ -73,7 +73,13 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     ArrayList<String> notifyList = new ArrayList<>();
     public int inte = 0;
 
-
+    /**
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +131,12 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 //                }
 
                 bottomnav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+                    /**
+                     * Upon selecting an option in the navigation bar below, this will transition
+                     * the user to the fragment they requested.
+                     * @param item The selected item
+                     * @return
+                     */
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -249,6 +261,11 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
 
                             NotifyListRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                /**
+                                 *
+                                 * @param queryDocumentSnapshots The value of the event. {@code null} if there was an error.
+                                 * @param error The error if there was error. {@code null} otherwise.
+                                 */
                                 @Override
                                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
                                     if (error != null) {
@@ -377,6 +394,14 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     //one for user created saved and old events
     //then we will map each event to get their attendelist ss
     //all user stuff saved on create
+
+    /**
+     * Fetches user information based on device ID, this is so that profiles can be searched
+     * in the database via device ID. As such, no sign-in is required, as the profile is
+     * linked to the device.
+     * @param deviceId
+     * @return
+     */
     private Task<User> getUser(String deviceId) {
         DocumentReference docRef = usersRef.document(deviceId);
         return docRef.get().continueWith(task -> {
@@ -420,7 +445,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         });
     }
 
-
+    /**
+     * Gets information of the current user and stores it locally.
+     * @param currentuser
+     */
     private void getDataUser(User currentuser) {
         DocumentReference docRef = usersRef.document(currentuser.getDeviceId());
 
@@ -456,6 +484,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         });
     }
 
+    /**
+     * This recovers old events, allowing the user to reuse events.
+     * @param id
+     */
     private void getOldQrList(String id) {
         final CollectionReference SavedeventsRef = db.collection("OldQrsList" + id);
 
@@ -499,7 +531,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         });
     }
 
-
+    /**
+     * Gets event data from the saved events page
+     * @param id
+     */
     private void getDataSave(String id) {
         // create event notfications are only made there so no list needed b/c they will only update notfication list of event like attendeelist
         // this means saved data stores a notfication list
@@ -561,6 +596,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
 
     }
 
+    /**
+     * gets event data when creating an event
+     * @param id
+     */
     private void getDataCreate(String id) {
         final CollectionReference createeventsRef = db.collection("CreateEvents" + id);
         final CollectionReference OldQreventsRef = db.collection("OldQrsList" + id);
@@ -619,6 +658,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         });
     }
 
+    /**
+     * gets event data from the explore events page
+     * @param id
+     */
     private void getDataExplore(String id) {
         // when a event is old we save the attendees for next time so ateendes already signed up
 
@@ -688,6 +731,11 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         });
     }
 
+    /**
+     * A list of attendees, for use in events.
+     * @param id
+     * @return
+     */
     private ArrayList<User> getAttendeList(String id) { //takes event id
         /// this should instead fetch the user from the users collection so attendee updates if the user changes images or whatever
 
@@ -746,6 +794,13 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         return attendeeList;
     }
 
+    /**
+     * checks if event exists
+     * @param list1
+     * @param list2
+     * @param eventId
+     * @return
+     */
     public static boolean eventIdExists(ArrayList<Event> list1, ArrayList<Event> list2, String eventId) {
         // code is literally O(n+m) n & m are size of lists
         for (Event event : list1) {
@@ -763,6 +818,12 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         return false;
     }
 
+    /**
+     * Checks current date, as to not allow creation of events that take place on a date that have
+     * already passed
+     * @param dateString
+     * @return
+     */
     public static boolean isDateBeforeCurrentDate(String dateString) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Calendar calendar = Calendar.getInstance();
@@ -862,6 +923,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
         void onProfileList(ArrayList<User> profileList);
     }
 
+    /**
+     * Gets list of user profiles so admin can monitor and delete profiles
+     * @param callback
+     */
     private void getProfileList(final ProfileListCallback callback) {
         final ArrayList<User> profileList = new ArrayList<>();
         CollectionReference profileListRef = db.collection("users");
@@ -892,7 +957,10 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
                 });
     }
 
-
+    /**
+     * get list of events so admin can monitor and delete events
+     * @return
+     */
     // Browse events
     private ArrayList<Event> adminGetAllEvents() {
         ArrayList<Event> eventList = new ArrayList<>();
@@ -930,6 +998,11 @@ public class MainActivity extends AppCompatActivity {//implements ExploreEventsR
     // Constructor same for user and event image
     // Array<Event>
     // arraylist = allimagelist
+
+    /**
+     * get list of event images so that admin can monitor and delete event images
+     * @return
+     */
     private ArrayList<Event> adminGetAllImages() {
         ArrayList<Event> imageAdminList = new ArrayList<>();
         // Get collection of ExploreEvents and Users

@@ -21,18 +21,38 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
-
 public class ExploreEventDetsFragment extends Fragment {
     Event event;
     FragmentManager fragmentManager;
     User user;
     BottomNavigationView bottomnavi;
+
+    /**
+     *
+     * @param events
+     * @param fragment
+     * @param usere
+     * @param bottomnav
+     */
     public ExploreEventDetsFragment(Event events,FragmentManager fragment,User usere,BottomNavigationView bottomnav){
         event = events;
         fragmentManager = fragment;
         user = usere;
         bottomnavi = bottomnav;
     }
+
+    /**
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,6 +74,12 @@ public class ExploreEventDetsFragment extends Fragment {
                 .into(detimage);
         //set the share button make it functional
         but.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Transfers to QR scanner fragment when clicking the scan details button, if user
+             * meets Geolocation requirements.
+             *
+             * @param v The view that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 if(event.getTracking() instanceof String) {
@@ -104,6 +130,10 @@ public class ExploreEventDetsFragment extends Fragment {
         ImageView postersharebut = v.findViewById(R.id.ShareIconUp);
 
         postersharebut.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Allows user to share event via other applications upon clicking share.
+             * @param v The view that was clicked.
+             */
             @Override
             public void onClick(View v) {
 //                Intent shareIntent = new Intent();

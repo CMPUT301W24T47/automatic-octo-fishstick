@@ -34,6 +34,13 @@ public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEven
     private BottomNavigationView bottomnav;
     private User inte;
 
+    /**
+     *
+     * @param items
+     * @param freg
+     * @param bottomNavigationview
+     * @param inting
+     */
     public OpenEventsRecyclerViewAdapter(List<Event> items,FragmentManager freg,BottomNavigationView bottomNavigationview,User inting) {
         events = items;
         frag = freg;
@@ -41,12 +48,25 @@ public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEven
         inte = inting;
     }
 
+    /**
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         return new ViewHolder(FragmentOrgainzersEventBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
+    /**
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.EventForView = events.get(position);
@@ -88,6 +108,10 @@ public class OpenEventsRecyclerViewAdapter extends RecyclerView.Adapter<OpenEven
 
     }
 
+    /**
+     *
+     * @return event size
+     */
     @Override
     public int getItemCount() {
 

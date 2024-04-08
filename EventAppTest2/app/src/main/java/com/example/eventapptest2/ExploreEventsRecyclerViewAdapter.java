@@ -31,7 +31,7 @@ import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
- * TODO: Replace the implementation with code for your data type.
+ *
  */
 public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<ExploreEventsRecyclerViewAdapter.ViewHolder> {
 
@@ -45,6 +45,16 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
     private BottomNavigationView bottomnav;
     private User user;
 
+    /**
+     *
+     * @param items
+     * @param saveEvents
+     * @param id
+     * @param freg
+     * @param bottomNavigationview
+     * @param userr
+     */
+
     public ExploreEventsRecyclerViewAdapter(List<Event> items,List<Event> saveEvents,String id,FragmentManager freg,BottomNavigationView bottomNavigationview,User userr) {
         events = items;
         sevents = saveEvents;
@@ -56,6 +66,14 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
 
     }
 
+    /**
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return
+     */
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -63,7 +81,14 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
 
     }
 
+    /**
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
+
     public void onBindViewHolder(final ViewHolder holder, int position) {
         //setting events text
         int postini = position;
@@ -84,6 +109,11 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
 
 
         holder.button.setOnClickListener(new View.OnClickListener() {
+            /**
+             * creates a new event page details based on the event that was selected, upon
+             * pressing "Details"
+             * @param v The view that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 // well need to do something like we did in main to get data for the attende list and check if length is < the length of limit
@@ -162,11 +192,18 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
 //        mListener = listener;
 //    }
 
+    /**
+     * Returns event size
+     * @return
+     */
     @Override
     public int getItemCount() {
         return events.size();
     }
 
+    /**
+     * The Holder in which information for each event is displayed
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView ExploreEventName;
 
@@ -175,7 +212,6 @@ public class ExploreEventsRecyclerViewAdapter extends RecyclerView.Adapter<Explo
         public final ImageView Imageing;
         public Event EventForView;
         public Button button;
-
 
         public ViewHolder(FragmentExploreBinding binding) {
             super(binding.getRoot());

@@ -24,10 +24,29 @@ public class OrganizeEventDetsFragment extends Fragment {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     User user;
 
+    /**
+     *
+     * @param events
+     * @param userr
+     */
     public OrganizeEventDetsFragment(Event events,User userr){
         event = events;
         user = userr;
     }
+
+    /**
+     * A fragment that shows organizers the details of their event. This is unique from the
+     * attendee view- it allows for creation of QR codes and revokes the ability to check-in.
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,6 +84,11 @@ public class OrganizeEventDetsFragment extends Fragment {
 
 
         geolocation.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Upon checking geolocation, this will require users to also enable geolocation
+             * in order to sign up for event.
+             * @param v The view that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 if (geolocation.isChecked()){
@@ -88,6 +112,10 @@ public class OrganizeEventDetsFragment extends Fragment {
         });
 
         checkinsharebut.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Allows organizer to share the QR code via other applications
+             * @param v The view that was clicked.
+             */
             @Override
             public void onClick(View v) {
 //                Intent shareIntent = new Intent();
@@ -120,6 +148,10 @@ public class OrganizeEventDetsFragment extends Fragment {
         ImageView postersharebut = v.findViewById(R.id.ShareIconOrgdet);
 
         postersharebut.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Allows organizer to share the event poster/details via other applications
+             * @param v The view that was clicked.
+             */
             @Override
             public void onClick(View v) {
 //                Intent shareIntent = new Intent();

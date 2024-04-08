@@ -40,18 +40,38 @@ public class OldEventsRecyclerViewAdapter extends RecyclerView.Adapter<OldEvents
     private String id;
 
     private static FragmentManager frag;
+
+    /**
+     * Creates an OldEventsRecyclerViewAdapter for scrolling through old events
+     * @param items
+     * @param did
+     * @param freg
+     */
     public OldEventsRecyclerViewAdapter(List<Event> items,String did, FragmentManager freg) {
         events = items;
         id = did;
         frag = freg;
     }
 
+    /**
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         return new ViewHolder(FragmentOldQrsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
+    /**
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.EventForView = events.get(position);
@@ -73,7 +93,13 @@ public class OldEventsRecyclerViewAdapter extends RecyclerView.Adapter<OldEvents
             private String ddmmyyyy = "DDMMYYYY";
             private Calendar cal = Calendar.getInstance();
 
-
+            /**
+             *
+             * @param s
+             * @param start
+             * @param before
+             * @param count
+             */
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //        https://techprogrammingideas.blogspot.com/2020/05/android-edit-text-to-show-dd-mm-yyyy.html
@@ -134,11 +160,15 @@ public class OldEventsRecyclerViewAdapter extends RecyclerView.Adapter<OldEvents
             }
         });
         holder.button.setOnClickListener(new View.OnClickListener() {
+            /**
+             * checks if date is acceptable; if so, recreate old event
+             * @param v The view that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 //we need a way to get a new date... rn our code in main will just not care abt this so we need change the date
 
-                        events.remove(position);
+                        //events.remove(position);
 
 
 
@@ -175,12 +205,16 @@ public class OldEventsRecyclerViewAdapter extends RecyclerView.Adapter<OldEvents
 
 
 
-                //events.remove(position);
+                events.remove(position);
             }
         });
 
     }
 
+    /**
+     *
+     * @return event size
+     */
     @Override
     public int getItemCount() {
 

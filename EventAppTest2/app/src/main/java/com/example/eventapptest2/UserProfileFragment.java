@@ -159,6 +159,14 @@ public class UserProfileFragment extends Fragment{
     //  - Which then each user will store different information
     private final CollectionReference usersRef = db.collection("users");
 //    private User user;
+
+    /**
+     * the profile for the user, various details can be edited
+     * @param useri
+     * @param freg
+     * @param bottomNavigationview
+     * @param exploree
+     */
     public UserProfileFragment(User useri,FragmentManager freg,BottomNavigationView bottomNavigationview,ArrayList<Event> exploree) {
         // Required empty public constructor
         user = useri;
@@ -242,7 +250,18 @@ public class UserProfileFragment extends Fragment{
 //        return user;
 //    }
 
-
+    /**
+     * creates a user profile page
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -255,6 +274,11 @@ public class UserProfileFragment extends Fragment{
         Button scanbut = v.findViewById(R.id.QRbutton);
 
         scanbut.setOnClickListener(new View.OnClickListener() {
+            /**
+             * opens a qr code scanner when clicking scan details, this allows for signing up
+             * for events via shared QR codes
+             * @param v The view that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = frag.beginTransaction();   //explore.get(0)     //will never be used from this side of code but is here for constructer
@@ -279,6 +303,10 @@ public class UserProfileFragment extends Fragment{
 
 
         geolocation.setOnClickListener(new View.OnClickListener() {
+            /**
+             * enables user geolocation
+             * @param v The view that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 if (geolocation.isChecked()){
@@ -304,6 +332,10 @@ public class UserProfileFragment extends Fragment{
 
             adminbut.setVisibility(View.VISIBLE);
             adminbut.setOnClickListener(new View.OnClickListener() {
+                /**
+                 * navigates to admin view if user has access to this button
+                 * @param v The view that was clicked.
+                 */
                 @Override
                 public void onClick(View v) {
 
@@ -459,6 +491,11 @@ public class UserProfileFragment extends Fragment{
         return v;
     }
 
+    /**
+     * automatically creates a user profile picture based on username. This will typically be
+     * the first 4 letters of their name
+     * @param originalPic
+     */
     public void generateImage(Drawable originalPic){
         if((user.getUserName() != null) && (user.getUserProfileImage()==null) || (user.getUserProfileImage() == "")){
             textOnProfilePic.setText(user.getUserName());
@@ -494,7 +531,10 @@ public class UserProfileFragment extends Fragment{
 
     }
 
-
+    /**
+     * deletes the current profile picture of user, will generate automatic profile picture
+     * @param originalPic
+     */
     public void setImageDel(Drawable originalPic){
         //either delete the image on firestore so everything in app "updates" with the image deleted
         // on text edits and profile image edits we need to update these db collections:

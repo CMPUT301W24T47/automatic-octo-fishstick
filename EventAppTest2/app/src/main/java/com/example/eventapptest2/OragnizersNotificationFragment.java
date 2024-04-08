@@ -34,6 +34,19 @@ public class OragnizersNotificationFragment extends Fragment {
 
 
     }
+
+    /**
+     * Creates a view that allows organizers to send notifications to all in their attendee list
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,6 +57,10 @@ public class OragnizersNotificationFragment extends Fragment {
         Button but = v.findViewById(R.id.OrganizerNotifyBtn);
 
         but.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Sends notification that was typed by organizer
+             * @param v The view that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 CollectionReference notifys = db.collection("Notify"+event.getEventid());

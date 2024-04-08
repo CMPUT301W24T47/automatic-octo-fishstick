@@ -30,13 +30,27 @@ public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEv
     private BottomNavigationView bottomnav;
     private static User did;
 
-
+    /**
+     * The recycler view attached to saved events fragment. A new view is created for every
+     * saved event
+     * @param saveEvents
+     * @param freg
+     * @param bottomNavigationview
+     * @param id
+     */
     public SavedEventsRecyclerViewAdapter(List<Event> saveEvents,FragmentManager freg,BottomNavigationView bottomNavigationview,User id) {
         events = saveEvents;frag = freg;
         bottomnav = bottomNavigationview;
         did = id;
     }
 
+    /**
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -44,6 +58,12 @@ public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEv
 
     }
 
+    /**
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         int postini = position;
@@ -78,6 +98,10 @@ public class SavedEventsRecyclerViewAdapter extends RecyclerView.Adapter<SavedEv
         });
     }
 
+    /**
+     *
+     * @return amount of events
+     */
     @Override
     public int getItemCount() {
         return events.size();

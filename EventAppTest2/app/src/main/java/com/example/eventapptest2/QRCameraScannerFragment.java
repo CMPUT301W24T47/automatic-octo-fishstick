@@ -77,12 +77,12 @@ public class QRCameraScannerFragment extends Fragment {
     String provider;
     MainActivity mActivityCallback;
     Button generate_qr_button;
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+
     private User user;
     private Event event;
     FragmentManager frag;
@@ -90,6 +90,15 @@ public class QRCameraScannerFragment extends Fragment {
     boolean getdet;
     ArrayList<Event> explore;
 
+    /**
+     * Creates a fragment that allows users to scan qr codes, this one has basic functionality
+     * and is used to check users into an event
+     * @param evnte
+     * @param param
+     * @param fragi
+     * @param bottomnavi
+     * @param getdete
+     */
     public QRCameraScannerFragment(Event evnte, User param, FragmentManager fragi, BottomNavigationView bottomnavi, boolean getdete) {
         //needs user to add user to list
         user = param;
@@ -100,6 +109,16 @@ public class QRCameraScannerFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * fragment that allows users to scan qr codes, this one will navigate to the explore events
+     * page and open event details based on the qr code scanned
+     * @param evnte
+     * @param param
+     * @param fragi
+     * @param bottomnavi
+     * @param getdete
+     * @param Explore
+     */
     public QRCameraScannerFragment(Event evnte, User param, FragmentManager fragi, BottomNavigationView bottomnavi, boolean getdete, ArrayList<Event> Explore) {
         //needs user to add user to list
         user = param;
@@ -127,6 +146,12 @@ public class QRCameraScannerFragment extends Fragment {
 //        fragment.setArguments(args);
 //        return fragment;
 //    }
+
+    /**
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +163,18 @@ public class QRCameraScannerFragment extends Fragment {
 
     }
 
+    /**
+     * initialize surface view for QR code scanner to lay on
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -147,6 +184,11 @@ public class QRCameraScannerFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Initalizes the barcode scanner detection. Sets size, requests permissions, and handles
+     * cases in which the surfaceview or camera is destroyed.
+     * Gets information from QR code upon scanning
+     */
     private void initialiseDetectorsandSources() {
         Toast.makeText(getActivity().getApplicationContext(), "Please scan your QR code", Toast.LENGTH_SHORT).show();
         barcodeDetector = new BarcodeDetector.Builder(getActivity().getApplicationContext())
@@ -159,6 +201,10 @@ public class QRCameraScannerFragment extends Fragment {
 
 
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            /**
+             * Request permissions and start camera
+             * @param holder The SurfaceHolder whose surface is being created.
+             */
             @Override
             public void surfaceCreated(@NonNull SurfaceHolder holder) {
 
@@ -181,24 +227,39 @@ public class QRCameraScannerFragment extends Fragment {
 
             }
 
+            /**
+             * stops camera when surface is destroyed
+             * @param holder The SurfaceHolder whose surface is being destroyed.
+             */
             @Override
             public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
                 cameraSource.stop();
             }
         });
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
+            /**
+             * Upon scanner being destroyed, notify user of this.
+             */
             @Override
             public void release() {
                 Toast.makeText(getActivity().getApplicationContext(), "QR scanner stopped", Toast.LENGTH_SHORT).show();
             }
 
+            /**
+             * handle information held in QR codes, swap fragments when necessary.
+             * Log users longitude and latitude in database for use in Maps fragment. Organizers can
+             * see where users check in from
+             * @param detections
+             */
             @Override
 
             public void receiveDetections(@NonNull Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0) {
                     surfaceView.post(new Runnable() {
-
+                        /**
+                         * runs upon scanning a QR code
+                         */
                         @Override
                         public void run() {
 
@@ -236,6 +297,10 @@ public class QRCameraScannerFragment extends Fragment {
 
 
                                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    /**
+                                     * runs upon QR code scan success, gets information from QR code
+                                     * @param task
+                                     */
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                         if (task.isSuccessful()) {
@@ -339,12 +404,18 @@ public class QRCameraScannerFragment extends Fragment {
         });
     }
 
+    /**
+     * runs if user pauses the camera, perhaps by app being set to sleep
+     */
     @Override
     public void onPause() {
         super.onPause();
         cameraSource.release();
     }
 
+    /**
+     * resumes the camera when the app wakes up, for example.
+     */
     @Override
     public void onResume() {
         super.onResume();
