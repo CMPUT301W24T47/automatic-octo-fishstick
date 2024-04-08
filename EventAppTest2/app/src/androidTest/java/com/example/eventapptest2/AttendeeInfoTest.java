@@ -8,6 +8,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasCategories;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasType;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -32,7 +33,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.Collections;
-// handles US02.02.01, US02.02.02, US02.02.03, US02.050.01
+// handles US02.02.01, US02.02.02, US02.02.03, US02.050.01, US 03.02.01
 @RunWith(JUnit4.class)
 @LargeTest
 public class AttendeeInfoTest {
@@ -92,5 +93,9 @@ public class AttendeeInfoTest {
         onView(withId(R.id.userImage)).check(doesNotExist());
         // ensure that profile picture is now set to be "first name"
         onView(withText("Test")).check(matches(isDisplayed()));
+        // geolocation toggle
+        onView(withId(R.id.UsergeolocationSwitch)).perform(click());
+        // check that it's on
+        onView(withId(R.id.UsergeolocationSwitch)).check(matches(isChecked()));
     }
 }
